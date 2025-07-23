@@ -1,0 +1,31 @@
+image: fkmy/atlassian-pipeline-awscli-node:latest
+clone:
+  depth: full
+
+options:
+  docker: true
+
+definitions:
+  services:
+    docker:
+      memory: 3072
+pipelines:
+  pull-requests:
+    '**':
+      - step:
+          name: Run SonarCloud for Quality Control
+          script:
+            - pipe: sonarsource/sonarcloud-scan:2.0.0
+            - pipe: sonarsource/sonarcloud-quality-gate:0.1.6
+          caches:
+            - node
+
+  branches:
+    develop:
+      - step:
+          name: Run SonarCloud for Quality Control
+          caches:
+            - node
+          script:
+            - pipe: sonarsource/sonarcloud-scan:2.0.0
+            - pipe: sonarsource/sonarcloud-quality-gate:0.1.6
