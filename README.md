@@ -1,405 +1,202 @@
-# Next JS Project
+# Fileme - Professional Tax Return Filing & Audit Services
 
-## ⚠️ Important Notes
+A modern, responsive website for Fileme, offering professional tax return filing and audit services. Built with Next.js 15, TypeScript, Tailwind CSS, and Shadcn UI.
 
-- 📝 **Type Safety**: Always write types where needed for your components and API calls.
-- 🧩 **Separation of Concerns**: Keep your code modular and organized by separating different concerns.
-- 🔧 **Utility Functions**: Create reusable utility functions to avoid code duplication.
-- 🎨 **Styling**: Use TailwindCSS for consistent and efficient styling.
-- 🖌️ **UI Components**: Utilize Shadcn/UI for building user interface components.
+## Features
 
-## 📋 Table of Contents
+- 🎨 Modern, responsive design
+- 📱 Mobile-first approach
+- 📧 Contact form with email functionality
+- ⚡ Fast performance with Next.js 15
+- 🔒 Secure form handling
+- 🎯 SEO optimized
+- 🚀 Production ready
 
-- [📥 Installation](#installation)
-- [🚀 Usage](#usage)
-- [🖼️ Icons](#icons)
-- [📝 Forms and Validation](#forms-and-validation)
-  - [📦 Installation](#installation-1)
-  - [🛠️ Usage](#usage-1)
-- [📊 Tables](#tables)
-  - [📦 Installation](#installation-2)
-  - [🛠️ Usage](#usage-2)
-- [🔧 Development](#development)
-  - [🎨 Prettier](#prettier)
-  - [🖌️ Shadcn/UI](#shadcnui)
-- [📚 Documentation Links](#documentation-links)
+## Tech Stack
 
-## Installation
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Shadcn UI + Radix UI
+- **Icons**: Lucide React
+- **Email Service**: Resend
+- **Notifications**: React Hot Toast
+- **Fonts**: Geist (Local)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Resend account for email functionality
+
+### Installation
 
 1. Clone the repository:
 
-2. Install dependencies using NPM:
+```bash
+git clone <repository-url>
+cd fileme
+```
+
+2. Install dependencies:
+
    ```bash
    npm install
    ```
 
-## Usage
+3. Set up environment variables:
 
-To start the development server:
+```bash
+cp env.example .env.local
+```
+
+4. Configure your environment variables in `.env.local`:
+
+```env
+# Email Configuration (Resend)
+RESEND_API_KEY=your_resend_api_key_here
+CONTACT_EMAIL=your@email.com
+```
+
+### Email Setup
+
+1. Sign up for a [Resend account](https://resend.com)
+2. Get your API key from the dashboard
+3. Add your API key to `.env.local`
+4. Update the `CONTACT_EMAIL` with your actual email address
+
+### Development
+
+Run the development server:
 
 ```bash
 npm run dev
 ```
 
-To build the project for production:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### Building for Production
 
 ```bash
 npm run build
-```
-
-To start the production server:
-
-```bash
-npm run start
-```
-
-## Icons
-
-This project uses `react-icons` for icons. You can easily include any icon from popular icon libraries.
-
-To use an icon in your component:
-
-```tsx
-import { FaBeer } from "react-icons/fa";
-
-const MyComponent = () => {
-  return <FaBeer />;
-};
-```
-
-## Forms and Validation
-
-To handle forms, this project uses `react-hook-form`. For form validations, `zod` is used.
-
-### Installation
-
-Install the required libraries:
-
-```bash
-npm install react-hook-form zod
-```
-
-### Usage
-
-Here's an example of how to create a form with validation:
-
-```tsx
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
-
-export function ProfileForm() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
-  });
-
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
-  );
-}
-
-export default ProfileForm;
-```
-
-## Tables
-
-This project uses `@tanstack/react-table` for creating and managing tables.
-
-### Installation
-
-Install the required library:
-
-```bash
-npm install @tanstack/react-table
-```
-
-### Usage
-
-Here's an example of how to create a table:
-
-## Prerequisites
-
-We are going to build a table to show recent payments. Here's what our data looks like:
-
-```tsx showLineNumbers
-type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const payments: Payment[] = [
-  {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
-  },
-  {
-    id: "489e1d42",
-    amount: 125,
-    status: "processing",
-    email: "example@gmail.com",
-  },
-  // ...
-];
+npm start
 ```
 
 ## Project Structure
 
-Start by creating the following file structure:
-
-```txt
-app
-└── payments
-    ├── columns.tsx
-    ├── data-table.tsx
-    └── page.tsx
+```
+fileme/
+├── app/
+│   ├── api/
+│   │   └── contact/
+│   │       └── route.ts          # Contact form API endpoint
+│   ├── contact/
+│   │   └── page.tsx              # Contact page
+│   ├── globals.css               # Global styles
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Home page
+├── components/
+│   ├── ui/                       # Shadcn UI components
+│   ├── footer.tsx                # Footer component
+│   └── navigation.tsx            # Navigation component
+├── lib/
+│   └── utils.ts                  # Utility functions
+└── public/                       # Static assets
 ```
 
-I'm using a Next.js example here but this works for any other React framework.
+## Pages
 
-- `columns.tsx` (client component) will contain our column definitions.
-- `data-table.tsx` (client component) will contain our `<DataTable />` component.
-- `page.tsx` (server component) is where we'll fetch data and render our table.
+### Home Page (`/`)
 
-## Basic Table
+- Hero section with deadline highlight
+- Services overview (Tax Return Filing & Audit Services)
+- Call-to-action sections
+- Professional design with trust indicators
 
-Let's start by building a basic table.
+### Contact Page (`/contact`)
 
-### Column Definitions
+- Contact form with validation
+- Contact information
+- Email integration with Resend
+- Toast notifications for form feedback
 
-First, we'll define our columns.
+## API Routes
 
-```tsx showLineNumbers title="app/payments/columns.tsx" {3,14-27}
-"use client";
+### POST `/api/contact`
 
-import { ColumnDef } from "@tanstack/react-table";
+Handles contact form submissions and sends emails via Resend.
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
+**Request Body:**
 
-export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-  },
-];
-```
-
-**Note:** Columns are where you define the core of what your table
-will look like. They define the data that will be displayed, how it will be
-formatted, sorted and filtered.
-
-### `<DataTable />` component
-
-Next, we'll create a `<DataTable />` component to render our table.
-
-```tsx showLineNumbers title="app/payments/data-table.tsx"
-"use client";
-
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-}
-
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-  return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  );
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "message": "I need help with my tax return..."
 }
 ```
 
-**Tip**: If you find yourself using `<DataTable />` in multiple places, this is the component you could make reusable by extracting it to `components/ui/data-table.tsx`.
+**Response:**
 
-`<DataTable columns={columns} data={data} />`
-
-### Render the table
-
-Finally, we'll render our table in our page component.
-
-```tsx showLineNumbers title="app/payments/page.tsx" {22}
-import { Payment, columns } from "./columns";
-import { DataTable } from "./data-table";
-
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    // ...
-  ];
-}
-
-export default async function DemoPage() {
-  const data = await getData();
-
-  return (
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
-  );
+```json
+{
+  "message": "Email sent successfully",
+  "data": { ... }
 }
 ```
 
-## Development
+## Styling
 
-### Prettier
+The project uses Tailwind CSS with a custom design system:
 
-This project uses Prettier for code formatting. The Prettier Tailwind plugin is also included to ensure Tailwind classes are ordered correctly.
+- **Primary Colors**: Blue (#3b82f6) and Indigo (#6366f1)
+- **Typography**: Geist font family
+- **Components**: Shadcn UI components with custom styling
+- **Responsive**: Mobile-first approach with breakpoints
 
-To format your code, run:
+## Deployment
 
-```bash
-npm run prettier
-```
+### Vercel (Recommended)
 
-### Shadcn/UI
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Add environment variables in Vercel dashboard
+4. Deploy
 
-Shadcn/UI is used for the UI components.
+### Other Platforms
 
-## Documentation Links
+The project is compatible with any platform that supports Next.js:
 
-- [react-icons documentation](https://react-icons.github.io/react-icons/)
-- [react-hook-form documentation](https://react-hook-form.com/get-started)
-- [zod documentation](https://zod.dev/)
-- [TanStack Table documentation](https://tanstack.com/table/v8/docs/guide/introduction)
-- [Shadcn/UI documentation](https://ui.shadcn.com/docs)
+- Netlify
+- Railway
+- DigitalOcean App Platform
+- AWS Amplify
+
+## Environment Variables
+
+| Variable         | Description                                       | Required |
+| ---------------- | ------------------------------------------------- | -------- |
+| `RESEND_API_KEY` | Resend API key for email functionality            | Yes      |
+| `CONTACT_EMAIL`  | Email address to receive contact form submissions | Yes      |
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For support, email info@fileme.com or create an issue in the repository.
+
+---
+
+**Fileme** - Professional tax return filing and audit services. Secure, fast, and hassle-free.
