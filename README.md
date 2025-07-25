@@ -11,6 +11,8 @@ A modern, responsive website for Fileme, offering professional tax return filing
 - 🔒 Secure form handling
 - 🎯 SEO optimized
 - 🚀 Production ready
+- 🎭 Smooth animations and interactions
+- 📋 Professional services overview
 
 ## Tech Stack
 
@@ -22,6 +24,7 @@ A modern, responsive website for Fileme, offering professional tax return filing
 - **Email Service**: Resend
 - **Notifications**: React Hot Toast
 - **Fonts**: Geist (Local)
+- **Carousel**: Embla Carousel
 
 ## Getting Started
 
@@ -42,9 +45,9 @@ cd fileme
 
 2. Install dependencies:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. Set up environment variables:
 
@@ -99,6 +102,13 @@ fileme/
 │   └── page.tsx                  # Home page
 ├── components/
 │   ├── ui/                       # Shadcn UI components
+│   │   ├── button.tsx            # Button component
+│   │   ├── carousel.tsx          # Carousel component
+│   │   ├── input.tsx             # Input component
+│   │   ├── select.tsx            # Select component
+│   │   ├── table.tsx             # Table component
+│   │   └── typeface.tsx          # Typeface component
+│   ├── experts.tsx               # Experts carousel component
 │   ├── footer.tsx                # Footer component
 │   └── navigation.tsx            # Navigation component
 ├── lib/
@@ -110,10 +120,10 @@ fileme/
 
 ### Home Page (`/`)
 
-- Hero section with deadline highlight
-- Services overview (Tax Return Filing & Audit Services)
-- Call-to-action sections
-- Professional design with trust indicators
+- **Hero Section**: Deadline-focused messaging with call-to-action
+- **Services Section**: Tax Return Filing & Audit Services overview
+- **Experts Section**: Team showcase with interactive carousel
+- **CTA Section**: Final call-to-action for tax filing
 
 ### Contact Page (`/contact`)
 
@@ -152,9 +162,34 @@ Handles contact form submissions and sends emails via Resend.
 The project uses Tailwind CSS with a custom design system:
 
 - **Primary Colors**: Blue (#3b82f6) and Indigo (#6366f1)
+- **Secondary Colors**: Green (#10b981) for success states
 - **Typography**: Geist font family
 - **Components**: Shadcn UI components with custom styling
 - **Responsive**: Mobile-first approach with breakpoints
+- **Gradients**: Subtle gradients for visual appeal
+
+## Key Features
+
+### Responsive Design
+
+- Mobile-first approach
+- Breakpoints: sm (640px), md (768px), lg (1024px), xl (1280px)
+- Flexible grid layouts
+- Touch-friendly interactions
+
+### Performance
+
+- Next.js 15 with App Router
+- Server-side rendering
+- Optimized images and assets
+- Fast loading times
+
+### Accessibility
+
+- Semantic HTML structure
+- ARIA labels and roles
+- Keyboard navigation support
+- Screen reader friendly
 
 ## Deployment
 
