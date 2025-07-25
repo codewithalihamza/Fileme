@@ -5,11 +5,10 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
+  type CarouselApi
 } from "@/components/ui/carousel";
 import { Linkedin } from "lucide-react";
+import { motion } from "motion/react";
 import React, { useState } from "react";
 
 interface Expert {
@@ -131,7 +130,13 @@ export function Experts() {
   return (
     <section className="bg-white py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
+        <motion.div
+          className="mb-16 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
           <h2 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl">
             Meet Our Expert Team
           </h2>
@@ -139,10 +144,16 @@ export function Experts() {
             Our certified professionals bring years of experience and expertise
             to ensure your tax filing is accurate and optimized.
           </p>
-        </div>
+        </motion.div>
 
         {/* Carousel for all screen sizes */}
-        <div className="relative">
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
           <Carousel
             setApi={setApi}
             className="mx-auto w-full max-w-6xl"
@@ -152,71 +163,125 @@ export function Experts() {
             }}
           >
             <CarouselContent className="-ml-2 md:-ml-4 lg:-ml-6">
-              {experts.map((expert) => (
+              {experts.map((expert, index) => (
                 <CarouselItem
                   key={expert.id}
                   className="basis-full pl-2 sm:basis-1/2 md:pl-4 lg:basis-1/4 lg:pl-6"
                 >
-                  <div className="h-full rounded-2xl bg-white p-6 text-center shadow-lg">
-                    <div className="relative mb-6">
-                      <img
+                  <motion.div
+                    className="h-full rounded-2xl bg-white p-6 text-center shadow-lg"
+                    initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{
+                      y: -10,
+                      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                      scale: 1.02
+                    }}
+                  >
+                    <motion.div
+                      className="relative mb-6"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <motion.img
                         src={expert.image}
                         alt={expert.name}
                         className="mx-auto h-32 w-32 rounded-full border-4 border-blue-100 object-cover"
+                        whileHover={{
+                          borderColor: "#3b82f6",
+                          boxShadow: "0 0 0 4px rgba(59, 130, 246, 0.1)"
+                        }}
+                        transition={{ duration: 0.3 }}
                       />
-                    </div>
+                    </motion.div>
 
-                    <h3 className="mb-2 text-xl font-bold text-gray-900">
+                    <motion.h3
+                      className="mb-2 text-xl font-bold text-gray-900"
+                      whileHover={{ color: "#2563eb" }}
+                    >
                       {expert.name}
-                    </h3>
-                    <p className="mb-3 font-medium text-blue-600">
+                    </motion.h3>
+                    <motion.p
+                      className="mb-3 font-medium text-blue-600"
+                      whileHover={{ scale: 1.05 }}
+                    >
                       {expert.role}
-                    </p>
-                    <p className="mb-4 text-sm leading-relaxed text-gray-600">
+                    </motion.p>
+                    <motion.p
+                      className="mb-4 text-sm leading-relaxed text-gray-600"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ duration: 0.4, delay: 0.2 }}
+                      viewport={{ once: true }}
+                    >
                       {expert.description}
-                    </p>
-                    <div className="flex justify-center">
+                    </motion.p>
+                    <motion.div
+                      className="flex justify-center"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
                       <Button
                         variant="link"
                         className="p-0"
                         onClick={() => window.open(expert.linkedin, "_blank")}
                       >
-                        <Linkedin className="h-5 w-5" color="#0B66C2" />
+                        <motion.div
+                          whileHover={{ rotate: 5 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Linkedin className="h-5 w-5" color="#0B66C2" />
+                        </motion.div>
                       </Button>
-                    </div>
-                  </div>
+                    </motion.div>
+                  </motion.div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
           </Carousel>
 
           {/* Carousel Indicators */}
-          <div className="mt-8 flex justify-center">
+          <motion.div
+            className="mt-8 flex justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
             <div className="flex space-x-2">
               {Array.from({ length: count }).map((_, index) => (
-                <button
+                <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`h-3 w-3 rounded-full transition-colors ${
-                    index === current - 1
-                      ? "bg-blue-600"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
+                  className={`h-3 w-3 rounded-full transition-colors ${index === current - 1
+                    ? "bg-blue-600"
+                    : "bg-gray-300 hover:bg-gray-400"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.8 }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                 />
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Slide Counter */}
-          <div className="mt-4 flex justify-center">
+          <motion.div
+            className="mt-4 flex justify-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            viewport={{ once: true }}
+          >
             <div className="text-sm text-gray-500">
               {current} of {count}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

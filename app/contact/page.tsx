@@ -1,9 +1,9 @@
 "use client";
 
-import { Footer } from "@/components/footer";
-import { Navigation } from "@/components/navigation";
 import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
+import { Navigation } from "@/components/ui/navigation";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
