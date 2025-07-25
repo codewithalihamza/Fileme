@@ -27,7 +27,11 @@ export function Footer() {
                 className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600"
                 whileHover={{ rotate: 5 }}
                 animate={{ rotate: [0, 2, -2, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 <span className="text-sm font-bold text-white">F</span>
               </motion.div>
@@ -62,7 +66,7 @@ export function Footer() {
                 "Tax Return Filing",
                 "Audit Services",
                 "Tax Consultation",
-                "Financial Planning"
+                "Financial Planning",
               ].map((service, index) => (
                 <motion.li
                   key={index}
@@ -72,7 +76,7 @@ export function Footer() {
                   viewport={{ once: true }}
                   whileHover={{
                     x: 5,
-                    color: "#3b82f6"
+                    color: "#3b82f6",
                   }}
                   className="cursor-pointer"
                 >
@@ -98,7 +102,7 @@ export function Footer() {
               {[
                 "Email: info@fileme.com",
                 "Phone: +1 (555) 123-4567",
-                "Hours: Mon-Fri 9AM-6PM"
+                "Hours: Mon-Fri 9AM-6PM",
               ].map((contact, index) => (
                 <motion.p
                   key={index}
@@ -108,7 +112,7 @@ export function Footer() {
                   viewport={{ once: true }}
                   whileHover={{
                     x: -5,
-                    color: "#3b82f6"
+                    color: "#3b82f6",
                   }}
                   className="cursor-pointer"
                 >

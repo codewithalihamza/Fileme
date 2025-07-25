@@ -15,7 +15,7 @@ const HeaderPage = [
     href: "/contact",
     label: "Contact",
   },
-]
+];
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,10 +38,7 @@ export function Navigation() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="/"
                 className="flex items-center space-x-2"
@@ -51,7 +48,11 @@ export function Navigation() {
                   className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600"
                   whileHover={{ rotate: 5 }}
                   animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                 >
                   <span className="text-sm font-bold text-white">F</span>
                 </motion.div>
@@ -99,10 +100,7 @@ export function Navigation() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <Button
                 variant="ghost"
                 size="sm"
@@ -141,7 +139,7 @@ export function Navigation() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              className=" border-gray-200 bg-white shadow-lg md:hidden"
+              className="border-gray-200 bg-white shadow-lg md:hidden"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}

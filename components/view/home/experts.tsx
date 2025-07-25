@@ -5,7 +5,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  type CarouselApi
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import { Linkedin } from "lucide-react";
 import { motion } from "motion/react";
@@ -177,7 +177,7 @@ export function Experts() {
                     whileHover={{
                       y: -10,
                       boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-                      scale: 1.02
+                      scale: 1.02,
                     }}
                   >
                     <motion.div
@@ -190,7 +190,7 @@ export function Experts() {
                         className="mx-auto h-32 w-32 rounded-full border-4 border-blue-100 object-cover"
                         whileHover={{
                           borderColor: "#3b82f6",
-                          boxShadow: "0 0 0 4px rgba(59, 130, 246, 0.1)"
+                          boxShadow: "0 0 0 4px rgba(59, 130, 246, 0.1)",
                         }}
                         transition={{ duration: 0.3 }}
                       />
@@ -254,10 +254,11 @@ export function Experts() {
                 <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`h-3 w-3 rounded-full transition-colors ${index === current - 1
-                    ? "bg-blue-600"
-                    : "bg-gray-300 hover:bg-gray-400"
-                    }`}
+                  className={`h-3 w-3 rounded-full transition-colors ${
+                    index === current - 1
+                      ? "bg-blue-600"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
                   aria-label={`Go to slide ${index + 1}`}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}
