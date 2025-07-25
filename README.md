@@ -91,29 +91,68 @@ npm start
 
 ```
 fileme/
-├── app/
+├── app/                          # Next.js App Router
 │   ├── api/
 │   │   └── contact/
 │   │       └── route.ts          # Contact form API endpoint
 │   ├── contact/
 │   │   └── page.tsx              # Contact page
+│   ├── demo/                     # Demo pages
+│   ├── fonts/                    # Local font files
+│   ├── favicon.ico               # Site favicon
 │   ├── globals.css               # Global styles
 │   ├── layout.tsx                # Root layout
 │   └── page.tsx                  # Home page
 ├── components/
 │   ├── ui/                       # Shadcn UI components
+│   │   ├── animated-card.tsx     # Animated card component
 │   │   ├── button.tsx            # Button component
 │   │   ├── carousel.tsx          # Carousel component
+│   │   ├── footer.tsx            # Footer component
 │   │   ├── input.tsx             # Input component
+│   │   ├── loading-spinner.tsx   # Loading animations
+│   │   ├── navigation.tsx        # Navigation component
 │   │   ├── select.tsx            # Select component
 │   │   ├── table.tsx             # Table component
 │   │   └── typeface.tsx          # Typeface component
-│   ├── experts.tsx               # Experts carousel component
-│   ├── footer.tsx                # Footer component
-│   └── navigation.tsx            # Navigation component
+│   └── view/                     # Page-specific components
+│       └── home/
+│           ├── cta-section.tsx   # Call-to-action section
+│           ├── experts.tsx       # Experts carousel section
+│           ├── hero-section.tsx  # Hero section
+│           └── services-section.tsx # Services overview
+├── constants/
+│   └── component-types.ts        # Component type definitions
+├── hooks/                        # Custom React hooks
+│   ├── custom-hook.ts            # Example custom hook
+│   ├── use-local-storage.ts      # Local storage hook
+│   └── use-scroll-animation.ts   # Scroll animation hook
 ├── lib/
 │   └── utils.ts                  # Utility functions
-└── public/                       # Static assets
+├── public/                       # Static assets
+├── store/                        # State management
+│   └── example.ts                # Example store
+├── types/                        # TypeScript type definitions
+│   └── index.ts                  # Global types
+├── .husky/                       # Git hooks
+├── .next/                        # Next.js build output
+├── node_modules/                 # Dependencies
+├── .cursorrules                  # Cursor IDE rules
+├── .eslintrc.json               # ESLint configuration
+├── .gitignore                   # Git ignore rules
+├── .prettierrc                  # Prettier configuration
+├── bitbucket-pipelines.yml      # CI/CD pipeline
+├── components.json              # Shadcn UI configuration
+├── Dockerfile                   # Docker configuration
+├── env.example                  # Environment variables example
+├── next.config.mjs              # Next.js configuration
+├── next-env.d.ts                # Next.js TypeScript definitions
+├── package.json                 # Project dependencies
+├── postcss.config.mjs           # PostCSS configuration
+├── README.md                    # Project documentation
+├── sonar-project.properties     # SonarQube configuration
+├── tailwind.config.ts           # Tailwind CSS configuration
+└── tsconfig.json                # TypeScript configuration
 ```
 
 ## Pages
@@ -227,11 +266,5 @@ The project is compatible with any platform that supports Next.js:
 ## License
 
 This project is licensed under the MIT License.
-
-## Support
-
-For support, email info@fileme.com or create an issue in the repository.
-
----
 
 **Fileme** - Professional tax return filing and audit services. Secure, fast, and hassle-free.
