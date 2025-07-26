@@ -15,12 +15,10 @@ export default function Home() {
       {/* Services Section */}
       <ServicesSection />
 
-      {/* Experts Section */}
-      <Experts />
-
       {/* CTA Section */}
       <CtaSection />
-
+      {/* Experts Section */}
+      <Experts />
       <Footer />
     </div>
   );
