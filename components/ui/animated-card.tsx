@@ -27,22 +27,22 @@ export function AnimatedCard({
 
   const scrollAnimation = scrollEffect
     ? {
-      initial: { opacity: initialOpacity, y: initialY },
-      whileInView: { opacity: 1, y: 0 },
-      transition: { duration: 0.6, delay },
-      viewport: { once: true },
-    }
+        initial: { opacity: initialOpacity, y: initialY },
+        whileInView: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, delay },
+        viewport: { once: true },
+      }
     : {};
 
   const hoverAnimation = hoverEffect
     ? {
-      whileHover: {
-        y: -10,
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-        scale: 1.02,
-      },
-      transition: { duration: 0.3 },
-    }
+        whileHover: {
+          y: -10,
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          scale: 1.02,
+        },
+        transition: { duration: 0.3 },
+      }
     : {};
 
   return (

@@ -136,8 +136,9 @@ export default function AboutPage() {
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
-                className={`grid gap-12 lg:grid-cols-2 lg:items-center ${index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
-                  }`}
+                className={`grid gap-12 lg:grid-cols-2 lg:items-center ${
+                  index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
+                }`}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -145,11 +146,17 @@ export default function AboutPage() {
               >
                 {/* Content */}
                 <div className={`${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
-                  <div className={`inline-flex rounded-xl p-3 mb-6 ${service.color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                      service.color === 'green' ? 'bg-green-100 text-green-600' :
-                        service.color === 'purple' ? 'bg-purple-100 text-purple-600' :
-                          'bg-orange-100 text-orange-600'
-                    }`}>
+                  <div
+                    className={`mb-6 inline-flex rounded-xl p-3 ${
+                      service.color === "blue"
+                        ? "bg-blue-100 text-blue-600"
+                        : service.color === "green"
+                          ? "bg-green-100 text-green-600"
+                          : service.color === "purple"
+                            ? "bg-purple-100 text-purple-600"
+                            : "bg-orange-100 text-orange-600"
+                    }`}
+                  >
                     {service.icon}
                   </div>
 
@@ -188,14 +195,15 @@ export default function AboutPage() {
                     <Button
                       asChild
                       size="lg"
-                      className={`${service.color === "blue"
-                        ? "bg-blue-600 hover:bg-blue-700"
-                        : service.color === "green"
-                          ? "bg-green-600 hover:bg-green-700"
-                          : service.color === "purple"
-                            ? "bg-purple-600 hover:bg-purple-700"
-                            : "bg-orange-600 hover:bg-orange-700"
-                        } px-8 py-3 text-lg font-semibold text-white`}
+                      className={`${
+                        service.color === "blue"
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : service.color === "green"
+                            ? "bg-green-600 hover:bg-green-700"
+                            : service.color === "purple"
+                              ? "bg-purple-600 hover:bg-purple-700"
+                              : "bg-orange-600 hover:bg-orange-700"
+                      } px-8 py-3 text-lg font-semibold text-white`}
                     >
                       <Link href="/contact">Learn More</Link>
                     </Button>
