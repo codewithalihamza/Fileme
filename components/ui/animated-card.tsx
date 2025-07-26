@@ -27,22 +27,22 @@ export function AnimatedCard({
 
   const scrollAnimation = scrollEffect
     ? {
-        initial: { opacity: initialOpacity, y: initialY },
-        whileInView: { opacity: 1, y: 0 },
-        transition: { duration: 0.6, delay },
-        viewport: { once: true },
-      }
+      initial: { opacity: initialOpacity, y: initialY },
+      whileInView: { opacity: 1, y: 0 },
+      transition: { duration: 0.6, delay },
+      viewport: { once: true },
+    }
     : {};
 
   const hoverAnimation = hoverEffect
     ? {
-        whileHover: {
-          y: -10,
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-          scale: 1.02,
-        },
-        transition: { duration: 0.3 },
-      }
+      whileHover: {
+        y: -10,
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+        scale: 1.02,
+      },
+      transition: { duration: 0.3 },
+    }
     : {};
 
   return (
@@ -75,7 +75,7 @@ export function AnimatedIconCard({
       scrollEffect={true}
     >
       <motion.div
-        className={`mb-6 flex h-16 w-16 items-center justify-center rounded-xl ${iconColor}`}
+        className={`mb-6 flex size-16 items-center justify-center rounded-xl ${iconColor}`}
         whileHover={{ scale: 1.1, rotate: 5 }}
         transition={{ duration: 0.2 }}
       >

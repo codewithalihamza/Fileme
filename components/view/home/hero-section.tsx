@@ -30,9 +30,9 @@ export const HeroSection = () => {
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
-        <div className="animate-blob absolute left-10 top-20 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl"></div>
-        <div className="animate-blob animation-delay-2000 absolute right-10 top-40 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl"></div>
-        <div className="animate-blob animation-delay-4000 absolute -bottom-8 left-20 h-96 w-96 rounded-full bg-indigo-500/10 blur-3xl"></div>
+        <div className="animate-blob absolute left-10 top-20 size-96 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div className="animate-blob animation-delay-2000 absolute right-10 top-40 size-96 rounded-full bg-purple-500/10 blur-3xl"></div>
+        <div className="animate-blob animation-delay-4000 absolute -bottom-8 left-20 size-96 rounded-full bg-indigo-500/10 blur-3xl"></div>
       </div>
 
       <div className="container relative mx-auto px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
@@ -52,7 +52,7 @@ export const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               whileHover={{ scale: 1.05, y: -2 }}
             >
-              <Clock className="mr-2 h-4 w-4 animate-pulse" />⚡ Last Date to
+              <Clock className="mr-2 size-4 animate-pulse" />⚡ Last Date to
               File: 30th September
             </motion.div>
 
@@ -103,7 +103,7 @@ export const HeroSection = () => {
                 >
                   <Link href="/contact" className="flex items-center">
                     Start Filing Now
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 size-5" />
                   </Link>
                 </Button>
               </motion.div>
@@ -138,7 +138,7 @@ export const HeroSection = () => {
                   transition={{ duration: 0.4, delay: 1.1 + index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -2 }}
                 >
-                  <item.icon className={`mr-2 h-5 w-5 ${item.color}`} />
+                  <item.icon className={`mr-2 size-5 ${item.color}`} />
                   <span className="font-medium">{item.text}</span>
                 </motion.div>
               ))}
@@ -159,11 +159,11 @@ export const HeroSection = () => {
               transition={{ duration: 0.3 }}
             >
               <Image
-                src="/hero-section/business-man-financial-inspector-secretary-making-report-calculating-checking-balance-internal-revenue-service-inspector-checking-document-audit-concept.jpg"
+                src="/hero-section/accountant-calculating-profit-with-financial-analysis-graphs.jpg"
                 alt="Professional tax inspector reviewing documents"
                 width={600}
                 height={400}
-                className="h-80 w-full object-cover"
+                className="size-80 w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
               <div className="absolute bottom-4 left-4 text-white">
@@ -185,11 +185,11 @@ export const HeroSection = () => {
                 whileHover={{ scale: 1.05, y: -5 }}
               >
                 <Image
-                  src="/hero-section/broker-looking-laptop-analyzing-stock-market-invest-trading-stocks-graph.jpg"
+                  src="/hero-section/business-man-financial-inspector-secretary-making-report-calculating-checking-balance-internal-revenue-service-inspector-checking-document-audit-concept.jpg"
                   alt="Financial analysis and market research"
                   width={300}
                   height={200}
-                  className="h-48 w-full object-cover"
+                  className="size-48 w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-3 left-3 text-white">
@@ -200,7 +200,7 @@ export const HeroSection = () => {
                 </div>
               </motion.div>
 
-              {/* Financial Calculations */}
+              {/* Tax Consultation */}
               <motion.div
                 className="relative overflow-hidden rounded-2xl shadow-xl"
                 initial={{ opacity: 0, y: 20 }}
@@ -209,17 +209,17 @@ export const HeroSection = () => {
                 whileHover={{ scale: 1.05, y: -5 }}
               >
                 <Image
-                  src="/hero-section/accountant-calculating-profit-with-financial-analysis-graphs.jpg"
+                  src="/hero-section/consultant-with-client.jpg"
                   alt="Accountant calculating profits with financial graphs"
                   width={300}
                   height={200}
-                  className="h-48 w-full object-cover"
+                  className="size-48 w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-3 left-3 text-white">
-                  <h4 className="text-sm font-semibold">Profit Analysis</h4>
+                  <h4 className="text-sm font-semibold">Tax Consultation</h4>
                   <p className="text-xs text-gray-200">
-                    Financial calculations
+                    Professional tax consultation
                   </p>
                 </div>
               </motion.div>
@@ -235,7 +235,7 @@ export const HeroSection = () => {
             >
               <div className="flex items-center space-x-3 text-white">
                 <div className="rounded-full bg-green-500 p-2">
-                  <CheckCircle className="h-5 w-5" />
+                  <CheckCircle className="size-5" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">Verified</p>

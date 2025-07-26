@@ -14,9 +14,9 @@ export function LoadingSpinner({
   className = "",
 }: LoadingSpinnerProps) {
   const sizeClasses = {
-    sm: "h-4 w-4",
-    md: "h-8 w-8",
-    lg: "h-12 w-12",
+    sm: "size-4",
+    md: "size-8",
+    lg: "size-12",
   };
 
   return (
@@ -26,7 +26,7 @@ export function LoadingSpinner({
       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
     >
       <svg
-        className="h-full w-full"
+        className="size-full"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ export function LoadingDots({ className = "" }: { className?: string }) {
       {[0, 1, 2].map((index) => (
         <motion.div
           key={index}
-          className="h-2 w-2 rounded-full bg-blue-600"
+          className="size-2 rounded-full bg-blue-600"
           animate={{
             scale: [1, 1.5, 1],
             opacity: [0.5, 1, 0.5],
@@ -73,7 +73,7 @@ export function LoadingDots({ className = "" }: { className?: string }) {
 export function LoadingPulse({ className = "" }: { className?: string }) {
   return (
     <motion.div
-      className={`h-8 w-8 rounded-full bg-blue-600 ${className}`}
+      className={`size-8 rounded-full bg-blue-600 ${className}`}
       animate={{
         scale: [1, 1.2, 1],
         opacity: [1, 0.7, 1],

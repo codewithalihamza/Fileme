@@ -25,7 +25,7 @@ export function Footer() {
               whileHover={{ scale: 1.05 }}
             >
               <motion.div
-                className="flex h-8 w-8 items-center justify-center rounded-lg"
+                className="flex size-8 items-center justify-center rounded-lg"
                 whileHover={{ rotate: 5 }}
                 animate={{ rotate: [0, 2, -2, 0] }}
                 transition={{

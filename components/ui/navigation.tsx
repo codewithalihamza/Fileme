@@ -50,7 +50,7 @@ export function Navigation() {
                 onClick={closeMobileMenu}
               >
                 <motion.div
-                  className="flex h-8 w-8 items-center justify-center rounded-lg"
+                  className="flex size-8 items-center justify-center rounded-lg"
                   whileHover={{ rotate: 5 }}
                   animate={{ rotate: [0, 5, -5, 0] }}
                   transition={{
@@ -121,7 +121,7 @@ export function Navigation() {
                       exit={{ rotate: 90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <X className="h-6 w-6" />
+                      <X className="size-6" />
                     </motion.div>
                   ) : (
                     <motion.div
@@ -131,7 +131,7 @@ export function Navigation() {
                       exit={{ rotate: -90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <Menu className="h-6 w-6" />
+                      <Menu className="size-6" />
                     </motion.div>
                   )}
                 </AnimatePresence>

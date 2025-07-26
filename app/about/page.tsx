@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/ui/footer";
 import { Navigation } from "@/components/ui/navigation";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, FileText, Shield, TrendingUp, Users } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import Link from "next/link";
 export default function AboutPage() {
   const services = [
     {
+      icon: <FileText className="size-8" />,
       title: "Tax Return Services",
       description:
         "Comprehensive tax preparation and filing services for individuals and businesses. We ensure accuracy, maximize deductions, and meet all deadlines.",
@@ -25,6 +26,7 @@ export default function AboutPage() {
       color: "blue",
     },
     {
+      icon: <Shield className="size-8" />,
       title: "Audit Services",
       description:
         "Professional audit services to ensure financial accuracy, compliance, and transparency. We help businesses maintain trust and meet regulatory requirements.",
@@ -40,6 +42,7 @@ export default function AboutPage() {
       color: "green",
     },
     {
+      icon: <Users className="size-8" />,
       title: "Tax Consulting",
       description:
         "Expert tax consulting to optimize your tax strategy, minimize liabilities, and ensure compliance with ever-changing tax laws and regulations.",
@@ -54,6 +57,7 @@ export default function AboutPage() {
       color: "purple",
     },
     {
+      icon: <TrendingUp className="size-8" />,
       title: "Financial Planning",
       description:
         "Comprehensive financial planning services to help you achieve your financial goals, from retirement planning to investment strategies.",
@@ -132,9 +136,8 @@ export default function AboutPage() {
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
-                className={`grid gap-12 lg:grid-cols-2 lg:items-center ${
-                  index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
-                }`}
+                className={`grid gap-12 lg:grid-cols-2 lg:items-center ${index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
+                  }`}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -142,6 +145,14 @@ export default function AboutPage() {
               >
                 {/* Content */}
                 <div className={`${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
+                  <div className={`inline-flex rounded-xl p-3 mb-6 ${service.color === 'blue' ? 'bg-blue-100 text-blue-600' :
+                      service.color === 'green' ? 'bg-green-100 text-green-600' :
+                        service.color === 'purple' ? 'bg-purple-100 text-purple-600' :
+                          'bg-orange-100 text-orange-600'
+                    }`}>
+                    {service.icon}
+                  </div>
+
                   <h3 className="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl">
                     {service.title}
                   </h3>
@@ -163,7 +174,7 @@ export default function AboutPage() {
                         }}
                         viewport={{ once: true }}
                       >
-                        <CheckCircle className="mr-3 h-5 w-5 flex-shrink-0 text-green-500" />
+                        <CheckCircle className="mr-3 size-5 shrink-0 text-green-500" />
                         <span className="text-base">{feature}</span>
                       </motion.li>
                     ))}
@@ -177,15 +188,14 @@ export default function AboutPage() {
                     <Button
                       asChild
                       size="lg"
-                      className={`${
-                        service.color === "blue"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : service.color === "green"
-                            ? "bg-green-600 hover:bg-green-700"
-                            : service.color === "purple"
-                              ? "bg-purple-600 hover:bg-purple-700"
-                              : "bg-orange-600 hover:bg-orange-700"
-                      } px-8 py-3 text-lg font-semibold text-white`}
+                      className={`${service.color === "blue"
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : service.color === "green"
+                          ? "bg-green-600 hover:bg-green-700"
+                          : service.color === "purple"
+                            ? "bg-purple-600 hover:bg-purple-700"
+                            : "bg-orange-600 hover:bg-orange-700"
+                        } px-8 py-3 text-lg font-semibold text-white`}
                     >
                       <Link href="/contact">Learn More</Link>
                     </Button>
@@ -243,9 +253,9 @@ export default function AboutPage() {
 
               <div className="space-y-4">
                 <div className="flex items-center">
-                  <div className="mr-4 flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
+                  <div className="mr-4 flex size-8 items-center justify-center rounded-full bg-green-100">
                     <svg
-                      className="h-5 w-5 text-green-600"
+                      className="size-5 text-green-600"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -259,9 +269,9 @@ export default function AboutPage() {
                   <span className="text-gray-700">Certified professionals</span>
                 </div>
                 <div className="flex items-center">
-                  <div className="mr-4 flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
+                  <div className="mr-4 flex size-8 items-center justify-center rounded-full bg-green-100">
                     <svg
-                      className="h-5 w-5 text-green-600"
+                      className="size-5 text-green-600"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -277,9 +287,9 @@ export default function AboutPage() {
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <div className="mr-4 flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
+                  <div className="mr-4 flex size-8 items-center justify-center rounded-full bg-green-100">
                     <svg
-                      className="h-5 w-5 text-green-600"
+                      className="size-5 text-green-600"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >

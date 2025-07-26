@@ -187,7 +187,7 @@ export function Experts() {
                       <motion.img
                         src={expert.image}
                         alt={expert.name}
-                        className="mx-auto h-32 w-32 rounded-full border-4 border-blue-100 object-cover"
+                        className="mx-auto size-32 rounded-full border-4 border-blue-100 object-cover"
                         whileHover={{
                           borderColor: "#3b82f6",
                           boxShadow: "0 0 0 4px rgba(59, 130, 246, 0.1)",
@@ -231,7 +231,7 @@ export function Experts() {
                           whileHover={{ rotate: 5 }}
                           transition={{ duration: 0.2 }}
                         >
-                          <Linkedin className="h-5 w-5" color="#0B66C2" />
+                          <Linkedin className="size-5" color="#0B66C2" />
                         </motion.div>
                       </Button>
                     </motion.div>
@@ -254,11 +254,10 @@ export function Experts() {
                 <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`h-3 w-3 rounded-full transition-colors ${
-                    index === current - 1
-                      ? "bg-blue-600"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
+                  className={`size-3 rounded-full transition-colors ${index === current - 1
+                    ? "bg-blue-600"
+                    : "bg-gray-300 hover:bg-gray-400"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}

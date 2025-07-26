@@ -87,7 +87,7 @@ export const CtaSection = () => {
       {/* Floating Elements */}
       <div className="absolute inset-0 z-0">
         <motion.div
-          className="absolute left-10 top-10 h-20 w-20 rounded-full bg-white/10 backdrop-blur-sm"
+          className="absolute left-10 top-10 size-20 rounded-full bg-white/10 backdrop-blur-sm"
           animate={{
             y: [0, -20, 0],
             rotate: [0, 360],
@@ -99,7 +99,7 @@ export const CtaSection = () => {
           }}
         />
         <motion.div
-          className="absolute right-20 top-32 h-16 w-16 rounded-full bg-yellow-400/20 backdrop-blur-sm"
+          className="absolute right-20 top-32 size-16 rounded-full bg-yellow-400/20 backdrop-blur-sm"
           animate={{
             y: [0, 15, 0],
             scale: [1, 1.2, 1],
@@ -111,7 +111,7 @@ export const CtaSection = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-20 left-1/4 h-12 w-12 rounded-full bg-green-400/20 backdrop-blur-sm"
+          className="absolute bottom-20 left-1/4 size-12 rounded-full bg-green-400/20 backdrop-blur-sm"
           animate={{
             x: [0, 10, 0],
             rotate: [0, -360],
@@ -140,7 +140,7 @@ export const CtaSection = () => {
             viewport={{ once: true }}
           >
             <svg
-              className="mr-2 h-5 w-5 text-yellow-400"
+              className="mr-2 size-5 text-yellow-400"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -212,7 +212,7 @@ export const CtaSection = () => {
               >
                 <Link href="/contact">
                   <svg
-                    className="mr-2 h-5 w-5"
+                    className="mr-2 size-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -238,7 +238,7 @@ export const CtaSection = () => {
               >
                 <Link href="/about">
                   <svg
-                    className="mr-2 h-5 w-5"
+                    className="mr-2 size-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -266,7 +266,7 @@ export const CtaSection = () => {
           >
             <div className="flex items-center">
               <svg
-                className="mr-2 h-4 w-4 text-green-400"
+                className="mr-2 size-4 text-green-400"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -280,7 +280,7 @@ export const CtaSection = () => {
             </div>
             <div className="flex items-center">
               <svg
-                className="mr-2 h-4 w-4 text-green-400"
+                className="mr-2 size-4 text-green-400"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -294,7 +294,7 @@ export const CtaSection = () => {
             </div>
             <div className="flex items-center">
               <svg
-                className="mr-2 h-4 w-4 text-green-400"
+                className="mr-2 size-4 text-green-400"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >

@@ -140,12 +140,12 @@ export default function ContactPage() {
                 >
                   {isSubmitting ? (
                     <div className="flex items-center">
-                      <div className="mr-2 h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                      <div className="mr-2 size-5 animate-spin rounded-full border-b-2 border-white"></div>
                       Sending...
                     </div>
                   ) : (
                     <div className="flex items-center">
-                      <Send className="mr-2 h-5 w-5" />
+                      <Send className="mr-2 size-5" />
                       Send Message
                     </div>
                   )}
@@ -169,7 +169,7 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <div className="rounded-lg bg-blue-600 p-3">
-                    <Mail className="h-6 w-6 text-white" />
+                    <Mail className="size-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -184,7 +184,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start space-x-4">
                   <div className="rounded-lg bg-green-600 p-3">
-                    <Phone className="h-6 w-6 text-white" />
+                    <Phone className="size-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -197,7 +197,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start space-x-4">
                   <div className="rounded-lg bg-orange-600 p-3">
-                    <MapPin className="h-6 w-6 text-white" />
+                    <MapPin className="size-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -216,19 +216,19 @@ export default function ContactPage() {
                 </h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-center">
-                    <span className="mr-3 h-2 w-2 rounded-full bg-blue-600"></span>
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
                     Expert tax professionals
                   </li>
                   <li className="flex items-center">
-                    <span className="mr-3 h-2 w-2 rounded-full bg-blue-600"></span>
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
                     Secure and confidential
                   </li>
                   <li className="flex items-center">
-                    <span className="mr-3 h-2 w-2 rounded-full bg-blue-600"></span>
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
                     Fast turnaround time
                   </li>
                   <li className="flex items-center">
-                    <span className="mr-3 h-2 w-2 rounded-full bg-blue-600"></span>
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
                     Competitive pricing
                   </li>
                 </ul>

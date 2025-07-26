@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 export const ServicesSection = () => {
   const services = [
     {
-      icon: <FileText className="h-8 w-8" />,
+      icon: <FileText className="size-8" />,
       title: "Tax Return Filing",
       description:
         "Professional tax return preparation and filing services. We ensure accuracy, maximize deductions, and meet all deadlines.",
@@ -21,7 +21,7 @@ export const ServicesSection = () => {
       iconBg: "bg-blue-600",
     },
     {
-      icon: <Shield className="h-8 w-8" />,
+      icon: <Shield className="size-8" />,
       title: "Audit Services",
       description:
         "Comprehensive audit services to ensure compliance and identify potential issues before they become problems.",
@@ -37,7 +37,7 @@ export const ServicesSection = () => {
       iconBg: "bg-green-600",
     },
     {
-      icon: <Users className="h-8 w-8" />,
+      icon: <Users className="size-8" />,
       title: "Tax Consulting",
       description:
         "Expert tax consulting to optimize your tax strategy, minimize liabilities, and ensure compliance with tax laws.",
@@ -53,7 +53,7 @@ export const ServicesSection = () => {
       iconBg: "bg-purple-600",
     },
     {
-      icon: <TrendingUp className="h-8 w-8" />,
+      icon: <TrendingUp className="size-8" />,
       title: "Financial Planning",
       description:
         "Comprehensive financial planning services to help you achieve your financial goals and secure your future.",
@@ -103,7 +103,7 @@ export const ServicesSection = () => {
               }}
             >
               <motion.div
-                className={`mb-6 flex h-16 w-16 items-center justify-center rounded-xl ${service.iconBg}`}
+                className={`mb-6 flex size-16 items-center justify-center rounded-xl ${service.iconBg}`}
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ duration: 0.2 }}
               >
@@ -131,7 +131,7 @@ export const ServicesSection = () => {
                     }}
                     viewport={{ once: true }}
                   >
-                    <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+                    <CheckCircle className="mr-2 size-5 text-green-500" />
                     {item}
                   </motion.li>
                 ))}
