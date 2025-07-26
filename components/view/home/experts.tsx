@@ -166,7 +166,7 @@ export function Experts() {
               {experts.map((expert, index) => (
                 <CarouselItem
                   key={expert.id}
-                  className="basis-full pl-2 sm:basis-1/2 md:pl-4 lg:basis-1/4 lg:pl-6"
+                  className="basis-full pl-2 sm:basis-1/2 md:pl-4 lg:basis-1/4 lg:pl-6 cursor-pointer"
                 >
                   <motion.div
                     className="h-full rounded-2xl bg-white p-6 text-center shadow-lg"
@@ -254,11 +254,10 @@ export function Experts() {
                 <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`h-3 w-3 rounded-full transition-colors ${
-                    index === current - 1
-                      ? "bg-blue-600"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
+                  className={`h-3 w-3 rounded-full transition-colors ${index === current - 1
+                    ? "bg-blue-600"
+                    : "bg-gray-300 hover:bg-gray-400"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}

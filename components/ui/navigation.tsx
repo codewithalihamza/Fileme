@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -45,7 +46,7 @@ export function Navigation() {
                 onClick={closeMobileMenu}
               >
                 <motion.div
-                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg"
                   whileHover={{ rotate: 5 }}
                   animate={{ rotate: [0, 5, -5, 0] }}
                   transition={{
@@ -54,7 +55,7 @@ export function Navigation() {
                     ease: "easeInOut",
                   }}
                 >
-                  <span className="text-sm font-bold text-white">F</span>
+                  <Image src="/nav-logo.png" alt="Fileme" width={32} height={32} />
                 </motion.div>
                 <motion.span
                   className="text-xl font-bold text-gray-900"
