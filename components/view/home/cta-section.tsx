@@ -236,7 +236,7 @@ export const CtaSection = () => {
                 variant="outline"
                 className="border-2 border-white/30 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20"
               >
-                <Link href="/demo">
+                <Link href="/about">
                   <svg
                     className="mr-2 h-5 w-5"
                     fill="none"

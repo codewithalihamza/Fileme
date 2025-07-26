@@ -16,6 +16,10 @@ const HeaderPage = [
     href: "/contact",
     label: "Contact",
   },
+  {
+    href: "/about",
+    label: "About",
+  },
 ];
 
 export function Navigation() {
