@@ -17,6 +17,10 @@ const HeaderPage = [
     label: "Contact",
   },
   {
+    href: "/refer",
+    label: "Refer",
+  },
+  {
     href: "/about",
     label: "About",
   },

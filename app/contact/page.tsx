@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Navigation } from "@/components/ui/navigation";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
