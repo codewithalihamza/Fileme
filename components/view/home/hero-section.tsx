@@ -1,88 +1,134 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Clock, FileText, Shield, TrendingUp } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  Shield,
+  Star,
+  Users,
+  Zap,
+} from "lucide-react";
 import { motion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 
 export const HeroSection = () => {
   return (
-    <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 py-20 lg:py-32">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+    <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0">
+        <Image
+          src="/hero-section/business-man-stock-exchange-trader-looking-laptop-screen-night.jpg"
+          alt="Professional tax advisor working"
+          fill
+          className="object-cover opacity-20"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-blue-900/60 to-indigo-900/80"></div>
+      </div>
+
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0">
+        <div className="animate-blob absolute left-10 top-20 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div className="animate-blob animation-delay-2000 absolute right-10 top-40 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl"></div>
+        <div className="animate-blob animation-delay-4000 absolute -bottom-8 left-20 h-96 w-96 rounded-full bg-indigo-500/10 blur-3xl"></div>
+      </div>
+
+      <div className="container relative mx-auto px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
+        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
+          {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
+            className="relative z-10"
           >
+            {/* Urgency Badge */}
             <motion.div
-              className="mb-6 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-800"
+              className="mb-8 inline-flex items-center rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-2xl backdrop-blur-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
             >
-              <Clock className="mr-2 h-4 w-4" />⏰ Last Date to File Tax Return:
-              31st September
+              <Clock className="mr-2 h-4 w-4 animate-pulse" />⚡ Last Date to
+              File: 30th September
             </motion.div>
 
+            {/* Main Heading */}
             <motion.h1
-              className="mb-6 text-4xl font-bold leading-tight text-gray-900 lg:text-6xl"
+              className="mb-8 text-5xl font-bold leading-tight text-white lg:text-7xl"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              Get Your Tax Return Filed Before{" "}
-              <span className="text-blue-600">31st September!</span>
+              Professional Tax{" "}
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+                Filing Services
+              </span>
             </motion.h1>
 
+            {/* Subtitle */}
             <motion.p
-              className="mb-8 text-xl leading-relaxed text-gray-600"
+              className="mb-10 text-xl leading-relaxed text-gray-300 lg:text-2xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              Professional tax return filing and audit services. Secure, fast,
-              and hassle-free.
+              Expert tax professionals with{" "}
+              <span className="font-semibold text-blue-400">99% accuracy</span>{" "}
+              and{" "}
+              <span className="font-semibold text-green-400">
+                24-hour support
+              </span>
+              . Secure, fast, and completely hassle-free filing experience.
             </motion.p>
 
+            {/* CTA Buttons */}
             <motion.div
-              className="flex gap-4"
+              className="mb-12 flex flex-col gap-4 sm:flex-row"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
             >
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button asChild size="lg" className="px-8 py-3 text-lg">
-                  <Link href="/contact">File Now</Link>
-                </Button>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <Button
-                  variant="outline"
+                  asChild
                   size="lg"
-                  className="px-8 py-3 text-lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 px-10 py-4 text-lg shadow-2xl hover:from-blue-700 hover:to-purple-700"
                 >
-                  Learn More
+                  <Link href="/contact" className="flex items-center">
+                    Start Filing Now
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
               </motion.div>
             </motion.div>
 
+            {/* Trust Indicators */}
             <motion.div
-              className="mt-8 flex items-center space-x-6 text-sm text-gray-600"
+              className="flex flex-wrap items-center gap-8 text-sm text-gray-300"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.9 }}
             >
               {[
-                { icon: CheckCircle, text: "Secure & Confidential" },
-                { icon: CheckCircle, text: "Expert Team" },
-                { icon: CheckCircle, text: "Fast Processing" },
+                {
+                  icon: Shield,
+                  text: "Bank-Level Security",
+                  color: "text-green-400",
+                },
+                {
+                  icon: Users,
+                  text: "1,000+ Happy Clients",
+                  color: "text-blue-400",
+                },
+                { icon: Star, text: "4.9/5 Rating", color: "text-yellow-400" },
+                { icon: Zap, text: "24hr Support", color: "text-purple-400" },
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -90,84 +136,112 @@ export const HeroSection = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 1.1 + index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                 >
-                  <item.icon className="mr-2 h-5 w-5 text-green-500" />
-                  {item.text}
+                  <item.icon className={`mr-2 h-5 w-5 ${item.color}`} />
+                  <span className="font-medium">{item.text}</span>
                 </motion.div>
               ))}
             </motion.div>
           </motion.div>
 
+          {/* Right Side - Image Gall ery */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
+            {/* Main Featured Image */}
             <motion.div
-              className="rounded-2xl bg-white p-8 shadow-2xl"
-              whileHover={{ y: -10, rotateY: 5 }}
+              className="relative mb-8 overflow-hidden rounded-3xl shadow-2xl"
+              whileHover={{ y: -10, scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="flex aspect-square items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
-                <motion.div
-                  className="text-center text-white"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                >
-                  <motion.div
-                    animate={{ rotate: [0, 5, -5, 0] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <FileText className="mx-auto mb-4 h-24 w-24" />
-                  </motion.div>
-                  <h3 className="mb-2 text-2xl font-bold">
-                    Tax Filing Made Easy
-                  </h3>
-                  <p className="text-blue-100">
-                    Professional expertise at your fingertips
-                  </p>
-                </motion.div>
+              <Image
+                src="/hero-section/business-man-financial-inspector-secretary-making-report-calculating-checking-balance-internal-revenue-service-inspector-checking-document-audit-concept.jpg"
+                alt="Professional tax inspector reviewing documents"
+                width={600}
+                height={400}
+                className="h-80 w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 text-white">
+                <h3 className="text-xl font-bold">Expert Tax Review</h3>
+                <p className="text-sm text-gray-200">
+                  Professional document analysis
+                </p>
               </div>
             </motion.div>
 
-            {/* Floating elements */}
+            {/* Image Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Stock Audit */}
+              <motion.div
+                className="relative overflow-hidden rounded-2xl shadow-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+                whileHover={{ scale: 1.05, y: -5 }}
+              >
+                <Image
+                  src="/hero-section/broker-looking-laptop-analyzing-stock-market-invest-trading-stocks-graph.jpg"
+                  alt="Financial analysis and market research"
+                  width={300}
+                  height={200}
+                  className="h-48 w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-3 left-3 text-white">
+                  <h4 className="text-sm font-semibold">Audit Services</h4>
+                  <p className="text-xs text-gray-200">
+                    Professional document analysis
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Financial Calculations */}
+              <motion.div
+                className="relative overflow-hidden rounded-2xl shadow-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+                whileHover={{ scale: 1.05, y: -5 }}
+              >
+                <Image
+                  src="/hero-section/accountant-calculating-profit-with-financial-analysis-graphs.jpg"
+                  alt="Accountant calculating profits with financial graphs"
+                  width={300}
+                  height={200}
+                  className="h-48 w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-3 left-3 text-white">
+                  <h4 className="text-sm font-semibold">Profit Analysis</h4>
+                  <p className="text-xs text-gray-200">
+                    Financial calculations
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Floating Action Cards */}
             <motion.div
-              className="absolute -right-4 -top-4 rounded-full bg-green-500 p-3 text-white shadow-lg"
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, 10, -10, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              whileHover={{ scale: 1.2 }}
+              className="absolute -right-8 top-1/4 rounded-2xl bg-white/10 p-4 shadow-2xl backdrop-blur-md"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.4 }}
+              whileHover={{ scale: 1.1, x: -5 }}
             >
-              <Shield className="h-6 w-6" />
-            </motion.div>
-            <motion.div
-              className="absolute -bottom-4 -left-4 rounded-full bg-orange-500 p-3 text-white shadow-lg"
-              animate={{
-                y: [0, 10, 0],
-                rotate: [0, -10, 10, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.5,
-              }}
-              whileHover={{ scale: 1.2 }}
-            >
-              <TrendingUp className="h-6 w-6" />
+              <div className="flex items-center space-x-3 text-white">
+                <div className="rounded-full bg-green-500 p-2">
+                  <CheckCircle className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">Verified</p>
+                  <p className="text-xs text-gray-300">IRS Approved</p>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         </div>

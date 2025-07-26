@@ -29,7 +29,7 @@ export const CtaSection = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          Time is running out! Get your tax return filed before September 31st
+          Time is running out! Get your tax return filed before September 30th
           to avoid penalties and ensure a smooth tax season.
         </motion.p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
