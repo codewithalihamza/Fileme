@@ -137,6 +137,30 @@ export function Footer() {
           >
             © 2025 Fileme. All rights reserved.
           </motion.p>
+          <motion.div
+            className="mt-2 flex items-center justify-center space-x-2"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <motion.span
+              className="text-xs text-gray-500"
+              whileHover={{ color: "#6b7280" }}
+            >
+              Created by
+            </motion.span>
+            <motion.a
+              href="https://syedalihamzaofficial.blogspot.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-blue-400 transition-colors duration-200 hover:text-blue-300"
+              whileHover={{ scale: 1.05, color: "#60a5fa" }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Ali Hamza
+            </motion.a>
+          </motion.div>
         </motion.div>
       </div>
     </motion.footer>
