@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -24,7 +25,7 @@ export function Footer() {
               whileHover={{ scale: 1.05 }}
             >
               <motion.div
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600"
+                className="flex h-8 w-8 items-center justify-center rounded-lg"
                 whileHover={{ rotate: 5 }}
                 animate={{ rotate: [0, 2, -2, 0] }}
                 transition={{
@@ -33,7 +34,7 @@ export function Footer() {
                   ease: "easeInOut",
                 }}
               >
-                <span className="text-sm font-bold text-white">F</span>
+                <Image src="/logo.png" alt="Fileme" width={32} height={32} />
               </motion.div>
               <span className="text-xl font-bold">Fileme</span>
             </motion.div>
