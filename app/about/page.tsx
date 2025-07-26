@@ -132,8 +132,9 @@ export default function AboutPage() {
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
-                className={`grid gap-12 lg:grid-cols-2 lg:items-center ${index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
-                  }`}
+                className={`grid gap-12 lg:grid-cols-2 lg:items-center ${
+                  index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
+                }`}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -176,14 +177,15 @@ export default function AboutPage() {
                     <Button
                       asChild
                       size="lg"
-                      className={`${service.color === "blue"
-                        ? "bg-blue-600 hover:bg-blue-700"
-                        : service.color === "green"
-                          ? "bg-green-600 hover:bg-green-700"
-                          : service.color === "purple"
-                            ? "bg-purple-600 hover:bg-purple-700"
-                            : "bg-orange-600 hover:bg-orange-700"
-                        } px-8 py-3 text-lg font-semibold text-white`}
+                      className={`${
+                        service.color === "blue"
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : service.color === "green"
+                            ? "bg-green-600 hover:bg-green-700"
+                            : service.color === "purple"
+                              ? "bg-purple-600 hover:bg-purple-700"
+                              : "bg-orange-600 hover:bg-orange-700"
+                      } px-8 py-3 text-lg font-semibold text-white`}
                     >
                       <Link href="/contact">Learn More</Link>
                     </Button>
@@ -229,9 +231,9 @@ export default function AboutPage() {
               </h2>
               <p className="mb-6 text-lg leading-relaxed text-gray-600">
                 We understand that financial matters can be complex and
-                overwhelming. That&apos;s why we&apos;re committed to providing clear,
-                reliable, and personalized financial services that help you make
-                informed decisions.
+                overwhelming. That&apos;s why we&apos;re committed to providing
+                clear, reliable, and personalized financial services that help
+                you make informed decisions.
               </p>
               <p className="mb-8 text-lg leading-relaxed text-gray-600">
                 Our team of experienced professionals combines deep expertise
