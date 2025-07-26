@@ -138,29 +138,31 @@ export default function ReferPage() {
             <CardContent>
               <div className="grid gap-6 md:grid-cols-3">
                 <div className="text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+                  <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-blue-100">
                     <span className="text-lg font-bold text-blue-600">1</span>
                   </div>
                   <h3 className="mb-2 font-semibold text-gray-900">
                     Refer a Friend
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Share your friend's details with us using the form below
+                    Share your friend&apos;s details with us using the form
+                    below
                   </p>
                 </div>
                 <div className="text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                  <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-green-100">
                     <span className="text-lg font-bold text-green-600">2</span>
                   </div>
                   <h3 className="mb-2 font-semibold text-gray-900">
                     They Subscribe
                   </h3>
                   <p className="text-sm text-gray-600">
-                    We'll reach out to your friend and help them get started
+                    We&apos;ll reach out to your friend and help them get
+                    started
                   </p>
                 </div>
                 <div className="text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
+                  <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-purple-100">
                     <span className="text-lg font-bold text-purple-600">3</span>
                   </div>
                   <h3 className="mb-2 font-semibold text-gray-900">
@@ -188,7 +190,7 @@ export default function ReferPage() {
                 {/* Friend Details Section */}
                 <div>
                   <h3 className="mb-4 border-b pb-2 text-lg font-semibold text-gray-900">
-                    Friend's Details
+                    Friend&apos;s Details
                   </h3>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
