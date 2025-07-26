@@ -55,7 +55,12 @@ export function Navigation() {
                     ease: "easeInOut",
                   }}
                 >
-                  <Image src="/nav-logo.png" alt="Fileme" width={32} height={32} />
+                  <Image
+                    src="/nav-logo.png"
+                    alt="Fileme"
+                    width={32}
+                    height={32}
+                  />
                 </motion.div>
                 <motion.span
                   className="text-xl font-bold text-gray-900"
