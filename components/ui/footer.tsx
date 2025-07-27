@@ -45,7 +45,7 @@ export function Footer() {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              Professional tax return filing and audit services. Secure, fast,
+              Professional tax return filing and accounting services. Secure, fast,
               and hassle-free.
             </motion.p>
           </motion.div>
@@ -65,7 +65,7 @@ export function Footer() {
             <motion.ul className="space-y-2 text-sm text-gray-300">
               {[
                 "Tax Return Filing",
-                "Audit Services",
+                "Accounting Services",
                 "Tax Consultation",
                 "Financial Planning",
               ].map((service, index) => (

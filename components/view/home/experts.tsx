@@ -36,12 +36,12 @@ const experts: Expert[] = [
   {
     id: 2,
     name: "Michael Chen",
-    role: "Audit Director",
+    role: "Accounting Director",
     image:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
     linkedin: "https://linkedin.com/in/michael-chen",
     description:
-      "Expert in financial audits and compliance. Former Big 4 auditor with 12+ years of experience.",
+      "Expert in financial accounting and compliance. Former Big 4 accountant with 12+ years of experience.",
   },
   {
     id: 3,
@@ -254,11 +254,10 @@ export function Experts() {
                 <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`size-3 rounded-full transition-colors ${
-                    index === current - 1
-                      ? "bg-blue-600"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
+                  className={`size-3 rounded-full transition-colors ${index === current - 1
+                    ? "bg-blue-600"
+                    : "bg-gray-300 hover:bg-gray-400"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}

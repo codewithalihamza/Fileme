@@ -16,11 +16,11 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Fileme - Professional Tax Return Filing & Audit Services",
+  title: "Fileme - Professional Tax Return Filing & Accounting Services",
   description:
-    "Get your tax return filed before 30th September! Professional tax return filing and audit services. Secure, fast, and hassle-free.",
+    "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free.",
   keywords:
-    "tax return, tax filing, audit services, tax preparation, tax deadline",
+    "tax return, tax filing, Accounting services, tax preparation, tax deadline",
 };
 
 export default function RootLayout({

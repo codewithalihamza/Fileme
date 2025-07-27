@@ -22,14 +22,13 @@ export const ServicesSection = () => {
     },
     {
       icon: <Shield className="size-8" />,
-      title: "Audit Services",
+      title: "Accounting Services",
       description:
-        "Comprehensive audit services to ensure compliance and identify potential issues before they become problems.",
+        "Comprehensive accounting services to ensure compliance and identify potential issues before they become problems.",
       features: [
-        "Financial Audits",
-        "Compliance Reviews",
-        "Risk Assessment",
-        "Expert Consultation",
+        "Bookkeeping",
+        "Account Compliance",
+        "Account Advisory",
       ],
       color: "green",
       gradient: "from-green-50 to-green-100",

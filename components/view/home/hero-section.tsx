@@ -176,7 +176,7 @@ export const HeroSection = () => {
 
             {/* Image Grid */}
             <div className="grid grid-cols-2 gap-4">
-              {/* Stock Audit */}
+              {/* Stock accounting */}
               <motion.div
                 className="relative overflow-hidden rounded-2xl shadow-xl"
                 initial={{ opacity: 0, y: 20 }}
@@ -193,9 +193,11 @@ export const HeroSection = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-3 left-3 text-white">
-                  <h4 className="text-sm font-semibold">Audit Services</h4>
+                  <h4 className="text-sm font-semibold">
+                    Accounting & Advisor Services
+                  </h4>
                   <p className="text-xs text-gray-200">
-                    Professional document analysis
+                    Professional accounting and advisory services
                   </p>
                 </div>
               </motion.div>
