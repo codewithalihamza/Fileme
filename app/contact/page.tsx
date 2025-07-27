@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
 import { Navigation } from "@/components/ui/navigation";
+import { validatePhoneNumber } from "@/lib/utils";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -12,8 +13,10 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
   });
+  const [errors, setErrors] = useState<Partial<typeof formData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
@@ -24,10 +27,39 @@ export default function ContactPage() {
       ...prev,
       [name]: value,
     }));
+    // Clear error when user starts typing
+    if (errors[name as keyof typeof formData]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Partial<typeof formData> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!validatePhoneNumber(formData.phone)) {
+      newErrors.phone = "Phone number must be 11 digits";
+    }
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fill in all required fields correctly.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -41,7 +73,8 @@ export default function ContactPage() {
 
       if (response.ok) {
         toast.success("Message sent successfully!");
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", phone: "", message: "" });
+        setErrors({});
       } else {
         toast.error("Failed to send message. Please try again.");
       }
@@ -81,18 +114,20 @@ export default function ContactPage() {
                     htmlFor="name"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Full Name *
+                    Full Name <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="name"
                     name="name"
                     type="text"
-                    required
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Enter your full name"
-                    className="w-full"
+                    className={`w-full ${errors.name ? "border-red-500" : ""}`}
                   />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                  )}
                 </div>
 
                 <div>
@@ -100,13 +135,12 @@ export default function ContactPage() {
                     htmlFor="email"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Email Address *
+                    Email Address
                   </label>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    required
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="Enter your email address"
@@ -116,21 +150,49 @@ export default function ContactPage() {
 
                 <div>
                   <label
+                    htmlFor="phone"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="03XXXXXXXXX (11 digits)"
+                    maxLength={11}
+                    className={`w-full ${errors.phone ? "border-red-500" : ""}`}
+                  />
+                  {errors.phone && (
+                    <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label
                     htmlFor="message"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Message *
+                    Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    required
                     value={formData.message}
                     onChange={handleInputChange}
                     placeholder="Tell us about your tax filing needs..."
                     rows={6}
-                    className="w-full resize-none rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.message ? "border-red-500" : "border-gray-300"
+                    }`}
                   />
+                  {errors.message && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 <Button

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Navigation } from "@/components/ui/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { validatePhoneNumber } from "@/lib/utils";
 import { useState } from "react";
 
 interface ReferralFormData {
@@ -62,12 +63,16 @@ export default function ReferPage() {
     }
     if (!formData.friendPhone.trim()) {
       newErrors.friendPhone = "Friend's phone number is required";
+    } else if (!validatePhoneNumber(formData.friendPhone)) {
+      newErrors.friendPhone = "Phone number must be 11 digits";
     }
     if (!formData.referrerName.trim()) {
       newErrors.referrerName = "Your name is required";
     }
     if (!formData.referrerPhone.trim()) {
       newErrors.referrerPhone = "Your phone number is required";
+    } else if (!validatePhoneNumber(formData.referrerPhone)) {
+      newErrors.referrerPhone = "Phone number must be 11 digits";
     }
     if (!formData.accountDetails.trim()) {
       newErrors.accountDetails = "Account details are required";
@@ -249,7 +254,8 @@ export default function ReferPage() {
                           handleInputChange("friendPhone", e.target.value)
                         }
                         className={`mt-1 ${errors.friendPhone ? "border-red-500" : ""}`}
-                        placeholder="Enter friend's phone number"
+                        placeholder="03XXXXXXXXX (11 digits)"
+                        maxLength={11}
                       />
                       {errors.friendPhone && (
                         <p className="mt-1 text-sm text-red-500">
@@ -322,7 +328,8 @@ export default function ReferPage() {
                           handleInputChange("referrerPhone", e.target.value)
                         }
                         className={`mt-1 ${errors.referrerPhone ? "border-red-500" : ""}`}
-                        placeholder="Enter your phone number"
+                        placeholder="03XXXXXXXXX (11 digits)"
+                        maxLength={11}
                       />
                       {errors.referrerPhone && (
                         <p className="mt-1 text-sm text-red-500">
