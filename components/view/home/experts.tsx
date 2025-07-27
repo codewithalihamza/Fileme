@@ -254,10 +254,11 @@ export function Experts() {
                 <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`size-3 rounded-full transition-colors ${index === current - 1
-                    ? "bg-blue-600"
-                    : "bg-gray-300 hover:bg-gray-400"
-                    }`}
+                  className={`size-3 rounded-full transition-colors ${
+                    index === current - 1
+                      ? "bg-blue-600"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
                   aria-label={`Go to slide ${index + 1}`}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}

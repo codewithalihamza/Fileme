@@ -45,8 +45,8 @@ export function Footer() {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              Professional tax return filing and accounting services. Secure, fast,
-              and hassle-free.
+              Professional tax return filing and accounting services. Secure,
+              fast, and hassle-free.
             </motion.p>
           </motion.div>
 

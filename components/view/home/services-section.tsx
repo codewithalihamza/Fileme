@@ -25,11 +25,7 @@ export const ServicesSection = () => {
       title: "Accounting Services",
       description:
         "Comprehensive accounting services to ensure compliance and identify potential issues before they become problems.",
-      features: [
-        "Bookkeeping",
-        "Account Compliance",
-        "Account Advisory",
-      ],
+      features: ["Bookkeeping", "Account Compliance", "Account Advisory"],
       color: "green",
       gradient: "from-green-50 to-green-100",
       borderColor: "border-green-200",

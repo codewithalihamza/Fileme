@@ -161,8 +161,8 @@ export default function ContactPage() {
                 </h2>
                 <p className="mb-8 text-gray-600">
                   Our team of tax professionals is here to help you with all
-                  your tax filing and accounting services needs. Reach out to us for
-                  personalized assistance.
+                  your tax filing and accounting services needs. Reach out to us
+                  for personalized assistance.
                 </p>
               </div>
 
