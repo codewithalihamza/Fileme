@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
@@ -124,6 +125,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <SpeedInsights />
         <Analytics />
         <Toaster position="top-right" />
       </body>
