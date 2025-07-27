@@ -18,7 +18,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: {
     default: "Fileme - Professional Tax Return Filing & Accounting Services",
-    template: "%s | Fileme"
+    template: "%s | Fileme",
   },
   description:
     "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free. Expert tax preparation, e-filing, and financial planning.",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "tax planning",
     "IRS representation",
     "business tax returns",
-    "individual tax returns"
+    "individual tax returns",
   ],
   authors: [{ name: "Fileme Team" }],
   creator: "Fileme",
@@ -55,7 +55,8 @@ export const metadata: Metadata = {
     url: "https://www.fileme.today",
     siteName: "Fileme",
     title: "Fileme - Professional Tax Return Filing & Accounting Services",
-    description: "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free.",
+    description:
+      "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free.",
     images: [
       {
         url: "/logo.png",
@@ -68,7 +69,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Fileme - Professional Tax Return Filing & Accounting Services",
-    description: "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free.",
+    description:
+      "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free.",
     images: ["/logo.png"],
     creator: "@fileme",
   },
@@ -104,16 +106,17 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "AccountingService",
               name: "Fileme",
-              description: "Professional tax return filing and accounting services",
+              description:
+                "Professional tax return filing and accounting services",
               url: "https://www.fileme.today",
               logo: "https://www.fileme.today/logo.png",
               serviceType: [
                 "Tax Return Filing",
                 "Accounting Services",
                 "Tax Consulting",
-                "Financial Planning"
-              ]
-            })
+                "Financial Planning",
+              ],
+            }),
           }}
         />
       </head>
