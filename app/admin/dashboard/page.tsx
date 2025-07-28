@@ -94,14 +94,14 @@ export default function AdminDashboardPage() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-4">
-                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                    <div className="size-2 rounded-full bg-green-500"></div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">Admin logged in</p>
                       <p className="text-xs text-gray-600">2 minutes ago</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
-                    <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+                    <div className="size-2 rounded-full bg-blue-500"></div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">Dashboard accessed</p>
                       <p className="text-xs text-gray-600">5 minutes ago</p>
