@@ -58,14 +58,14 @@ export const HeroSection = () => {
 
             {/* Main Heading */}
             <motion.h1
-              className="mb-8 text-5xl font-bold leading-tight text-white lg:text-7xl"
+              className="mb-8 text-[50px] font-bold leading-tight text-white lg:text-[60px]"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              Professional Tax{" "}
+              Professional Tax &{" "}
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-                Filing Services
+                Accounting Services
               </span>
             </motion.h1>
 
@@ -76,7 +76,7 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              Expert tax professionals with{" "}
+              Expert tax & accounting professionals with{" "}
               <span className="font-semibold text-blue-400">99% accuracy</span>{" "}
               and{" "}
               <span className="font-semibold text-green-400">

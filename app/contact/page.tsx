@@ -252,7 +252,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Phone
                     </h3>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
+                    <p className="text-gray-600">+92 348 6512212</p>
                     <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM EST</p>
                   </div>
                 </div>

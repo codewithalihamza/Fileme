@@ -25,43 +25,42 @@ interface Expert {
 const experts: Expert[] = [
   {
     id: 1,
-    name: "Sarah Johnson",
-    role: "Senior Tax Consultant",
+    name: "Ali Raza",
+    role: "Senior Accounting Consultant",
     image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/sarah-johnson",
+      "https://media.licdn.com/dms/image/v2/D4D03AQF6AlQvIQtK2w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1703659568660?e=1756339200&v=beta&t=KVryzzuc5Ah8VlenrQWr2jb52lGqXj-MoQfr13VudXM",
+    linkedin: "https://www.linkedin.com/in/syedalirazazaidii/",
     description:
-      "15+ years of experience in tax planning and compliance. Specializes in small business and individual tax returns.",
+      "4+ years of experience in financial accounting and compliance.",
   },
   {
     id: 2,
-    name: "Michael Chen",
-    role: "Accounting Director",
+    name: "Ali Hamza",
+    role: "Software Engineer",
     image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/michael-chen",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgorcYdz0E5TsArfLwh4CPJJXN-fDeoZfVGqYq1cwYeaSjYQAs6Y_6YHKVCtnvnB_Ojngj6a0h9Kz2VZGFzb9TDb8533T7UqXkHK-5Xd9UwE8Ulsckn-FsifAO76n85Dm8YrLc7sMC1HIO9HeNBc1LiVgkWNJ_nZO5nwzgM-V6K7p_RbhxcRrguw_5-lOU/w320-h320/WhatsApp%20Image%202023-08-01%20at%2011.07.22%20AM-modified.png",
+    linkedin: "https://www.linkedin.com/in/syedalihamzaofficial/",
     description:
-      "Expert in financial accounting and compliance. Former Big 4 accountant with 12+ years of experience.",
+      "5+ years of experience in software development and web development.",
   },
   {
     id: 3,
-    name: "Emily Rodriguez",
-    role: "Tax Strategy Specialist",
+    name: "Danyal Mehdi",
+    role: "Marketing Officer",
     image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/emily-rodriguez",
-    description:
-      "Specializes in tax optimization strategies for high-net-worth individuals and corporations.",
+      "https://media.licdn.com/dms/image/v2/C5103AQFDvzekCVEzgg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1519248773846?e=1756339200&v=beta&t=radz92-7xS5P2khwCpsVcdNmSx0sPuo34UH2d8Gv-XA",
+    linkedin: "https://www.linkedin.com/in/danyal-mehdi-0bb2b515a/",
+    description: "5+ years of experience in marketing and sales.",
   },
   {
     id: 4,
-    name: "David Thompson",
-    role: "Senior Accountant",
+    name: "Abdul Qayyum",
+    role: "Senior Accounting & Tax Consultant",
     image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/david-thompson",
+      "https://media.licdn.com/dms/image/v2/D4D03AQF6AlQvIQtK2w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1703659568660?e=1756339200&v=beta&t=KVryzzuc5Ah8VlenrQWr2jb52lGqXj-MoQfr13VudXM",
+    linkedin: "#",
     description:
-      "Certified Public Accountant with expertise in real estate and investment tax planning.",
+      "5+ years of experience in financial accounting and tax consulting.",
   },
   {
     id: 5,
@@ -92,16 +91,6 @@ const experts: Expert[] = [
     linkedin: "https://linkedin.com/in/jennifer-lee",
     description:
       "Expert in estate planning and wealth transfer strategies for high-net-worth families.",
-  },
-  {
-    id: 8,
-    name: "Alex Turner",
-    role: "Technology Tax Consultant",
-    image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/alex-turner",
-    description:
-      "Specializes in tax strategies for technology startups and digital businesses.",
   },
 ];
 

@@ -105,7 +105,7 @@ export function Footer() {
             <motion.div className="space-y-2 text-sm text-gray-300">
               {[
                 "Email: info@fileme.com",
-                "Phone: +1 (555) 123-4567",
+                "Phone: +92 348 6512212",
                 "Hours: Mon-Fri 9AM-6PM",
               ].map((contact, index) => (
                 <motion.p
