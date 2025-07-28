@@ -57,7 +57,7 @@ const experts: Expert[] = [
     name: "Abdul Qayyum",
     role: "Senior Accounting & Tax Consultant",
     image:
-      "https://media.licdn.com/dms/image/v2/D4D03AQF6AlQvIQtK2w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1703659568660?e=1756339200&v=beta&t=KVryzzuc5Ah8VlenrQWr2jb52lGqXj-MoQfr13VudXM",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiobScdfU9pwaWTg6A9rXn15rKZ71HEEQj1k-rFYxycBKon-luZmg7mgSRFI9MBDM2y4xDx4CJkgNCLTQd5Gx_f3ChH7lImutz87eVM27Dw0Vrp7_-OR9PE0JDmDrzkJg_WxnkkP3_YyUe7iscgbqGx1_9TWO3sep7A9yz0Nh1F7ZBujeIJ3naLIDeBEfOm/s1599/WhatsApp%20Image%202025-07-28%20at%2011.26.57%20PM.jpeg",
     linkedin: "#",
     description:
       "5+ years of experience in financial accounting and tax consulting.",
