@@ -18,25 +18,26 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Fileme - Professional Tax Return Filing & Accounting Services",
+    default: "Fileme - Professional Financial Services & Advisory",
     template: "%s | Fileme",
   },
   description:
-    "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free. Expert tax preparation, e-filing, and financial planning.",
+    "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory. Expert financial solutions for your business.",
   keywords: [
-    "tax return",
-    "tax filing",
+    "tax services",
     "accounting services",
+    "financial reporting",
+    "business valuation",
+    "financial analysis",
+    "internal controls",
+    "risk advisory",
     "tax preparation",
-    "tax deadline",
-    "e-filing",
-    "tax consulting",
-    "financial planning",
     "bookkeeping",
-    "tax planning",
-    "IRS representation",
-    "business tax returns",
-    "individual tax returns",
+    "IFRS compliance",
+    "business consulting",
+    "financial planning",
+    "audit services",
+    "compliance advisory",
   ],
   authors: [{ name: "Fileme Team" }],
   creator: "Fileme",
@@ -55,9 +56,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://www.fileme.today",
     siteName: "Fileme",
-    title: "Fileme - Professional Tax Return Filing & Accounting Services",
+    title: "Fileme - Professional Financial Services & Advisory",
     description:
-      "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free.",
+      "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory.",
     images: [
       {
         url: "/logo.png",
@@ -69,9 +70,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fileme - Professional Tax Return Filing & Accounting Services",
+    title: "Fileme - Professional Financial Services & Advisory",
     description:
-      "Get your tax return filed before 30th September! Professional tax return filing and Accounting services. Secure, fast, and hassle-free.",
+      "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory.",
     images: ["/logo.png"],
     creator: "@fileme",
   },
@@ -108,14 +109,16 @@ export default function RootLayout({
               "@type": "AccountingService",
               name: "Fileme",
               description:
-                "Professional tax return filing and accounting services",
+                "Professional financial services and advisory including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory",
               url: "https://www.fileme.today",
               logo: "https://www.fileme.today/logo.png",
               serviceType: [
-                "Tax Return Filing",
-                "Accounting Services",
-                "Tax Consulting",
-                "Financial Planning",
+                "Tax Services",
+                "Accounting & Financial Reporting",
+                "Business Valuation Services",
+                "Financial Analysis & Decision Support",
+                "Internal Controls Advisory",
+                "Risk Advisory Services",
               ],
             }),
           }}

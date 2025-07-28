@@ -19,7 +19,7 @@ export const HeroSection = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <Image
-          src="/hero-section/business-man-stock-exchange-trader-looking-laptop-screen-night.jpg"
+          src="/hero-section/financial-analysis.jpg"
           alt="Professional tax advisor working"
           fill
           className="object-cover opacity-20"

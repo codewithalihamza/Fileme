@@ -2,7 +2,15 @@
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/ui/footer";
 import { Navigation } from "@/components/ui/navigation";
-import { CheckCircle, FileText, Shield, TrendingUp, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  BarChart3,
+  Building2,
+  Calculator,
+  CheckCircle,
+  FileText,
+  Shield,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,60 +19,101 @@ export default function AboutPage() {
   const services = [
     {
       icon: <FileText className="size-8" />,
-      title: "Tax Return Services",
+      title: "Tax Services",
       description:
-        "Comprehensive tax preparation and filing services for individuals and businesses. We ensure accuracy, maximize deductions, and meet all deadlines.",
+        "Comprehensive tax services including return filing, compliance, and strategic tax planning to optimize your tax position.",
       features: [
-        "Individual Tax Returns",
-        "Business Tax Returns",
-        "E-filing Services",
-        "Tax Planning",
-        "Extension Filing",
+        "Tax Return Filing & Preparation",
+        "Business Registration & NTN",
+        "SECP Annual Filing",
+        "Sales Tax Registration & Returns",
+        "Withholding Tax Management",
+        "Tax Strategy & Planning",
       ],
       image:
         "/hero-section/accountant-calculating-profit-with-financial-analysis-graphs.jpg",
       color: "blue",
     },
     {
-      icon: <Shield className="size-8" />,
-      title: "Accounting Services",
+      icon: <Calculator className="size-8" />,
+      title: "Accounting & Financial Reporting",
       description:
-        "Professional Accounting services to ensure financial accuracy, compliance, and transparency. We help businesses maintain trust and meet regulatory requirements.",
-      features: ["Bookkeeping", "Account Compliance", "Account Advisory"],
+        "Professional accounting and financial reporting services ensuring compliance with IFRS/GAAP standards and statutory requirements.",
+      features: [
+        "Bookkeeping & General Ledger",
+        "Financial Statements Preparation",
+        "Group Accounts & Consolidation",
+        "IFRS/GAAP Advisory",
+        "Statutory Accounts Preparation",
+        "Management Reporting",
+      ],
       image:
         "/hero-section/business-man-financial-inspector-secretary-making-report-calculating-checking-balance-internal-revenue-service-inspector-checking-document-audit-concept.jpg",
       color: "green",
     },
     {
-      icon: <Users className="size-8" />,
-      title: "Tax Consulting",
+      icon: <Building2 className="size-8" />,
+      title: "Business Valuation Services",
       description:
-        "Expert tax consulting to optimize your tax strategy, minimize liabilities, and ensure compliance with ever-changing tax laws and regulations.",
+        "Expert business valuation services for mergers, acquisitions, investments, and fair value measurements in compliance with IFRS 13.",
       features: [
-        "Tax Strategy Planning",
-        "Business Structure Advice",
-        "Tax Law Updates",
-        "IRS Representation",
-        "Tax Dispute Resolution",
+        "Business Valuation for Mergers & Acquisitions",
+        "Fair Value Measurement (IFRS 13)",
+        "Share & Intangible Asset Valuation",
+        "Purchase Price Allocation (PPA)",
+        "Transaction Valuation Services",
+        "Mergers & Acquisitions Valuation Advisory",
       ],
       image: "/hero-section/consultant-with-client.jpg",
       color: "purple",
     },
     {
-      icon: <TrendingUp className="size-8" />,
-      title: "Financial Planning",
+      icon: <BarChart3 className="size-8" />,
+      title: "Financial Analysis & Decision Support",
       description:
-        "Comprehensive financial planning services to help you achieve your financial goals, from retirement planning to investment strategies.",
+        "Comprehensive financial analysis and decision support services to drive strategic business decisions and performance optimization.",
       features: [
-        "Retirement Planning",
-        "Investment Strategies",
-        "Estate Planning",
-        "Cash Flow Management",
-        "Financial Goal Setting",
+        "Ratio & Trend Analysis",
+        "Industry Benchmarking",
+        "Working Capital Assessment",
+        "Forecasting & Budgeting",
+        "Financial Planning & Analysis (FP&A)",
+        "KPI Design & Dashboard Reporting",
       ],
-      image:
-        "/hero-section/business-man-stock-exchange-trader-looking-laptop-screen-night.jpg",
+      image: "/hero-section/financial-analysis.jpg",
       color: "orange",
+    },
+    {
+      icon: <Shield className="size-8" />,
+      title: "Internal Controls Advisory",
+      description:
+        "Comprehensive internal controls design, review, and testing services to ensure robust financial controls and compliance frameworks.",
+      features: [
+        "Internal Controls Design & Review",
+        "COSO/COBIT Framework Compliance",
+        "Financial Control Mapping (ICFR/ICOFR)",
+        "Risk Control Matrix (RCM)",
+        "Controls Implementation",
+        "Financial Controls Advisory",
+      ],
+      image: "/hero-section/internal-controls-advisory.jpg",
+      color: "indigo",
+    },
+    {
+      icon: <AlertTriangle className="size-8" />,
+      title: "Risk Advisory Services",
+      description:
+        "Enterprise risk management and governance advisory services to identify, assess, and mitigate business risks effectively.",
+      features: [
+        "Risk Assessment & Mapping",
+        "Enterprise Risk Management (ERM)",
+        "Fraud Risk Assessments",
+        "Governance & Compliance (GRC)",
+        "Risk Registers & Mitigation",
+        "Operational Risk Advisory",
+      ],
+      image: "/hero-section/risk-advisory-services.jpg",
+      color: "red",
     },
   ];
 
@@ -75,13 +124,6 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-800 py-20">
         <div className="absolute inset-0">
-          <Image
-            src="/hero-section/business-man-stock-exchange-trader-looking-laptop-screen-night.jpg"
-            alt="Financial planning"
-            fill
-            className="object-cover opacity-20"
-            priority
-          />
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-indigo-700/90 to-purple-800/90" />
         </div>
 
@@ -98,10 +140,11 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="mx-auto mb-8 max-w-3xl text-xl text-blue-100 lg:text-2xl">
-              We are your trusted partner in tax preparation, accounting
-              services, consulting, and financial planning. With over 7+ years
-              of experience, we help individuals and businesses achieve
-              financial success.
+              We are your trusted partner in comprehensive financial services
+              including tax services, accounting & financial reporting, business
+              valuation, financial analysis, internal controls, and risk
+              advisory. With over 7+ years of experience, we help individuals
+              and businesses achieve financial success.
             </p>
           </motion.div>
         </div>

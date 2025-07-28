@@ -1,19 +1,31 @@
 "use client";
-import { CheckCircle, FileText, Shield, TrendingUp, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  BarChart3,
+  Building2,
+  Calculator,
+  CheckCircle,
+  FileText,
+  Shield,
+} from "lucide-react";
 import { motion } from "motion/react";
 
 export const ServicesSection = () => {
   const services = [
     {
       icon: <FileText className="size-8" />,
-      title: "Tax Return Filing",
+      title: "Tax Services",
       description:
-        "Professional tax return preparation and filing services. We ensure accuracy, maximize deductions, and meet all deadlines.",
+        "Comprehensive tax services including return filing, compliance, and strategic tax planning to optimize your tax position.",
       features: [
-        "Individual Tax Returns",
-        "Business Tax Returns",
-        "Maximize Deductions",
-        "Electronic Filing",
+        "Tax Return Filing & Preparation",
+        "Business Registration & NTN",
+        "SECP Annual Filing",
+        "Sales Tax Registration & Returns",
+        "Withholding Tax Management",
+        "Tax Strategy & Planning",
+        "Corporate Registration (SMC, Private Limited)",
+        "Tax Compliance & Advisory",
       ],
       color: "blue",
       gradient: "from-blue-50 to-blue-100",
@@ -21,26 +33,39 @@ export const ServicesSection = () => {
       iconBg: "bg-blue-600",
     },
     {
-      icon: <Shield className="size-8" />,
-      title: "Accounting Services",
+      icon: <Calculator className="size-8" />,
+      title: "Accounting & Financial Reporting",
       description:
-        "Comprehensive accounting services to ensure compliance and identify potential issues before they become problems.",
-      features: ["Bookkeeping", "Account Compliance", "Account Advisory"],
+        "Professional accounting and financial reporting services ensuring compliance with IFRS/GAAP standards and statutory requirements.",
+      features: [
+        "Bookkeeping & General Ledger",
+        "Financial Statements Preparation",
+        "Group Accounts & Consolidation",
+        "IFRS/GAAP Advisory",
+        "Statutory Accounts Preparation",
+        "Management Reporting",
+        "Financial Accounting Advisory",
+        "Outsourced Accounting Services",
+      ],
       color: "green",
       gradient: "from-green-50 to-green-100",
       borderColor: "border-green-200",
       iconBg: "bg-green-600",
     },
     {
-      icon: <Users className="size-8" />,
-      title: "Tax Consulting",
+      icon: <Building2 className="size-8" />,
+      title: "Business Valuation Services",
       description:
-        "Expert tax consulting to optimize your tax strategy, minimize liabilities, and ensure compliance with tax laws.",
+        "Expert business valuation services for mergers, acquisitions, investments, and fair value measurements in compliance with IFRS 13.",
       features: [
-        "Tax Strategy Planning",
-        "Business Structure Advice",
-        "Tax Law Updates",
-        "IRS Representation",
+        "Business Valuation for Mergers & Acquisitions",
+        "Fair Value Measurement (IFRS 13)",
+        "Share & Intangible Asset Valuation",
+        "Purchase Price Allocation (PPA)",
+        "Transaction Valuation Services",
+        "Financial Asset Valuation",
+        "Mergers & Acquisitions Valuation Advisory",
+        "Goodwill Impairment Testing",
       ],
       color: "purple",
       gradient: "from-purple-50 to-purple-100",
@@ -48,20 +73,64 @@ export const ServicesSection = () => {
       iconBg: "bg-purple-600",
     },
     {
-      icon: <TrendingUp className="size-8" />,
-      title: "Financial Planning",
+      icon: <BarChart3 className="size-8" />,
+      title: "Financial Analysis & Decision Support",
       description:
-        "Comprehensive financial planning services to help you achieve your financial goals and secure your future.",
+        "Comprehensive financial analysis and decision support services to drive strategic business decisions and performance optimization.",
       features: [
-        "Retirement Planning",
-        "Investment Strategies",
-        "Estate Planning",
-        "Cash Flow Management",
+        "Ratio & Trend Analysis",
+        "Industry Benchmarking",
+        "Working Capital Assessment",
+        "Forecasting & Budgeting",
+        "Financial Planning & Analysis (FP&A)",
+        "KPI Design & Dashboard Reporting",
+        "Performance Reporting",
+        "Decision Support Services",
       ],
       color: "orange",
       gradient: "from-orange-50 to-orange-100",
       borderColor: "border-orange-200",
       iconBg: "bg-orange-600",
+    },
+    {
+      icon: <Shield className="size-8" />,
+      title: "Internal Controls Advisory",
+      description:
+        "Comprehensive internal controls design, review, and testing services to ensure robust financial controls and compliance frameworks.",
+      features: [
+        "Internal Controls Design & Review",
+        "COSO/COBIT Framework Compliance",
+        "Financial Control Mapping (ICFR/ICOFR)",
+        "Risk Control Matrix (RCM)",
+        "Controls Implementation",
+        "Financial Controls Advisory",
+        "Internal Control Testing",
+        "Compliance Framework Development",
+      ],
+      color: "indigo",
+      gradient: "from-indigo-50 to-indigo-100",
+      borderColor: "border-indigo-200",
+      iconBg: "bg-indigo-600",
+    },
+    {
+      icon: <AlertTriangle className="size-8" />,
+      title: "Risk Advisory Services",
+      description:
+        "Enterprise risk management and governance advisory services to identify, assess, and mitigate business risks effectively.",
+      features: [
+        "Risk Assessment & Mapping",
+        "Enterprise Risk Management (ERM)",
+        "Fraud Risk Assessments",
+        "Governance & Compliance (GRC)",
+        "Risk Registers & Mitigation",
+        "Operational Risk Advisory",
+        "Internal Audit Support",
+        "Compliance Framework Design",
+      ],
+      color: "red",
+      gradient: "from-red-50 to-red-100",
+      borderColor: "border-red-200",
+      iconBg: "bg-red-600",
     },
   ];
 
@@ -83,7 +152,7 @@ export const ServicesSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => (
             <motion.div
               key={service.title}

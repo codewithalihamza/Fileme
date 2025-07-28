@@ -1,6 +1,6 @@
-# Fileme - Professional Tax Return Filing & Accounting Services
+# Fileme - Professional Financial Services & Advisory
 
-A modern, responsive website for Fileme, offering professional tax return filing and accounting services. Built with Next.js 15, TypeScript, Tailwind CSS, and Shadcn UI.
+A modern, responsive website for Fileme, offering comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory. Built with Next.js 15, TypeScript, Tailwind CSS, and Shadcn UI.
 
 ## Features
 
@@ -160,7 +160,7 @@ fileme/
 ### Home Page (`/`)
 
 - **Hero Section**: Deadline-focused messaging with call-to-action
-- **Services Section**: Tax Return Filing & Accounting Services overview
+- **Services Section**: Comprehensive professional services overview including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory
 - **Experts Section**: Team showcase with interactive carousel
 - **CTA Section**: Final call-to-action for tax filing
 
@@ -267,4 +267,4 @@ The project is compatible with any platform that supports Next.js:
 
 This project is licensed under the MIT License.
 
-**Fileme** - Professional tax return filing and Accounting services. Secure, fast, and hassle-free.
+**Fileme** - Professional financial services and advisory. Comprehensive solutions for your business needs.

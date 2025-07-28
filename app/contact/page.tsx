@@ -182,7 +182,7 @@ export default function ContactPage() {
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Tell us about your tax filing needs..."
+                    placeholder="Tell us about your professional services needs..."
                     rows={6}
                     className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                       errors.message ? "border-red-500" : "border-gray-300"
@@ -222,9 +222,9 @@ export default function ContactPage() {
                   Contact Information
                 </h2>
                 <p className="mb-8 text-gray-600">
-                  Our team of tax professionals is here to help you with all
-                  your tax filing and accounting services needs. Reach out to us
-                  for personalized assistance.
+                  Our team of financial professionals is here to help you with
+                  all your professional financial services and advisory needs.
+                  Reach out to us for personalized assistance.
                 </p>
               </div>
 

@@ -45,8 +45,9 @@ export function Footer() {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              Professional tax return filing and accounting services. Secure,
-              fast, and hassle-free.
+              Comprehensive professional services including tax services,
+              accounting & financial reporting, business valuation, financial
+              analysis, internal controls, and risk advisory.
             </motion.p>
           </motion.div>
 
@@ -64,10 +65,12 @@ export function Footer() {
             </motion.h3>
             <motion.ul className="space-y-2 text-sm text-gray-300">
               {[
-                "Tax Return Filing",
-                "Accounting Services",
-                "Tax Consultation",
-                "Financial Planning",
+                "Tax Services",
+                "Accounting & Financial Reporting",
+                "Business Valuation Services",
+                "Financial Analysis & Decision Support",
+                "Internal Controls Advisory",
+                "Risk Advisory Services",
               ].map((service, index) => (
                 <motion.li
                   key={index}

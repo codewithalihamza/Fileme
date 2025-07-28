@@ -2,10 +2,10 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Fileme - Professional Tax Return Filing & Accounting Services",
+    name: "Fileme - Professional Financial Services & Advisory",
     short_name: "Fileme",
     description:
-      "Professional tax return filing and accounting services. Secure, fast, and hassle-free.",
+      "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",
