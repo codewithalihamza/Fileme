@@ -4,6 +4,7 @@ import { CtaSection } from "@/components/view/home/cta-section";
 import { Experts } from "@/components/view/home/experts";
 import { HeroSection } from "@/components/view/home/hero-section";
 import { ServicesSection } from "@/components/view/home/services-section";
+import { TaxCalculator } from "@/components/view/home/tax-calculator";
 
 export default function Home() {
   return (
@@ -11,6 +12,9 @@ export default function Home() {
       <Navigation />
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Tax Calculator Section */}
+      <TaxCalculator />
 
       {/* Services Section */}
       <ServicesSection />
