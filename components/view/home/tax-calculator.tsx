@@ -120,7 +120,7 @@ export const TaxCalculator = () => {
           </motion.p>
         </motion.div>
 
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto mt-10 max-w-5xl">
           <motion.div
             className="mb-8 rounded-3xl border border-gray-200 bg-white p-8 shadow-xl"
             initial={{ opacity: 0, y: 50, scale: 0.9 }}

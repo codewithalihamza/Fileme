@@ -27,8 +27,7 @@ const experts: Expert[] = [
     id: 1,
     name: "Ali Raza",
     role: "Senior Accounting Consultant",
-    image:
-      "https://media.licdn.com/dms/image/v2/D4D03AQF6AlQvIQtK2w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1703659568660?e=1756339200&v=beta&t=KVryzzuc5Ah8VlenrQWr2jb52lGqXj-MoQfr13VudXM",
+    image: "",
     linkedin: "https://www.linkedin.com/in/syedalirazazaidii/",
     description:
       "4+ years of experience in financial accounting and compliance.",
@@ -66,9 +65,8 @@ const experts: Expert[] = [
     id: 5,
     name: "Lisa Wang",
     role: "International Tax Specialist",
-    image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/lisa-wang",
+    image: "",
+    linkedin: "#",
     description:
       "Expert in international tax law and cross-border transactions.",
   },
@@ -76,9 +74,8 @@ const experts: Expert[] = [
     id: 6,
     name: "Robert Martinez",
     role: "Corporate Tax Manager",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/robert-martinez",
+    image: "",
+    linkedin: "#",
     description:
       "Specializes in corporate tax planning and compliance for Fortune 500 companies.",
   },
@@ -86,9 +83,8 @@ const experts: Expert[] = [
     id: 7,
     name: "Jennifer Lee",
     role: "Estate Tax Specialist",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face",
-    linkedin: "https://linkedin.com/in/jennifer-lee",
+    image: "",
+    linkedin: "#",
     description:
       "Expert in estate planning and wealth transfer strategies for high-net-worth families.",
   },
@@ -173,16 +169,29 @@ export function Experts() {
                       className="relative mb-6"
                       whileHover={{ scale: 1.05 }}
                     >
-                      <motion.img
-                        src={expert.image}
-                        alt={expert.name}
-                        className="mx-auto size-32 rounded-full border-4 border-blue-100 object-cover"
-                        whileHover={{
-                          borderColor: "#3b82f6",
-                          boxShadow: "0 0 0 4px rgba(59, 130, 246, 0.1)",
-                        }}
-                        transition={{ duration: 0.3 }}
-                      />
+                      {expert.image ? (
+                        <motion.img
+                          src={expert.image}
+                          alt={expert.name}
+                          className="mx-auto size-32 rounded-full border-4 border-blue-100 object-cover"
+                          whileHover={{
+                            borderColor: "#3b82f6",
+                            boxShadow: "0 0 0 4px rgba(59, 130, 246, 0.1)",
+                          }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      ) : (
+                        <motion.div
+                          className="mx-auto flex size-32 items-center justify-center rounded-full border-4 border-blue-100 bg-gradient-to-br from-blue-500 to-indigo-600 text-4xl font-bold text-white"
+                          whileHover={{
+                            borderColor: "#3b82f6",
+                            boxShadow: "0 0 0 4px rgba(59, 130, 246, 0.1)",
+                          }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {expert.name.charAt(0).toUpperCase()}
+                        </motion.div>
+                      )}
                     </motion.div>
 
                     <motion.h3

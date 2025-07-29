@@ -222,9 +222,9 @@ export default function ContactPage() {
                   Contact Information
                 </h2>
                 <p className="mb-8 text-gray-600">
-                  Our team of financial professionals is here to help you with
-                  all your professional financial services and advisory needs.
-                  Reach out to us for personalized assistance.
+                  Our team of professionals is here to help you with all your
+                  tax services and accounting needs. Reach out to us for
+                  personalized assistance.
                 </p>
               </div>
 
@@ -265,8 +265,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Office
                     </h3>
-                    <p className="text-gray-600">123 Tax Street, Suite 100</p>
-                    <p className="text-gray-600">New York, NY 10001</p>
+                    <p className="text-gray-600">Modal Town, Lahore</p>
                     <p className="text-sm text-gray-500">By appointment only</p>
                   </div>
                 </div>
