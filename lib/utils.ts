@@ -31,3 +31,10 @@ export const formatNumberWithCommas = (value: string): string => {
 
   return number.toLocaleString("en-US");
 };
+
+export const contactInfo = {
+  Email: "info@fileme.com",
+  Phone: "+92 348 6512212",
+  Hours: "Mon-Fri 9AM-6PM",
+  Address: "Modal Town, Lahore",
+};

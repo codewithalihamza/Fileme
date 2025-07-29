@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
 import { Navigation } from "@/components/ui/navigation";
-import { validatePhoneNumber } from "@/lib/utils";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { contactInfo, validatePhoneNumber } from "@/lib/utils";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -237,7 +238,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Email
                     </h3>
-                    <p className="text-gray-600">info@fileme.com</p>
+                    <p className="text-gray-600">{contactInfo.Email}</p>
                     <p className="text-sm text-gray-500">
                       We&apos;ll respond within 24 hours
                     </p>
@@ -252,8 +253,8 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Phone
                     </h3>
-                    <p className="text-gray-600">+92 348 6512212</p>
-                    <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM EST</p>
+                    <p className="text-gray-600">{contactInfo.Phone}</p>
+                    <p className="text-sm text-gray-500">{contactInfo.Hours}</p>
                   </div>
                 </div>
 
@@ -265,7 +266,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Office
                     </h3>
-                    <p className="text-gray-600">Modal Town, Lahore</p>
+                    <p className="text-gray-600">{contactInfo.Address}</p>
                     <p className="text-sm text-gray-500">By appointment only</p>
                   </div>
                 </div>
@@ -300,6 +301,9 @@ export default function ContactPage() {
       </section>
 
       <Footer />
+
+      {/* WhatsApp Floating Button */}
+      <WhatsAppButton phoneNumber={contactInfo.Phone} />
     </div>
   );
 }

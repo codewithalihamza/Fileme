@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/ui/footer";
 import { Navigation } from "@/components/ui/navigation";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { contactInfo } from "@/lib/utils";
 import {
   AlertTriangle,
   BarChart3,
@@ -403,6 +405,9 @@ export default function AboutPage() {
       </section>
 
       <Footer />
+
+      {/* WhatsApp Floating Button */}
+      <WhatsAppButton phoneNumber={contactInfo.Phone} />
     </div>
   );
 }

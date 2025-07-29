@@ -1,5 +1,6 @@
 "use client";
 
+import { contactInfo } from "@/lib/utils";
 import { motion } from "motion/react";
 import Image from "next/image";
 
@@ -103,11 +104,7 @@ export function Footer() {
               Contact
             </motion.h3>
             <motion.div className="space-y-2 text-sm text-gray-300">
-              {[
-                "Email: info@fileme.com",
-                "Phone: +92 348 6512212",
-                "Hours: Mon-Fri 9AM-6PM",
-              ].map((contact, index) => (
+              {Object.entries(contactInfo).map(([key, value], index) => (
                 <motion.p
                   key={index}
                   initial={{ opacity: 0, x: 20 }}
@@ -120,7 +117,7 @@ export function Footer() {
                   }}
                   className="cursor-pointer"
                 >
-                  {contact}
+                  {key}: {value}
                 </motion.p>
               ))}
             </motion.div>
