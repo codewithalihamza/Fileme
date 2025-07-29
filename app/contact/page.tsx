@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
 import { Navigation } from "@/components/ui/navigation";
+import { ServiceDropdown } from "@/components/ui/service-dropdown";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { contactInfo, validatePhoneNumber } from "@/lib/utils";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
@@ -15,6 +16,7 @@ export default function ContactPage() {
     name: "",
     email: "",
     phone: "",
+    service: "tax",
     message: "",
   });
   const [errors, setErrors] = useState<Partial<typeof formData>>({});
@@ -45,6 +47,9 @@ export default function ContactPage() {
     } else if (!validatePhoneNumber(formData.phone)) {
       newErrors.phone = "Phone number must be 11 digits";
     }
+    if (!formData.service.trim()) {
+      newErrors.service = "Please select a service";
+    }
     if (!formData.message.trim()) {
       newErrors.message = "Message is required";
     }
@@ -74,7 +79,13 @@ export default function ContactPage() {
 
       if (response.ok) {
         toast.success("Message sent successfully!");
-        setFormData({ name: "", email: "", phone: "", message: "" });
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          service: "tax",
+          message: "",
+        });
         setErrors({});
       } else {
         toast.error("Failed to send message. Please try again.");
@@ -169,6 +180,19 @@ export default function ContactPage() {
                   {errors.phone && (
                     <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
                   )}
+                </div>
+
+                <div>
+                  <ServiceDropdown
+                    value={formData.service}
+                    onValueChange={(value) => {
+                      setFormData((prev) => ({ ...prev, service: value }));
+                      if (errors.service) {
+                        setErrors((prev) => ({ ...prev, service: "" }));
+                      }
+                    }}
+                    error={errors.service}
+                  />
                 </div>
 
                 <div>
@@ -279,7 +303,7 @@ export default function ContactPage() {
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-center">
                     <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
-                    Expert tax professionals
+                    Expert professionals
                   </li>
                   <li className="flex items-center">
                     <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
@@ -292,6 +316,14 @@ export default function ContactPage() {
                   <li className="flex items-center">
                     <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
                     Competitive pricing
+                  </li>
+                  <li className="flex items-center">
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
+                    Personalized service
+                  </li>
+                  <li className="flex items-center">
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
+                    Free consultation
                   </li>
                 </ul>
               </div>
