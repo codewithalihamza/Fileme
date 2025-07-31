@@ -2,7 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { calculateTax } from "@/lib/tax";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { calculateTax, taxYears } from "@/lib/tax";
 import { formatCurrency, formatNumberWithCommas } from "@/lib/utils";
 import {
   Calculator,
@@ -28,6 +35,9 @@ export const TaxCalculator = () => {
   const [displayValue, setDisplayValue] = useState<string>("");
   const [calculation, setCalculation] = useState<TaxCalculation | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [selectedTaxYear, setSelectedTaxYear] = useState(
+    taxYears[taxYears.length - 1]
+  );
 
   // Handle input change with comma formatting
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +59,7 @@ export const TaxCalculator = () => {
     await new Promise((resolve) => setTimeout(resolve, 800));
 
     const yearly = monthly * 12;
-    const yearlyTax = calculateTax(yearly);
+    const yearlyTax = calculateTax(yearly, selectedTaxYear.year);
     const monthlyTax = yearlyTax / 12;
 
     setCalculation({
@@ -146,7 +156,7 @@ export const TaxCalculator = () => {
                 Enter Your Monthly Salary
               </motion.h3>
               <motion.div
-                className="mx-auto flex max-w-2xl flex-col gap-6 sm:flex-row sm:items-end sm:justify-center"
+                className="mx-auto flex max-w-2xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-center"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
@@ -168,62 +178,92 @@ export const TaxCalculator = () => {
                     />
                   </motion.div>
                 </div>
+
+                {/* Tax Year Selection */}
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex justify-center sm:flex-none"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1 }}
+                  viewport={{ once: true }}
                 >
-                  <Button
-                    onClick={handleCalculate}
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
-                    disabled={
-                      !monthlySalary ||
-                      parseFloat(monthlySalary) <= 0 ||
-                      isCalculating
-                    }
+                  <Select
+                    value={selectedTaxYear.year}
+                    onValueChange={(value) => {
+                      const year = taxYears.find((y) => y.year === value);
+                      if (year) {
+                        setSelectedTaxYear(year);
+                      }
+                    }}
                   >
-                    <AnimatePresence mode="wait">
-                      {isCalculating ? (
-                        <motion.div
-                          key="loading"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex items-center gap-2"
-                        >
-                          <motion.div
-                            className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white"
-                            animate={{ rotate: 360 }}
-                            transition={{
-                              duration: 1,
-                              repeat: Infinity,
-                              ease: "linear",
-                            }}
-                          />
-                          Calculating...
-                        </motion.div>
-                      ) : (
-                        <motion.span
-                          key="calculate"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                        >
-                          Calculate Tax
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </Button>
+                    <SelectTrigger className="mx-auto w-full max-w-xs">
+                      <SelectValue placeholder="Select tax year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {taxYears.map((year) => (
+                        <SelectItem key={year.year} value={year.year}>
+                          {year.year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </motion.div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-6 flex justify-center sm:flex-none"
+              >
+                <Button
+                  onClick={handleCalculate}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
+                  disabled={
+                    !monthlySalary ||
+                    parseFloat(monthlySalary) <= 0 ||
+                    isCalculating
+                  }
+                >
+                  <AnimatePresence mode="wait">
+                    {isCalculating ? (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center gap-2"
+                      >
+                        <motion.div
+                          className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white"
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
+                        />
+                        Calculating...
+                      </motion.div>
+                    ) : (
+                      <motion.span
+                        key="calculate"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                      >
+                        Calculate Tax
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Button>
               </motion.div>
             </motion.div>
 
-            {/* Tax Year Selection */}
+            {/* Tax Year Info */}
             <motion.div
               className="rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 1 }}
+              transition={{ duration: 0.6, delay: 1.2 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
             >
@@ -238,7 +278,7 @@ export const TaxCalculator = () => {
                   }}
                 />
                 <p className="text-lg font-semibold text-blue-800">
-                  Tax Year: 2025-2026 (Latest)
+                  Tax Year: {selectedTaxYear.year}
                 </p>
               </div>
             </motion.div>
