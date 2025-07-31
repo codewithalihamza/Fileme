@@ -1,9 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
-import { Navigation } from "@/components/ui/navigation";
 import { ServiceDropdown } from "@/components/ui/service-dropdown";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { contactInfo, validatePhoneNumber } from "@/lib/utils";
@@ -99,8 +97,6 @@ export default function ContactPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navigation />
-
       <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16 text-center">
@@ -209,9 +205,8 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     placeholder="Tell us about your professional services needs..."
                     rows={6}
-                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.message ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.message ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.message && (
                     <p className="mt-1 text-sm text-red-500">
@@ -331,8 +326,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
 
       {/* WhatsApp Floating Button */}
       <WhatsAppButton phoneNumber={contactInfo.Phone} />

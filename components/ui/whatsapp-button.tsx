@@ -29,7 +29,7 @@ export function WhatsAppButton({
   return (
     <div
       className={cn(
-        "fixed bottom-10 right-10 z-50 transition-all duration-500 ease-in-out",
+        "fixed bottom-10 right-5 z-50 transition-all duration-500 ease-in-out",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
         className
       )}

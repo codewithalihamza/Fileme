@@ -8,14 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Navigation } from "@/components/ui/navigation";
 import { ServiceDropdown } from "@/components/ui/service-dropdown";
 import { Textarea } from "@/components/ui/textarea";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { useToast } from "@/hooks/use-toast";
-import { validatePhoneNumber } from "@/lib/utils";
+import { contactInfo, validatePhoneNumber } from "@/lib/utils";
 import { useState } from "react";
 
 interface ReferralFormData {
@@ -149,7 +148,6 @@ export default function ReferPage() {
 
   return (
     <div>
-      <Navigation />
       <div className="bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="mx-auto max-w-4xl">
@@ -438,7 +436,7 @@ export default function ReferPage() {
           </Card>
         </div>
       </div>
-      <Footer />
+      <WhatsAppButton phoneNumber={contactInfo.Phone} />
     </div>
   );
 }

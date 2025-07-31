@@ -1,5 +1,3 @@
-import { Footer } from "@/components/ui/footer";
-import { Navigation } from "@/components/ui/navigation";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { CtaSection } from "@/components/view/home/cta-section";
 import { Experts } from "@/components/view/home/experts";
@@ -10,8 +8,7 @@ import { contactInfo } from "@/lib/utils";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navigation />
+    <>
       {/* Hero Section */}
       <HeroSection />
 
@@ -25,10 +22,7 @@ export default function Home() {
       <CtaSection />
       {/* Experts Section */}
       <Experts />
-      <Footer />
-
-      {/* WhatsApp Floating Button */}
       <WhatsAppButton phoneNumber={contactInfo.Phone} />
-    </div>
+    </>
   );
 }

@@ -1,14 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Footer } from "@/components/ui/footer";
-import { Navigation } from "@/components/ui/navigation";
 import { ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
 
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Navigation />
-
       <main className="flex flex-1 items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-16">
         <div className="mx-auto max-w-2xl text-center">
           {/* 404 Number */}
@@ -83,8 +79,6 @@ export default function NotFound() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
