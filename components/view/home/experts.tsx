@@ -36,19 +36,19 @@ const experts: Expert[] = [
     id: 2,
     name: "Syed Shahzaid",
     role: "BPO Accounting Specialist",
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQFwJDSC7lwTwA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1719468687910?e=1756944000&v=beta&t=osxgUxF5pL4RxR9EG3luviZ7vci8ujlpv5c0a0Gp1bs",
+    image:
+      "https://media.licdn.com/dms/image/v2/D4D03AQFwJDSC7lwTwA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1719468687910?e=1756944000&v=beta&t=osxgUxF5pL4RxR9EG3luviZ7vci8ujlpv5c0a0Gp1bs",
     linkedin: "https://www.linkedin.com/in/syed-shahzaib-aca-384796218/",
-    description:
-      "Focuses specifically on outsourced accounting tasks.",
+    description: "Focuses specifically on outsourced accounting tasks.",
   },
   {
     id: 3,
     name: "Muhammad Noman",
     role: "Senior Internal Controls Analyst",
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQHOTSwXsnFJmg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1709370722420?e=1756944000&v=beta&t=KGp-kbq7ONyzOFPwyO4FtXgHPM5ppD9OUK7FkzUt68s",
+    image:
+      "https://media.licdn.com/dms/image/v2/D4D03AQHOTSwXsnFJmg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1709370722420?e=1756944000&v=beta&t=KGp-kbq7ONyzOFPwyO4FtXgHPM5ppD9OUK7FkzUt68s",
     linkedin: "https://www.linkedin.com/in/muhammad-noman-26617a189",
-    description:
-      "Internal controls and compliance expert.",
+    description: "Internal controls and compliance expert.",
   },
   {
     id: 4,
@@ -252,10 +252,11 @@ export function Experts() {
                 <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`size-3 rounded-full transition-colors ${index === current - 1
-                    ? "bg-blue-600"
-                    : "bg-gray-300 hover:bg-gray-400"
-                    }`}
+                  className={`size-3 rounded-full transition-colors ${
+                    index === current - 1
+                      ? "bg-blue-600"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
                   aria-label={`Go to slide ${index + 1}`}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}
