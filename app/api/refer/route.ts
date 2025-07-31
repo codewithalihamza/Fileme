@@ -1,3 +1,6 @@
+import { db } from "@/lib/db";
+import { contacts, referrals } from "@/lib/schema";
+import { and, eq, or } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -63,27 +66,76 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Console log the referral data
-    console.log("=== REFERRAL FORM SUBMISSION ===");
-    console.log("Friend Details:");
-    console.log("  Name:", friendName);
-    console.log("  Email:", friendEmail || "Not provided");
-    console.log("  Phone:", friendPhone);
-    console.log("");
-    console.log("Referrer Details:");
-    console.log("  Name:", referrerName);
-    console.log("  Email:", referrerEmail || "Not provided");
-    console.log("  Phone:", referrerPhone);
-    console.log("");
-    console.log("Service Details:");
-    console.log("  Service:", service);
-    console.log("");
-    console.log("Payment Details:");
-    console.log("  Account Details:", accountDetails);
-    console.log("==================================");
+    // Check if friend already exists in contacts with pending, in-progress, or unpaid status
+    const existingContact = await db
+      .select()
+      .from(contacts)
+      .where(
+        and(
+          or(
+            eq(contacts.phone, friendPhone),
+            eq(contacts.email, friendEmail || "")
+          ),
+          or(
+            eq(contacts.status, "pending"),
+            eq(contacts.status, "in-progress"),
+            eq(contacts.status, "unpaid")
+          )
+        )
+      );
+
+    if (existingContact.length > 0) {
+      return NextResponse.json(
+        {
+          error:
+            "This person already has a submission in progress. You cannot refer them at this time.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Check if this referral already exists
+    const existingReferral = await db
+      .select()
+      .from(referrals)
+      .where(
+        and(
+          eq(referrals.friendPhone, friendPhone),
+          eq(referrals.referrerPhone, referrerPhone)
+        )
+      );
+
+    if (existingReferral.length > 0) {
+      return NextResponse.json(
+        {
+          error:
+            "You have already referred this person. Please refer someone else.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Insert new referral
+    const newReferral = await db
+      .insert(referrals)
+      .values({
+        friendName,
+        friendEmail: friendEmail || null,
+        friendPhone,
+        referrerName,
+        referrerEmail: referrerEmail || null,
+        referrerPhone,
+        service,
+        accountDetails,
+        status: "pending",
+      })
+      .returning();
 
     return NextResponse.json(
-      { message: "Referral submitted successfully" },
+      {
+        message: "Referral submitted successfully",
+        data: newReferral[0],
+      },
       { status: 200 }
     );
   } catch (error) {

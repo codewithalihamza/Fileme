@@ -1,6 +1,7 @@
+import { db } from "@/lib/db";
+import { contacts } from "@/lib/schema";
+import { and, eq, or } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-
-// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,12 +34,52 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-    console.log(name, email, phone, service, message);
-    return;
-    // return NextResponse.json(
-    //   { message: "Email sent successfully", data },
-    //   { status: 200 }
-    // );
+
+    // Check if user already has a pending, in-progress, or unpaid submission
+    const existingSubmission = await db
+      .select()
+      .from(contacts)
+      .where(
+        and(
+          or(eq(contacts.phone, phone), eq(contacts.email, email || "")),
+          or(
+            eq(contacts.status, "pending"),
+            eq(contacts.status, "in-progress"),
+            eq(contacts.status, "unpaid")
+          )
+        )
+      );
+
+    if (existingSubmission.length > 0) {
+      return NextResponse.json(
+        {
+          error:
+            "You already have a submission in progress. Please wait for us to contact you or check your existing submission status.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Insert new contact submission
+    const newContact = await db
+      .insert(contacts)
+      .values({
+        name,
+        email: email || null,
+        phone,
+        service,
+        message,
+        status: "pending",
+      })
+      .returning();
+
+    return NextResponse.json(
+      {
+        message: "Contact form submitted successfully",
+        data: newContact[0],
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(
