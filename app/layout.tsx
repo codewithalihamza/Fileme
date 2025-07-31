@@ -128,9 +128,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AdminLayoutWrapper>
-          {children}
-        </AdminLayoutWrapper>
+        <AdminLayoutWrapper>{children}</AdminLayoutWrapper>
         <SpeedInsights />
         <Analytics />
         <Toaster position="top-right" />
