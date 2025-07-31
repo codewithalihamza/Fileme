@@ -34,6 +34,43 @@ const experts: Expert[] = [
   },
   {
     id: 2,
+    name: "Syed Shahzaid",
+    role: "BPO Accounting Specialist",
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQFwJDSC7lwTwA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1719468687910?e=1756944000&v=beta&t=osxgUxF5pL4RxR9EG3luviZ7vci8ujlpv5c0a0Gp1bs",
+    linkedin: "https://www.linkedin.com/in/syed-shahzaib-aca-384796218/",
+    description:
+      "Focuses specifically on outsourced accounting tasks.",
+  },
+  {
+    id: 3,
+    name: "Muhammad Noman",
+    role: "Senior Internal Controls Analyst",
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQHOTSwXsnFJmg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1709370722420?e=1756944000&v=beta&t=KGp-kbq7ONyzOFPwyO4FtXgHPM5ppD9OUK7FkzUt68s",
+    linkedin: "https://www.linkedin.com/in/muhammad-noman-26617a189",
+    description:
+      "Internal controls and compliance expert.",
+  },
+  {
+    id: 4,
+    name: "Abdul Qayyum",
+    role: "SECP & Tax Compliance Expert",
+    image:
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiobScdfU9pwaWTg6A9rXn15rKZ71HEEQj1k-rFYxycBKon-luZmg7mgSRFI9MBDM2y4xDx4CJkgNCLTQd5Gx_f3ChH7lImutz87eVM27Dw0Vrp7_-OR9PE0JDmDrzkJg_WxnkkP3_YyUe7iscgbqGx1_9TWO3sep7A9yz0Nh1F7ZBujeIJ3naLIDeBEfOm/s1599/WhatsApp%20Image%202025-07-28%20at%2011.26.57%20PM.jpeg",
+    linkedin: "#",
+    description:
+      "5+ years of experience in financial accounting and tax consulting.",
+  },
+  {
+    id: 5,
+    name: "Danyal Mehdi",
+    role: "Marketing Officer",
+    image:
+      "https://media.licdn.com/dms/image/v2/C5103AQFDvzekCVEzgg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1519248773846?e=1756339200&v=beta&t=radz92-7xS5P2khwCpsVcdNmSx0sPuo34UH2d8Gv-XA",
+    linkedin: "https://www.linkedin.com/in/danyal-mehdi-0bb2b515a/",
+    description: "5+ years of experience in marketing and sales.",
+  },
+  {
+    id: 6,
     name: "Ali Hamza",
     role: "Software Engineer",
     image:
@@ -43,45 +80,8 @@ const experts: Expert[] = [
       "5+ years of experience in software development and web development.",
   },
   {
-    id: 3,
-    name: "Danyal Mehdi",
-    role: "Marketing Officer",
-    image:
-      "https://media.licdn.com/dms/image/v2/C5103AQFDvzekCVEzgg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1519248773846?e=1756339200&v=beta&t=radz92-7xS5P2khwCpsVcdNmSx0sPuo34UH2d8Gv-XA",
-    linkedin: "https://www.linkedin.com/in/danyal-mehdi-0bb2b515a/",
-    description: "5+ years of experience in marketing and sales.",
-  },
-  {
-    id: 4,
-    name: "Abdul Qayyum",
-    role: "Senior Accounting & Tax Consultant",
-    image:
-      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiobScdfU9pwaWTg6A9rXn15rKZ71HEEQj1k-rFYxycBKon-luZmg7mgSRFI9MBDM2y4xDx4CJkgNCLTQd5Gx_f3ChH7lImutz87eVM27Dw0Vrp7_-OR9PE0JDmDrzkJg_WxnkkP3_YyUe7iscgbqGx1_9TWO3sep7A9yz0Nh1F7ZBujeIJ3naLIDeBEfOm/s1599/WhatsApp%20Image%202025-07-28%20at%2011.26.57%20PM.jpeg",
-    linkedin: "#",
-    description:
-      "5+ years of experience in financial accounting and tax consulting.",
-  },
-  {
-    id: 5,
-    name: "Lisa Wang",
-    role: "International Tax Specialist",
-    image: "",
-    linkedin: "#",
-    description:
-      "Expert in international tax law and cross-border transactions.",
-  },
-  {
-    id: 6,
-    name: "Robert Martinez",
-    role: "Corporate Tax Manager",
-    image: "",
-    linkedin: "#",
-    description:
-      "Specializes in corporate tax planning and compliance for Fortune 500 companies.",
-  },
-  {
     id: 7,
-    name: "Jennifer Lee",
+    name: "Kashan",
     role: "Estate Tax Specialist",
     image: "",
     linkedin: "#",
@@ -252,11 +252,10 @@ export function Experts() {
                 <motion.button
                   key={index}
                   onClick={() => scrollTo(index)}
-                  className={`size-3 rounded-full transition-colors ${
-                    index === current - 1
-                      ? "bg-blue-600"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
+                  className={`size-3 rounded-full transition-colors ${index === current - 1
+                    ? "bg-blue-600"
+                    : "bg-gray-300 hover:bg-gray-400"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}
