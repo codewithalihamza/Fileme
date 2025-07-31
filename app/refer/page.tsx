@@ -12,6 +12,7 @@ import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Navigation } from "@/components/ui/navigation";
+import { ServiceDropdown } from "@/components/ui/service-dropdown";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { validatePhoneNumber } from "@/lib/utils";
@@ -27,6 +28,7 @@ interface ReferralFormData {
   referrerName: string;
   referrerEmail: string;
   referrerPhone: string;
+  service: string;
 
   // Account details
   accountDetails: string;
@@ -41,6 +43,7 @@ export default function ReferPage() {
     referrerName: "",
     referrerEmail: "",
     referrerPhone: "",
+    service: "tax",
     accountDetails: "",
   });
 
@@ -74,6 +77,9 @@ export default function ReferPage() {
     } else if (!validatePhoneNumber(formData.referrerPhone)) {
       newErrors.referrerPhone = "Phone number must be 11 digits";
     }
+    if (!formData.service.trim()) {
+      newErrors.service = "Please select a service";
+    }
     if (!formData.accountDetails.trim()) {
       newErrors.accountDetails = "Account details are required";
     }
@@ -82,7 +88,7 @@ export default function ReferPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -94,27 +100,51 @@ export default function ReferPage() {
       return;
     }
 
-    // Log the form data (for now)
-    console.log("Referral Form Data:", formData);
+    try {
+      const response = await fetch("/api/refer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Show success message
-    toast({
-      title: "Referral Submitted!",
-      description:
-        "Thank you for your referral. We'll contact you soon with updates.",
-    });
+      if (response.ok) {
+        // Show success message
+        toast({
+          title: "Referral Submitted!",
+          description:
+            "Thank you for your referral. We'll contact you soon with updates.",
+        });
 
-    // Reset form
-    setFormData({
-      friendName: "",
-      friendEmail: "",
-      friendPhone: "",
-      referrerName: "",
-      referrerEmail: "",
-      referrerPhone: "",
-      accountDetails: "",
-    });
-    setErrors({});
+        // Reset form
+        setFormData({
+          friendName: "",
+          friendEmail: "",
+          friendPhone: "",
+          referrerName: "",
+          referrerEmail: "",
+          referrerPhone: "",
+          service: "tax",
+          accountDetails: "",
+        });
+        setErrors({});
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Submission Failed",
+          description:
+            errorData.error || "Failed to submit referral. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "Failed to submit referral. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -263,6 +293,26 @@ export default function ReferPage() {
                         </p>
                       )}
                     </div>
+                  </div>
+                </div>
+
+                {/* Service Selection Section */}
+                <div>
+                  <h3 className="mb-4 border-b pb-2 text-lg font-semibold text-gray-900">
+                    Service Required
+                  </h3>
+                  <div>
+                    <ServiceDropdown
+                      value={formData.service}
+                      onValueChange={(value) => {
+                        setFormData((prev) => ({ ...prev, service: value }));
+                        if (errors.service) {
+                          setErrors((prev) => ({ ...prev, service: "" }));
+                        }
+                      }}
+                      error={errors.service}
+                      placeholder="Select a service your friend needs"
+                    />
                   </div>
                 </div>
 

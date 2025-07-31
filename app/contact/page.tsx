@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/ui/footer";
 import { Input } from "@/components/ui/input";
 import { Navigation } from "@/components/ui/navigation";
-import { validatePhoneNumber } from "@/lib/utils";
+import { ServiceDropdown } from "@/components/ui/service-dropdown";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { contactInfo, validatePhoneNumber } from "@/lib/utils";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -14,6 +16,7 @@ export default function ContactPage() {
     name: "",
     email: "",
     phone: "",
+    service: "tax",
     message: "",
   });
   const [errors, setErrors] = useState<Partial<typeof formData>>({});
@@ -44,6 +47,9 @@ export default function ContactPage() {
     } else if (!validatePhoneNumber(formData.phone)) {
       newErrors.phone = "Phone number must be 11 digits";
     }
+    if (!formData.service.trim()) {
+      newErrors.service = "Please select a service";
+    }
     if (!formData.message.trim()) {
       newErrors.message = "Message is required";
     }
@@ -73,7 +79,13 @@ export default function ContactPage() {
 
       if (response.ok) {
         toast.success("Message sent successfully!");
-        setFormData({ name: "", email: "", phone: "", message: "" });
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          service: "tax",
+          message: "",
+        });
         setErrors({});
       } else {
         toast.error("Failed to send message. Please try again.");
@@ -171,6 +183,19 @@ export default function ContactPage() {
                 </div>
 
                 <div>
+                  <ServiceDropdown
+                    value={formData.service}
+                    onValueChange={(value) => {
+                      setFormData((prev) => ({ ...prev, service: value }));
+                      if (errors.service) {
+                        setErrors((prev) => ({ ...prev, service: "" }));
+                      }
+                    }}
+                    error={errors.service}
+                  />
+                </div>
+
+                <div>
                   <label
                     htmlFor="message"
                     className="mb-2 block text-sm font-medium text-gray-700"
@@ -222,9 +247,9 @@ export default function ContactPage() {
                   Contact Information
                 </h2>
                 <p className="mb-8 text-gray-600">
-                  Our team of financial professionals is here to help you with
-                  all your professional financial services and advisory needs.
-                  Reach out to us for personalized assistance.
+                  Our team of professionals is here to help you with all your
+                  tax services and accounting needs. Reach out to us for
+                  personalized assistance.
                 </p>
               </div>
 
@@ -237,7 +262,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Email
                     </h3>
-                    <p className="text-gray-600">info@fileme.com</p>
+                    <p className="text-gray-600">{contactInfo.Email}</p>
                     <p className="text-sm text-gray-500">
                       We&apos;ll respond within 24 hours
                     </p>
@@ -252,8 +277,8 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Phone
                     </h3>
-                    <p className="text-gray-600">+92 348 6512212</p>
-                    <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM EST</p>
+                    <p className="text-gray-600">{contactInfo.Phone}</p>
+                    <p className="text-sm text-gray-500">{contactInfo.Hours}</p>
                   </div>
                 </div>
 
@@ -265,8 +290,7 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Office
                     </h3>
-                    <p className="text-gray-600">123 Tax Street, Suite 100</p>
-                    <p className="text-gray-600">New York, NY 10001</p>
+                    <p className="text-gray-600">{contactInfo.Address}</p>
                     <p className="text-sm text-gray-500">By appointment only</p>
                   </div>
                 </div>
@@ -279,7 +303,7 @@ export default function ContactPage() {
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-center">
                     <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
-                    Expert tax professionals
+                    Expert professionals
                   </li>
                   <li className="flex items-center">
                     <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
@@ -293,6 +317,14 @@ export default function ContactPage() {
                     <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
                     Competitive pricing
                   </li>
+                  <li className="flex items-center">
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
+                    Personalized service
+                  </li>
+                  <li className="flex items-center">
+                    <span className="mr-3 size-2 rounded-full bg-blue-600"></span>
+                    Free consultation
+                  </li>
                 </ul>
               </div>
             </div>
@@ -301,6 +333,9 @@ export default function ContactPage() {
       </section>
 
       <Footer />
+
+      {/* WhatsApp Floating Button */}
+      <WhatsAppButton phoneNumber={contactInfo.Phone} />
     </div>
   );
 }
