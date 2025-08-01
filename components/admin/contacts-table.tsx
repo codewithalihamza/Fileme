@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { getStatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -18,104 +19,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-
-interface Contact {
-  id: string;
-  name: string;
-  email: string | null;
-  phone: string;
-  service: string;
-  message: string;
-  status: "pending" | "in-progress" | "completed" | "unpaid" | "paid";
-  paidAmount: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Pagination {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
+import { TableEmpty } from "@/components/ui/table-empty";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useContacts } from "@/hooks/use-contacts";
+import { ChevronLeft, ChevronRight, Edit, Eye, Search } from "lucide-react";
+import Link from "next/link";
 
 export function ContactsTable() {
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({
-    page: 1,
-    limit: 10,
-    total: 0,
-    totalPages: 0,
-  });
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [loading, setLoading] = useState(true);
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
-
-  const fetchContacts = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: pagination.page.toString(),
-        limit: pagination.limit.toString(),
-        ...(search && { search }),
-        ...(statusFilter && statusFilter !== "all" && { status: statusFilter }),
-      });
-
-      const response = await fetch(`/api/admin/contacts?${params}`);
-      if (!response.ok) throw new Error("Failed to fetch contacts");
-
-      const data = await response.json();
-      setContacts(data.data);
-      setPagination(data.pagination);
-    } catch (error) {
-      toast.error("Failed to fetch contacts");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchContacts();
-  }, [pagination.page, search, statusFilter]);
-
-  const updateContact = async (id: string, updates: any) => {
-    try {
-      setUpdatingId(id);
-      const response = await fetch("/api/admin/contacts", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, ...updates }),
-      });
-
-      if (!response.ok) throw new Error("Failed to update contact");
-
-      toast.success("Contact updated successfully");
-      fetchContacts();
-    } catch (error) {
-      toast.error("Failed to update contact");
-    } finally {
-      setUpdatingId(null);
-    }
-  };
-
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      pending: "bg-yellow-100 text-yellow-800",
-      "in-progress": "bg-blue-100 text-blue-800",
-      completed: "bg-green-100 text-green-800",
-      unpaid: "bg-red-100 text-red-800",
-      paid: "bg-green-100 text-green-800",
-    };
-    return (
-      <Badge className={variants[status as keyof typeof variants]}>
-        {status.replace("-", " ")}
-      </Badge>
-    );
-  };
+  const {
+    contacts,
+    pagination,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    loading,
+    updatingId,
+    updateContact,
+    setPage,
+  } = useContacts();
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -126,14 +48,6 @@ export function ContactsTable() {
       minute: "2-digit",
     });
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-lg">Loading contacts...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-4">
@@ -180,62 +94,113 @@ export function ContactsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {contacts.map((contact) => (
-              <TableRow key={contact.id}>
-                <TableCell>
-                  <div>
-                    <div className="font-medium">{contact.name}</div>
-                    {contact.email && (
-                      <div className="text-sm text-gray-500">
-                        {contact.email}
+            {loading ? (
+              <TableSkeleton rows={5} columns={7} />
+            ) : contacts.length === 0 ? (
+              <TableEmpty
+                message="No contacts found"
+                description="No contact submissions match your current filters"
+                icon="inbox"
+                columns={7}
+              />
+            ) : (
+              contacts.map((contact) => (
+                <TableRow key={contact.id}>
+                  <TableCell>
+                    <div>
+                      <div className="font-medium">{contact.name}</div>
+                      {contact.email && (
+                        <div className="text-sm text-gray-500">
+                          {contact.email}
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>{contact.phone}</TableCell>
+                  <TableCell className="capitalize">
+                    {contact.service}
+                  </TableCell>
+                  <TableCell>{getStatusBadge(contact.status)}</TableCell>
+                  <TableCell>
+                    {contact.paidAmount ? `$${contact.paidAmount}` : "-"}
+                  </TableCell>
+                  <TableCell>{formatDate(contact.createdAt)}</TableCell>
+                  <TableCell>
+                    {updatingId === contact.id ? (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-8 w-8" />
+                          <Skeleton className="h-8 w-8" />
+                        </div>
+                        <Skeleton className="h-10 w-[140px]" />
+                        <Skeleton className="h-10 w-[140px]" />
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <Link href={`/admin/contacts/${contact.id}`}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <Select
+                          value={contact.status}
+                          onValueChange={(value) =>
+                            updateContact(contact.id, {
+                              status: value as
+                                | "pending"
+                                | "in-progress"
+                                | "completed"
+                                | "unpaid"
+                                | "paid",
+                            })
+                          }
+                          disabled={updatingId === contact.id}
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="in-progress">
+                              In Progress
+                            </SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="unpaid">Unpaid</SelectItem>
+                            <SelectItem value="paid">Paid</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          placeholder="Paid amount"
+                          type="number"
+                          step="0.01"
+                          className="w-[140px]"
+                          defaultValue={contact.paidAmount || ""}
+                          onBlur={(e) => {
+                            const value = e.target.value;
+                            if (value) {
+                              updateContact(contact.id, { paidAmount: value });
+                            }
+                          }}
+                        />
                       </div>
                     )}
-                  </div>
-                </TableCell>
-                <TableCell>{contact.phone}</TableCell>
-                <TableCell className="capitalize">{contact.service}</TableCell>
-                <TableCell>{getStatusBadge(contact.status)}</TableCell>
-                <TableCell>
-                  {contact.paidAmount ? `$${contact.paidAmount}` : "-"}
-                </TableCell>
-                <TableCell>{formatDate(contact.createdAt)}</TableCell>
-                <TableCell>
-                  <div className="flex flex-col gap-2">
-                    <Select
-                      value={contact.status}
-                      onValueChange={(value) =>
-                        updateContact(contact.id, { status: value })
-                      }
-                      disabled={updatingId === contact.id}
-                    >
-                      <SelectTrigger className="w-[140px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="in-progress">In Progress</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                        <SelectItem value="unpaid">Unpaid</SelectItem>
-                        <SelectItem value="paid">Paid</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      placeholder="Paid amount"
-                      type="number"
-                      step="0.01"
-                      className="w-[140px]"
-                      defaultValue={contact.paidAmount || ""}
-                      onBlur={(e) => {
-                        const value = e.target.value;
-                        if (value) {
-                          updateContact(contact.id, { paidAmount: value });
-                        }
-                      }}
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
@@ -252,9 +217,7 @@ export function ContactsTable() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() =>
-                setPagination((prev) => ({ ...prev, page: prev.page - 1 }))
-              }
+              onClick={() => setPage(pagination.page - 1)}
               disabled={pagination.page === 1}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -266,9 +229,7 @@ export function ContactsTable() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() =>
-                setPagination((prev) => ({ ...prev, page: prev.page + 1 }))
-              }
+              onClick={() => setPage(pagination.page + 1)}
               disabled={pagination.page === pagination.totalPages}
             >
               Next

@@ -34,3 +34,17 @@ function Badge({ className, variant, ...props }: BadgeProps) {
 }
 
 export { Badge, badgeVariants };
+
+export const getStatusBadge = (status: string) => {
+  const variants = {
+    pending: "bg-yellow-500 text-white hover:text-white",
+    "in-progress": "bg-blue-500 text-white hover:text-white",
+    completed: "bg-green-500 text-white hover:text-white",
+    paid: "bg-green-500 text-white hover:text-white",
+  };
+  return (
+    <Badge className={variants[status as keyof typeof variants]}>
+      {status.replace("-", " ")}
+    </Badge>
+  );
+};
