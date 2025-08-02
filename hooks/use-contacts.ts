@@ -36,6 +36,7 @@ export function useContacts() {
   });
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [serviceFilter, setServiceFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -57,6 +58,8 @@ export function useContacts() {
         limit: pagination.limit.toString(),
         ...(debouncedSearch && { search: debouncedSearch }),
         ...(statusFilter && statusFilter !== "all" && { status: statusFilter }),
+        ...(serviceFilter &&
+          serviceFilter !== "all" && { service: serviceFilter }),
       });
 
       const response = await fetch(`/api/admin/contacts?${params}`);
@@ -75,7 +78,13 @@ export function useContacts() {
     } finally {
       setLoading(false);
     }
-  }, [pagination.page, debouncedSearch, statusFilter, pagination.limit]);
+  }, [
+    pagination.page,
+    debouncedSearch,
+    statusFilter,
+    serviceFilter,
+    pagination.limit,
+  ]);
 
   useEffect(() => {
     fetchContacts();
@@ -165,6 +174,8 @@ export function useContacts() {
     setSearch,
     statusFilter,
     setStatusFilter,
+    serviceFilter,
+    setServiceFilter,
     loading,
     updatingId,
     createContact,

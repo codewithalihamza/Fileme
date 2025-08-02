@@ -53,6 +53,8 @@ export function ContactsTable() {
     setSearch,
     statusFilter,
     setStatusFilter,
+    serviceFilter,
+    setServiceFilter,
     loading,
     updatingId,
     updateContact,
@@ -170,6 +172,19 @@ export function ContactsTable() {
             />
             Refresh
           </Button>
+          <Select value={serviceFilter} onValueChange={setServiceFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by service" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Services</SelectItem>
+              {servicesNames.map((service) => (
+                <SelectItem key={service.value} value={service.value}>
+                  {service.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by status" />

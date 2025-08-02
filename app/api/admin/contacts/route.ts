@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "";
+    const service = searchParams.get("service") || "";
 
     const offset = (page - 1) * limit;
 
@@ -28,6 +29,10 @@ export async function GET(request: NextRequest) {
 
     if (status) {
       whereConditions.push(eq(contacts.status, status as any));
+    }
+
+    if (service) {
+      whereConditions.push(eq(contacts.service, service));
     }
 
     // Get total count
