@@ -153,7 +153,7 @@ export const TaxCalculator = () => {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 viewport={{ once: true }}
               >
-                Enter Your Monthly Salary
+                Enter Your Monthly Salary (PKR)
               </motion.h3>
               <motion.div
                 className="mx-auto flex max-w-2xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-center"
@@ -171,7 +171,7 @@ export const TaxCalculator = () => {
                     <Input
                       id="monthly-salary"
                       type="text"
-                      placeholder="Enter your monthly salary (PKR)"
+                      placeholder="Enter your monthly salary"
                       value={displayValue}
                       onChange={handleInputChange}
                       className="mt-1 border-2 border-gray-200 py-4 text-center text-lg font-semibold transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
