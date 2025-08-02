@@ -2,7 +2,15 @@
 
 import { getStatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   Select,
   SelectContent,
@@ -22,8 +30,18 @@ import {
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useContacts } from "@/hooks/use-contacts";
-import { ChevronLeft, ChevronRight, Edit, Eye, Search } from "lucide-react";
-import Link from "next/link";
+import { formatDate } from "@/lib/utils";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Edit,
+  Eye,
+  MoreHorizontal,
+  Search,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function ContactsTable() {
   const {
@@ -39,14 +57,73 @@ export function ContactsTable() {
     setPage,
   } = useContacts();
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  const router = useRouter();
+  const [paidModal, setPaidModal] = useState<{
+    isOpen: boolean;
+    contactId: string;
+    contactName: string;
+    currentAmount?: string | null;
+    phone: string;
+  }>({
+    isOpen: false,
+    contactId: "",
+    contactName: "",
+    currentAmount: null,
+    phone: "",
+  });
+
+  const handleRowClick = (contactId: string) => {
+    router.push(`/admin/contacts/${contactId}`);
+  };
+
+  const handleStatusChange = async (
+    contactId: string,
+    newStatus: string,
+    contactName: string,
+    phone: string,
+    currentAmount?: string | null
+  ) => {
+    if (newStatus === "paid") {
+      setPaidModal({
+        isOpen: true,
+        contactId,
+        contactName,
+        currentAmount,
+        phone,
+      });
+    } else {
+      await updateContact(contactId, {
+        status: newStatus as
+          | "pending"
+          | "in-progress"
+          | "completed"
+          | "unpaid"
+          | "paid",
+      });
+    }
+  };
+
+  const handlePaidAmountSave = async (amount: string) => {
+    try {
+      await updateContact(paidModal.contactId, {
+        status: "paid",
+        paidAmount: amount,
+      });
+      toast.success("Payment recorded successfully");
+    } catch (error) {
+      toast.error("Failed to record payment");
+    }
+  };
+
+  const handleQuickAction = (action: string, contactId: string) => {
+    switch (action) {
+      case "view":
+        router.push(`/admin/contacts/${contactId}`);
+        break;
+      case "edit":
+        router.push(`/admin/contacts/${contactId}`);
+        break;
+    }
   };
 
   return (
@@ -89,8 +166,8 @@ export function ContactsTable() {
               <TableHead>Service</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Paid Amount</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -105,7 +182,11 @@ export function ContactsTable() {
               />
             ) : (
               contacts.map((contact) => (
-                <TableRow key={contact.id}>
+                <TableRow
+                  key={contact.id}
+                  className="cursor-pointer transition-colors hover:bg-gray-50"
+                  onClick={() => handleRowClick(contact.id)}
+                >
                   <TableCell>
                     <div>
                       <div className="font-medium">{contact.name}</div>
@@ -122,79 +203,86 @@ export function ContactsTable() {
                   </TableCell>
                   <TableCell>{getStatusBadge(contact.status)}</TableCell>
                   <TableCell>
-                    {contact.paidAmount ? `$${contact.paidAmount}` : "-"}
+                    {contact.paidAmount ? `PKR ${contact.paidAmount}` : "-"}
                   </TableCell>
                   <TableCell>{formatDate(contact.createdAt)}</TableCell>
                   <TableCell>
                     {updatingId === contact.id ? (
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <Skeleton className="h-8 w-8" />
-                          <Skeleton className="h-8 w-8" />
-                        </div>
-                        <Skeleton className="h-10 w-[140px]" />
-                        <Skeleton className="h-10 w-[140px]" />
+                      <div className="flex items-center justify-center">
+                        <Skeleton className="h-8 w-8 rounded-md" />
                       </div>
                     ) : (
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <Link href={`/admin/contacts/${contact.id}`}>
+                      <div className="flex items-center gap-2">
+                        {/* Quick Status Update */}
+                        <div
+                          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                        >
+                          <Select
+                            value={contact.status}
+                            onValueChange={(value) =>
+                              handleStatusChange(
+                                contact.id,
+                                value,
+                                contact.name,
+                                contact.phone,
+                                contact?.paidAmount
+                              )
+                            }
+                            disabled={updatingId === contact.id}
+                          >
+                            <SelectTrigger className="h-8 w-[120px] text-xs">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="in-progress">
+                                In Progress
+                              </SelectItem>
+                              <SelectItem value="completed">
+                                Completed
+                              </SelectItem>
+                              <SelectItem value="unpaid">Unpaid</SelectItem>
+                              <SelectItem value="paid">Paid</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Actions Dropdown */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger
+                            asChild
+                            onClick={(e: React.MouseEvent) =>
+                              e.stopPropagation()
+                            }
+                          >
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-8 w-8 p-0"
+                              className="h-8 w-8 p-0 hover:bg-gray-100"
                             >
-                              <Eye className="h-4 w-4" />
+                              <MoreHorizontal className="h-4 w-4" />
                             </Button>
-                          </Link>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                        </div>
-                        <Select
-                          value={contact.status}
-                          onValueChange={(value) =>
-                            updateContact(contact.id, {
-                              status: value as
-                                | "pending"
-                                | "in-progress"
-                                | "completed"
-                                | "unpaid"
-                                | "paid",
-                            })
-                          }
-                          disabled={updatingId === contact.id}
-                        >
-                          <SelectTrigger className="w-[140px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="in-progress">
-                              In Progress
-                            </SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
-                            <SelectItem value="unpaid">Unpaid</SelectItem>
-                            <SelectItem value="paid">Paid</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Input
-                          placeholder="Paid amount"
-                          type="number"
-                          step="0.01"
-                          className="w-[140px]"
-                          defaultValue={contact.paidAmount || ""}
-                          onBlur={(e) => {
-                            const value = e.target.value;
-                            if (value) {
-                              updateContact(contact.id, { paidAmount: value });
-                            }
-                          }}
-                        />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleQuickAction("view", contact.id)
+                              }
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleQuickAction("edit", contact.id)
+                              }
+                            >
+                              <Edit className="mr-2 h-4 w-4" />
+                              Edit Contact
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     )}
                   </TableCell>
@@ -238,6 +326,97 @@ export function ContactsTable() {
           </div>
         </div>
       )}
+
+      {/* Paid Amount Modal */}
+      <PaidAmountModal
+        isOpen={paidModal.isOpen}
+        onClose={() =>
+          setPaidModal({
+            isOpen: false,
+            contactId: "",
+            contactName: "",
+            currentAmount: null,
+            phone: "",
+          })
+        }
+        onSave={handlePaidAmountSave}
+        contactName={paidModal.contactName}
+        currentAmount={paidModal.currentAmount}
+        phone={paidModal.phone}
+      />
     </div>
+  );
+}
+
+interface PaidAmountModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (amount: string) => void;
+  contactName: string;
+  currentAmount?: string | null;
+  phone: string;
+}
+
+function PaidAmountModal({
+  isOpen,
+  onClose,
+  onSave,
+  contactName,
+  currentAmount,
+  phone,
+}: PaidAmountModalProps) {
+  const [amount, setAmount] = useState(currentAmount || "");
+
+  const handleSave = () => {
+    if (!amount || parseFloat(amount) <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+    onSave(amount);
+    onClose();
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Enter Paid Amount"
+      size="md"
+      footer={
+        <div className="flex justify-end space-x-3">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave}>Save</Button>
+        </div>
+      }
+    >
+      <div className="space-y-4">
+        <div className="flex justify-between">
+          <label className="float-left text-sm font-medium text-gray-700">
+            Contact: {contactName}
+          </label>
+          <label className="float-right text-sm font-medium text-gray-700">
+            Phone: {phone}
+          </label>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Paid Amount (PKR)
+          </label>
+          <Input
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="0.00"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            className="w-full"
+            autoFocus
+          />
+        </div>
+      </div>
+    </Modal>
   );
 }

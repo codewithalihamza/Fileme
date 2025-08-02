@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface Contact {
+export interface Contact {
   id: string;
   name: string;
   email: string | null;
@@ -14,14 +14,14 @@ interface Contact {
   updatedAt: string;
 }
 
-interface Pagination {
+export interface Pagination {
   page: number;
   limit: number;
   total: number;
   totalPages: number;
 }
 
-interface ContactsResponse {
+export interface ContactsResponse {
   data: Contact[];
   pagination: Pagination;
 }
@@ -60,13 +60,18 @@ export function useContacts() {
       });
 
       const response = await fetch(`/api/admin/contacts?${params}`);
-      if (!response.ok) throw new Error("Failed to fetch contacts");
+      const data = await response.json();
 
-      const data: ContactsResponse = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch contacts");
+      }
+
       setContacts(data.data);
       setPagination(data.pagination);
     } catch (error) {
-      toast.error("Failed to fetch contacts");
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch contacts";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -115,12 +120,18 @@ export function useContacts() {
         body: JSON.stringify({ id, ...updates }),
       });
 
-      if (!response.ok) throw new Error("Failed to update contact");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update contact");
+      }
 
       toast.success("Contact updated successfully");
       fetchContacts();
     } catch (error) {
-      toast.error("Failed to update contact");
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to update contact";
+      toast.error(errorMessage);
     } finally {
       setUpdatingId(null);
     }

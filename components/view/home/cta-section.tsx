@@ -47,8 +47,11 @@ export const CtaSection = () => {
     minutes: 0,
     seconds: 0,
   });
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     const calculateTimeLeft = () => {
       const deadline = new Date("2025-09-30");
       const now = new Date();
@@ -182,19 +185,21 @@ export const CtaSection = () => {
             to avoid penalties and ensure a smooth tax season.
           </motion.p>
 
-          {/* Countdown Timer */}
-          <motion.div
-            className="mb-8 flex justify-center space-x-4 sm:space-x-6 lg:space-x-8"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <TimeUnit value={timeLeft.days} label="Days" />
-            <TimeUnit value={timeLeft.hours} label="Hours" />
-            <TimeUnit value={timeLeft.minutes} label="Minutes" />
-            <TimeUnit value={timeLeft.seconds} label="Seconds" />
-          </motion.div>
+          {/* Countdown Timer - Only render when mounted */}
+          {mounted && (
+            <motion.div
+              className="mb-8 flex justify-center space-x-4 sm:space-x-6 lg:space-x-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <TimeUnit value={timeLeft.days} label="Days" />
+              <TimeUnit value={timeLeft.hours} label="Hours" />
+              <TimeUnit value={timeLeft.minutes} label="Minutes" />
+              <TimeUnit value={timeLeft.seconds} label="Seconds" />
+            </motion.div>
+          )}
 
           {/* CTA Buttons */}
           <motion.div

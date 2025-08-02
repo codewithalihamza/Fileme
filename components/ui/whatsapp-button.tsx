@@ -13,8 +13,10 @@ export function WhatsAppButton({
   className,
 }: WhatsAppButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Show the button after a short delay for better UX
     const timer = setTimeout(() => setIsVisible(true), 1000);
     return () => clearTimeout(timer);
@@ -25,6 +27,9 @@ export function WhatsAppButton({
     const whatsappUrl = `https://wa.me/${formattedNumber}`;
     window.open(whatsappUrl, "_blank");
   };
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) return null;
 
   return (
     <div

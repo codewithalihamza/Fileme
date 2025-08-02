@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
-import { useContacts } from "@/hooks/use-contacts";
 import {
   ArrowLeft,
   Calendar,
@@ -23,7 +22,6 @@ import Link from "next/link";
 
 export default function AdminContactsPage() {
   const { logout, isLoading } = useAuth();
-  const { search, setSearch } = useContacts();
 
   const handleLogout = async () => {
     await logout();
