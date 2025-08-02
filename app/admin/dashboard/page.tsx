@@ -1,12 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import {
   Activity,
@@ -17,7 +12,7 @@ import {
   DollarSign,
   MessageSquare,
   TrendingUp,
-  Users2
+  Users2,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -30,7 +25,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="px-4 py-6 sm:px-0">
           <div className="flex items-center justify-between">
