@@ -34,7 +34,7 @@ const experts: Expert[] = [
   },
   {
     id: 2,
-    name: "Syed Shahzaid",
+    name: "Syed Shahzaib",
     role: "BPO Accounting Specialist",
     image:
       "https://media.licdn.com/dms/image/v2/D4D03AQFwJDSC7lwTwA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1719468687910?e=1756944000&v=beta&t=osxgUxF5pL4RxR9EG3luviZ7vci8ujlpv5c0a0Gp1bs",
