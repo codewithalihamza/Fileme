@@ -13,16 +13,14 @@ import { useAuth } from "@/hooks/use-auth";
 import { useReferrals } from "@/hooks/use-referrals";
 import {
   ArrowLeft,
-  BarChart3,
   DollarSign,
   Download,
   Filter,
   Gift,
-  Mail,
   Plus,
   Search,
   TrendingUp,
-  Users2,
+  Users2
 } from "lucide-react";
 import Link from "next/link";
 
@@ -199,34 +197,6 @@ export default function AdminReferralsPage() {
             </CardHeader>
             <CardContent>
               <ReferralsTable />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Quick Actions Footer */}
-        <div className="mt-8 px-4 sm:px-0">
-          <Card className="border-0 bg-white/80 shadow-lg backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex flex-col items-center justify-between sm:flex-row">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Referral Program Insights
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-600">
-                    Track performance and optimize your referral program
-                  </p>
-                </div>
-                <div className="mt-4 flex items-center space-x-3 sm:mt-0">
-                  <Button variant="outline" size="sm">
-                    <BarChart3 className="mr-2 h-4 w-4" />
-                    View Analytics
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Mail className="mr-2 h-4 w-4" />
-                    Contact Support
-                  </Button>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>

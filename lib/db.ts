@@ -2,5 +2,10 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL!);
+// Check if database URL is available
+if (!process.env.NEXT_PUBLIC_DATABASE_URL) {
+  throw new Error("NEXT_PUBLIC_DATABASE_URL environment variable is not set");
+}
+
+const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL);
 export const db = drizzle(sql, { schema });

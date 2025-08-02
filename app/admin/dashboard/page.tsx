@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import {
@@ -14,13 +13,11 @@ import {
   AlertCircle,
   ArrowRight,
   BarChart3,
-  Calendar,
-  CheckCircle,
   Clock,
   DollarSign,
   MessageSquare,
   TrendingUp,
-  Users2,
+  Users2
 } from "lucide-react";
 import Link from "next/link";
 
@@ -210,53 +207,6 @@ export default function AdminDashboardPage() {
               </Card>
             </Link>
           </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="px-4 sm:px-0">
-          <Card className="border-0 bg-white/80 shadow-lg backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold text-gray-900">
-                Recent Activity
-              </CardTitle>
-              <CardDescription>
-                Latest actions and updates in your system
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4 rounded-lg bg-gray-50 p-3">
-                  <div className="rounded-full bg-green-100 p-2">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
-                      System initialized
-                    </p>
-                    <p className="text-xs text-gray-600">
-                      Admin dashboard is ready for use
-                    </p>
-                  </div>
-                  <span className="text-xs text-gray-500">Just now</span>
-                </div>
-
-                <div className="flex items-center space-x-4 rounded-lg bg-gray-50 p-3">
-                  <div className="rounded-full bg-blue-100 p-2">
-                    <Calendar className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
-                      Database connected
-                    </p>
-                    <p className="text-xs text-gray-600">
-                      Ready to store contacts and referrals
-                    </p>
-                  </div>
-                  <span className="text-xs text-gray-500">Just now</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
