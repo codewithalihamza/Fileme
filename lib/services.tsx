@@ -124,10 +124,10 @@ export function getServices(): Service[] {
         "Compliance Framework Development",
       ],
       image: "/hero-section/internal-controls-advisory.jpg",
-      color: "indigo",
-      gradient: "from-indigo-50 to-indigo-100",
-      borderColor: "border-indigo-200",
-      iconBg: "bg-indigo-600",
+      color: "cyan",
+      gradient: "from-cyan-50 to-cyan-100",
+      borderColor: "border-cyan-200",
+      iconBg: "bg-cyan-600",
     },
     {
       icon: <AlertTriangle className="size-8" />,
@@ -148,7 +148,7 @@ export function getServices(): Service[] {
       color: "red",
       gradient: "from-red-50 to-red-100",
       borderColor: "border-red-200",
-      iconBg: "bg-red-600",
+      iconBg: "bg-red-500",
     },
   ];
 }
