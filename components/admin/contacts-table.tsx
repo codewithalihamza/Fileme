@@ -30,13 +30,15 @@ import {
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useContacts } from "@/hooks/use-contacts";
-import { formatDate } from "@/lib/utils";
+import { servicesNames } from "@/lib/services";
+import { formatCurrency, formatDate } from "@/lib/utils";
 import {
   ChevronLeft,
   ChevronRight,
   Edit,
   Eye,
   MoreHorizontal,
+  RefreshCw,
   Search,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -55,7 +57,10 @@ export function ContactsTable() {
     updatingId,
     updateContact,
     setPage,
+    refetch,
   } = useContacts();
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const router = useRouter();
   const [paidModal, setPaidModal] = useState<{
@@ -126,6 +131,17 @@ export function ContactsTable() {
     }
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await refetch();
+    } catch (error) {
+      toast.error("Failed to refresh contacts");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* Search and Filters */}
@@ -141,19 +157,33 @@ export function ContactsTable() {
             />
           </div>
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="in-progress">In Progress</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-            <SelectItem value="unpaid">Unpaid</SelectItem>
-            <SelectItem value="paid">Paid</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing || loading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="in-progress">In Progress</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="unpaid">Unpaid</SelectItem>
+              <SelectItem value="paid">Paid</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Table */}
@@ -199,11 +229,17 @@ export function ContactsTable() {
                   </TableCell>
                   <TableCell>{contact.phone}</TableCell>
                   <TableCell className="capitalize">
-                    {contact.service}
+                    {
+                      servicesNames.find(
+                        (service) => service.value === contact.service
+                      )?.label
+                    }
                   </TableCell>
                   <TableCell>{getStatusBadge(contact.status)}</TableCell>
                   <TableCell>
-                    {contact.paidAmount ? `PKR ${contact.paidAmount}` : "-"}
+                    {contact.paidAmount
+                      ? formatCurrency(Number(contact.paidAmount))
+                      : "-"}
                   </TableCell>
                   <TableCell>{formatDate(contact.createdAt)}</TableCell>
                   <TableCell>

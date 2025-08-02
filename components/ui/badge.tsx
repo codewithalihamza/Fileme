@@ -37,14 +37,16 @@ export { Badge, badgeVariants };
 
 export const getStatusBadge = (status: string) => {
   const variants = {
-    pending: "bg-yellow-500 text-white hover:text-white",
-    "in-progress": "bg-blue-500 text-white hover:text-white",
-    completed: "bg-green-500 text-white hover:text-white",
-    paid: "bg-green-500 text-white hover:text-white",
+    pending: "bg-yellow-500 text-white hover:text-white hover:bg-yellow-600",
+    "in-progress": "bg-blue-500 text-white hover:text-white hover:bg-blue-600",
+    unpaid: "bg-amber-500 text-white hover:text-white hover:bg-amber-600",
+    completed: "bg-purple-500 text-white hover:text-white hover:bg-purple-600",
+    paid: "bg-green-500 text-white hover:text-white hover:bg-green-600",
   };
   return (
     <Badge className={variants[status as keyof typeof variants]}>
-      {status.replace("-", " ")}
+      {status.replace("-", " ").charAt(0).toUpperCase() +
+        status.replace("-", " ").slice(1).toLowerCase()}
     </Badge>
   );
 };

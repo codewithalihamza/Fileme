@@ -75,6 +75,8 @@ export default function ContactPage() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         toast.success("Message sent successfully!");
         setFormData({
@@ -86,10 +88,10 @@ export default function ContactPage() {
         });
         setErrors({});
       } else {
-        toast.error("Failed to send message. Please try again.");
+        toast.error(data.error || "Failed to send message. Please try again.");
       }
     } catch (error) {
-      toast.error("Failed to send message. Please try again.");
+      console.error("Contact form error:", error);
     } finally {
       setIsSubmitting(false);
     }

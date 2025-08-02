@@ -1,3 +1,5 @@
+"use server";
+import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/constants";
 import { db } from "@/lib/db";
 import { contacts, referrals } from "@/lib/schema";
 import { and, eq, or } from "drizzle-orm";
@@ -32,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Phone validation (11 digits)
-    const phoneRegex = /^\d{11}$/;
+    const phoneRegex = PHONE_REGEX;
     if (!phoneRegex.test(friendPhone)) {
       return NextResponse.json(
         { error: "Invalid friend's phone number format" },
@@ -48,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     // Email validation (if provided)
     if (friendEmail) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = EMAIL_REGEX;
       if (!emailRegex.test(friendEmail)) {
         return NextResponse.json(
           { error: "Invalid friend's email format" },
@@ -57,7 +59,7 @@ export async function POST(request: NextRequest) {
       }
     }
     if (referrerEmail) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = EMAIL_REGEX;
       if (!emailRegex.test(referrerEmail)) {
         return NextResponse.json(
           { error: "Invalid referrer's email format" },

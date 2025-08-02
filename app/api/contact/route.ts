@@ -1,3 +1,6 @@
+"use server";
+
+import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/constants";
 import { db } from "@/lib/db";
 import { contacts } from "@/lib/schema";
 import { and, eq, or } from "drizzle-orm";
@@ -16,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Phone validation (11 digits)
-    const phoneRegex = /^\d{11}$/;
+    const phoneRegex = PHONE_REGEX;
     if (!phoneRegex.test(phone)) {
       return NextResponse.json(
         { error: "Invalid phone number format" },
@@ -26,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     // Email validation (if provided)
     if (email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = EMAIL_REGEX;
       if (!emailRegex.test(email)) {
         return NextResponse.json(
           { error: "Invalid email format" },
@@ -35,18 +38,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Check if user already has a pending, in-progress, or unpaid submission
     const existingSubmission = await db
       .select()
       .from(contacts)
       .where(
         and(
-          or(eq(contacts.phone, phone), eq(contacts.email, email || "")),
+          or(eq(contacts.phone, phone)),
           or(
-            eq(contacts.status, "pending"),
+            eq(contacts.status, "unpaid"),
             eq(contacts.status, "in-progress"),
-            eq(contacts.status, "unpaid")
-          )
+            eq(contacts.status, "pending"),
+            eq(contacts.status, "completed")
+          ),
+          eq(contacts.service, service)
         )
       );
 
