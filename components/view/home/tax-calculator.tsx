@@ -44,6 +44,8 @@ export const TaxCalculator = () => {
     const value = e.target.value.replace(/,/g, "");
     setMonthlySalary(value);
     setDisplayValue(formatNumberWithCommas(value));
+    // Close results when input changes
+    setCalculation(null);
   };
 
   const handleCalculate = async () => {
@@ -192,6 +194,8 @@ export const TaxCalculator = () => {
                       const year = taxYears.find((y) => y.year === value);
                       if (year) {
                         setSelectedTaxYear(year);
+                        // Close results when tax year changes
+                        setCalculation(null);
                       }
                     }}
                   >
