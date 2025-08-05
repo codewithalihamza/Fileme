@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   Select,
   SelectContent,
@@ -10,9 +11,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { calculateTax, taxYears } from "@/lib/tax";
+import { getTaxSlabInfo } from "@/lib/tax-slabs";
 import { formatCurrency, formatNumberWithCommas } from "@/lib/utils";
 import {
   Calculator,
+  FileText,
   Sparkles,
   TrendingUp,
   TrendingUpDown,
@@ -38,6 +41,7 @@ export const TaxCalculator = () => {
   const [selectedTaxYear, setSelectedTaxYear] = useState(
     taxYears[taxYears.length - 1]
   );
+  const [showTaxSlabModal, setShowTaxSlabModal] = useState(false);
 
   // Handle input change with comma formatting
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -271,7 +275,10 @@ export const TaxCalculator = () => {
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
             >
-              <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => setShowTaxSlabModal(true)}
+                className="flex w-full items-center justify-center gap-3 transition-all duration-300 hover:scale-105"
+              >
                 <motion.div
                   className="h-3 w-3 rounded-full bg-green-500"
                   animate={{ scale: [1, 1.2, 1] }}
@@ -281,10 +288,17 @@ export const TaxCalculator = () => {
                     ease: "easeInOut",
                   }}
                 />
-                <p className="text-lg font-semibold text-blue-800">
-                  Tax Year: {selectedTaxYear.year}
+                <p className="text-lg font-semibold text-blue-800 underline">
+                  View Tax Slabs for {selectedTaxYear.year}
                 </p>
-              </div>
+                <motion.div
+                  className="rounded-full bg-blue-100 p-1"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <FileText className="size-4 text-blue-600" />
+                </motion.div>
+              </button>
             </motion.div>
           </motion.div>
 
@@ -477,6 +491,56 @@ export const TaxCalculator = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Tax Slab Modal */}
+      <Modal
+        isOpen={showTaxSlabModal}
+        onClose={() => setShowTaxSlabModal(false)}
+        title={`Tax Slab Information - ${selectedTaxYear.year}`}
+      >
+        <div className="space-y-6">
+          <div className="mb-4 flex items-center gap-2">
+            <FileText className="size-8 text-blue-500" />
+            <h3 className="text-lg font-semibold text-gray-900">
+              Income Tax Slabs
+            </h3>
+          </div>
+          <div className="prose prose-sm max-w-none text-gray-700">
+            <div className="space-y-4">
+              <div className="text-sm leading-relaxed">
+                {getTaxSlabInfo(selectedTaxYear.year)
+                  .split("\n")
+                  .map((line, index) => {
+                    if (line.trim().startsWith("•")) {
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-start gap-3 border-b border-gray-100 py-2 last:border-b-0"
+                        >
+                          <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500"></div>
+                          <span className="text-sm text-gray-700">
+                            {line.trim().substring(1).trim()}
+                          </span>
+                        </div>
+                      );
+                    } else if (line.trim() === "") {
+                      return <div key={index} className="h-2"></div>;
+                    } else {
+                      return (
+                        <div
+                          key={index}
+                          className="text-sm font-medium text-gray-600"
+                        >
+                          {line.trim()}
+                        </div>
+                      );
+                    }
+                  })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </section>
   );
 };
