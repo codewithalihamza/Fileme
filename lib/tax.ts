@@ -13,7 +13,7 @@ export interface TaxYear {
 
 export const taxYears: TaxYear[] = [
   {
-    year: "2023-2024",
+    year: "2024",
     slabs: [
       { maxIncome: 600000, rate: 0, fixedTax: 0 },
       { maxIncome: 1200000, rate: 0.025, fixedTax: 0 },
@@ -24,7 +24,7 @@ export const taxYears: TaxYear[] = [
     ],
   },
   {
-    year: "2024-2025",
+    year: "2025",
     slabs: [
       { maxIncome: 600000, rate: 0, fixedTax: 0 },
       { maxIncome: 1200000, rate: 0.05, fixedTax: 0 },
@@ -35,7 +35,7 @@ export const taxYears: TaxYear[] = [
     ],
   },
   {
-    year: "2025-2026",
+    year: "2026",
     slabs: [
       { maxIncome: 600000, rate: 0, fixedTax: 0 },
       { maxIncome: 1200000, rate: 0.01, fixedTax: 0 },
@@ -49,30 +49,44 @@ export const taxYears: TaxYear[] = [
 
 export const calculateTax = (
   yearlyIncome: number,
-  taxYear: string = "2025-2026"
+  taxYear: string = "2026"
 ): number => {
   const year = taxYears.find((y) => y.year === taxYear);
   if (!year) {
     throw new Error(`Tax year ${taxYear} not found`);
   }
 
+  let baseTax = 0;
+
   // Find the appropriate tax slab
   for (let i = 0; i < year.slabs.length; i++) {
     const slab = year.slabs[i];
     if (yearlyIncome <= slab.maxIncome) {
       if (i === 0) {
-        return 0; // First slab is always 0%
+        baseTax = 0; // First slab is always 0%
+        break;
       }
       // Calculate tax for this slab
       const previousSlab = year.slabs[i - 1];
       const taxableIncome = yearlyIncome - previousSlab.maxIncome;
-      return slab.fixedTax + taxableIncome * slab.rate;
+      baseTax = slab.fixedTax + taxableIncome * slab.rate;
+      break;
     }
   }
 
   // If income exceeds all slabs, use the last slab
-  const lastSlab = year.slabs[year.slabs.length - 1];
-  const previousSlab = year.slabs[year.slabs.length - 2];
-  const taxableIncome = yearlyIncome - previousSlab.maxIncome;
-  return previousSlab.fixedTax + taxableIncome * lastSlab.rate;
+  if (baseTax === 0) {
+    const lastSlab = year.slabs[year.slabs.length - 1];
+    const previousSlab = year.slabs[year.slabs.length - 2];
+    const taxableIncome = yearlyIncome - previousSlab.maxIncome;
+    baseTax = previousSlab.fixedTax + taxableIncome * lastSlab.rate;
+  }
+
+  // Apply surcharge for 2025-2026 if income exceeds 10 million
+  if (taxYear === "2026" && yearlyIncome > 10000000) {
+    const surcharge = baseTax * 0.09; // 9% surcharge
+    return baseTax + surcharge;
+  }
+
+  return baseTax;
 };
