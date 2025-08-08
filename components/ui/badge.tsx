@@ -25,7 +25,7 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof badgeVariants> { }
+    VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
@@ -50,12 +50,11 @@ export const getStatusBadge = (status: string) => {
     unpaid: "bg-amber-500 text-white hover:text-white hover:bg-amber-600",
   };
 
-  const label = status.replace("_", " ").charAt(0).toUpperCase() +
+  const label =
+    status.replace("_", " ").charAt(0).toUpperCase() +
     status.replace("_", " ").slice(1).toLowerCase();
 
   return (
-    <Badge className={variants[status as keyof typeof variants]}>
-      {label}
-    </Badge>
+    <Badge className={variants[status as keyof typeof variants]}>{label}</Badge>
   );
 };

@@ -260,7 +260,7 @@ export default function ContactDetailPage({ params }: PageProps) {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Basic Information */}
           <Card>
             <CardHeader>
@@ -364,11 +364,15 @@ export default function ContactDetailPage({ params }: PageProps) {
                         <SelectItem value="tax">Tax Filing</SelectItem>
                         <SelectItem value="accounting">Accounting</SelectItem>
                         <SelectItem value="audit">Audit</SelectItem>
-                        <SelectItem value="consultation">Consultation</SelectItem>
+                        <SelectItem value="consultation">
+                          Consultation
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   ) : (
-                    <p className="capitalize text-gray-900">{contact.service}</p>
+                    <p className="capitalize text-gray-900">
+                      {contact.service}
+                    </p>
                   )}
                 </div>
                 <div>

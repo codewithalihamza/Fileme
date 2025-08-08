@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
 interface Request {
@@ -41,134 +41,146 @@ export const useRequests = () => {
   const [loading, setLoading] = useState(false);
 
   // Fetch all requests with pagination and filters
-  const fetchRequests = useCallback(async (
-    page: number = 1,
-    limit: number = 10,
-    search?: string,
-    status?: string,
-    service?: string
-  ): Promise<RequestsResponse | null> => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-        ...(search && { search }),
-        ...(status && status !== "all" && { status }),
-        ...(service && service !== "all" && { service }),
-      });
+  const fetchRequests = useCallback(
+    async (
+      page: number = 1,
+      limit: number = 10,
+      search?: string,
+      status?: string,
+      service?: string
+    ): Promise<RequestsResponse | null> => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+          ...(search && { search }),
+          ...(status && status !== "all" && { status }),
+          ...(service && service !== "all" && { service }),
+        });
 
-      const response = await fetch(`/api/admin/requests?${params}`);
-      const data = await response.json();
+        const response = await fetch(`/api/admin/requests?${params}`);
+        const data = await response.json();
 
-      if (response.ok) {
-        return data;
-      } else {
+        if (response.ok) {
+          return data;
+        } else {
+          toast.error("Failed to fetch requests");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error fetching requests:", error);
         toast.error("Failed to fetch requests");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching requests:", error);
-      toast.error("Failed to fetch requests");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Fetch single request by ID
-  const fetchRequest = useCallback(async (id: string): Promise<Request | null> => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/admin/requests/${id}`);
-      const data: RequestResponse = await response.json();
+  const fetchRequest = useCallback(
+    async (id: string): Promise<Request | null> => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/admin/requests/${id}`);
+        const data: RequestResponse = await response.json();
 
-      if (response.ok) {
-        return data.data;
-      } else {
+        if (response.ok) {
+          return data.data;
+        } else {
+          toast.error("Failed to fetch request");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error fetching request:", error);
         toast.error("Failed to fetch request");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching request:", error);
-      toast.error("Failed to fetch request");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Create new request
-  const createRequest = useCallback(async (requestData: {
-    service: string;
-    status: "pending" | "in_progress" | "completed" | "cancelled";
-    paidAmount: number | null;
-    userId: string;
-    assigneeId: string | null;
-  }): Promise<Request | null> => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/admin/requests", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+  const createRequest = useCallback(
+    async (requestData: {
+      service: string;
+      status: "pending" | "in_progress" | "completed" | "cancelled";
+      paidAmount: number | null;
+      userId: string;
+      assigneeId: string | null;
+    }): Promise<Request | null> => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/admin/requests", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        });
 
-      const data: RequestResponse = await response.json();
+        const data: RequestResponse = await response.json();
 
-      if (response.ok) {
-        toast.success("Request created successfully!");
-        return data.data;
-      } else {
-        toast.error(data.error || "Failed to create request");
+        if (response.ok) {
+          toast.success("Request created successfully!");
+          return data.data;
+        } else {
+          toast.error(data.error || "Failed to create request");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error creating request:", error);
+        toast.error("Failed to create request");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error creating request:", error);
-      toast.error("Failed to create request");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Update request
-  const updateRequest = useCallback(async (
-    id: string,
-    requestData: Partial<Request>
-  ): Promise<Request | null> => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/admin/requests", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-          ...requestData,
-        }),
-      });
+  const updateRequest = useCallback(
+    async (
+      id: string,
+      requestData: Partial<Request>
+    ): Promise<Request | null> => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/admin/requests", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id,
+            ...requestData,
+          }),
+        });
 
-      const data: RequestResponse = await response.json();
+        const data: RequestResponse = await response.json();
 
-      if (response.ok) {
-        toast.success("Request updated successfully!");
-        return data.data;
-      } else {
-        toast.error(data.error || "Failed to update request");
+        if (response.ok) {
+          toast.success("Request updated successfully!");
+          return data.data;
+        } else {
+          toast.error(data.error || "Failed to update request");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error updating request:", error);
+        toast.error("Failed to update request");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error updating request:", error);
-      toast.error("Failed to update request");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Delete request
   const deleteRequest = useCallback(async (id: string): Promise<boolean> => {

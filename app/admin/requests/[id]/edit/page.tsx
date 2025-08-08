@@ -12,10 +12,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRequests } from "@/hooks/use-requests";
 import { ArrowLeft, FileText, Save } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { useRequests } from "@/hooks/use-requests";
 
 interface Request {
   id: string;
@@ -119,7 +119,7 @@ export default function EditRequestPage({ params }: PageProps) {
         <div className="space-y-4">
           <Skeleton className="h-8 w-64" />
           <Skeleton className="h-4 w-96" />
-          <div className="grid gap-6 md:grid-cols-2 mt-8">
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
             <Skeleton className="h-64" />
             <Skeleton className="h-64" />
           </div>
@@ -132,11 +132,15 @@ export default function EditRequestPage({ params }: PageProps) {
     return (
       <div className="container mx-auto p-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Request Not Found</h1>
-          <p className="text-gray-600 mb-6">The request you&apos;re looking for doesn&apos;t exist.</p>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">
+            Request Not Found
+          </h1>
+          <p className="mb-6 text-gray-600">
+            The request you&apos;re looking for doesn&apos;t exist.
+          </p>
           <Button asChild>
             <Link href="/admin/requests">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Requests
             </Link>
           </Button>
@@ -152,13 +156,13 @@ export default function EditRequestPage({ params }: PageProps) {
         <div className="flex items-center space-x-4">
           <Button variant="ghost" asChild>
             <Link href="/admin/requests">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Requests
             </Link>
           </Button>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Edit Request</h1>
-            <p className="text-gray-600 mt-1">Update request information</p>
+            <p className="mt-1 text-gray-600">Update request information</p>
           </div>
         </div>
       </div>
@@ -176,7 +180,10 @@ export default function EditRequestPage({ params }: PageProps) {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <Label htmlFor="service" className="mb-2 block text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="service"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Service <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -189,18 +196,26 @@ export default function EditRequestPage({ params }: PageProps) {
                     className={errors.service ? "border-red-500" : ""}
                   />
                   {errors.service && (
-                    <p className="mt-1 text-sm text-red-500">{errors.service}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.service}
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <Label htmlFor="status" className="mb-2 block text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="status"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Status
                   </Label>
                   <Select
                     value={formData.status || "pending"}
                     onValueChange={(value) => {
-                      setFormData((prev) => ({ ...prev, status: value as any }));
+                      setFormData((prev) => ({
+                        ...prev,
+                        status: value as any,
+                      }));
                       if (errors.status) {
                         setErrors((prev) => ({ ...prev, status: undefined }));
                       }
@@ -219,7 +234,10 @@ export default function EditRequestPage({ params }: PageProps) {
                 </div>
 
                 <div>
-                  <Label htmlFor="paidAmount" className="mb-2 block text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="paidAmount"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Paid Amount
                   </Label>
                   <Input
@@ -262,27 +280,33 @@ export default function EditRequestPage({ params }: PageProps) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-1">Client Name</p>
+                <p className="mb-1 text-sm font-medium text-gray-700">
+                  Client Name
+                </p>
                 <p className="text-gray-900">{request.user.name}</p>
               </div>
 
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-1">Email</p>
+                <p className="mb-1 text-sm font-medium text-gray-700">Email</p>
                 <p className="text-gray-900">{request.user.email}</p>
               </div>
 
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-1">Phone</p>
+                <p className="mb-1 text-sm font-medium text-gray-700">Phone</p>
                 <p className="text-gray-900">{request.user.phone}</p>
               </div>
 
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-1">Request ID</p>
-                <p className="text-sm text-gray-600 font-mono">{request.id}</p>
+                <p className="mb-1 text-sm font-medium text-gray-700">
+                  Request ID
+                </p>
+                <p className="font-mono text-sm text-gray-600">{request.id}</p>
               </div>
 
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-1">Created At</p>
+                <p className="mb-1 text-sm font-medium text-gray-700">
+                  Created At
+                </p>
                 <p className="text-gray-900">
                   {new Date(request.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",

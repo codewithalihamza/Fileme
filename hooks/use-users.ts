@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
 interface User {
@@ -29,38 +29,41 @@ export const useUsers = () => {
   const [loading, setLoading] = useState(false);
 
   // Fetch all users with pagination and filters
-  const fetchUsers = useCallback(async (
-    page: number = 1,
-    limit: number = 10,
-    search?: string,
-    role?: string
-  ): Promise<UsersResponse | null> => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-        ...(search && { search }),
-        ...(role && role !== "all" && { role }),
-      });
+  const fetchUsers = useCallback(
+    async (
+      page: number = 1,
+      limit: number = 10,
+      search?: string,
+      role?: string
+    ): Promise<UsersResponse | null> => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+          ...(search && { search }),
+          ...(role && role !== "all" && { role }),
+        });
 
-      const response = await fetch(`/api/admin/users?${params}`);
-      const data = await response.json();
+        const response = await fetch(`/api/admin/users?${params}`);
+        const data = await response.json();
 
-      if (response.ok) {
-        return data;
-      } else {
+        if (response.ok) {
+          return data;
+        } else {
+          toast.error("Failed to fetch users");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
         toast.error("Failed to fetch users");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      toast.error("Failed to fetch users");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Fetch single user by ID
   const fetchUser = useCallback(async (id: string): Promise<User | null> => {
@@ -85,76 +88,79 @@ export const useUsers = () => {
   }, []);
 
   // Create new user
-  const createUser = useCallback(async (userData: {
-    name: string;
-    email: string;
-    phone: string;
-    password: string;
-    role: "admin" | "employees" | "customer";
-  }): Promise<User | null> => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/admin/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+  const createUser = useCallback(
+    async (userData: {
+      name: string;
+      email: string;
+      phone: string;
+      password: string;
+      role: "admin" | "employees" | "customer";
+    }): Promise<User | null> => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/admin/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
 
-      const data: UserResponse = await response.json();
+        const data: UserResponse = await response.json();
 
-      if (response.ok) {
-        toast.success("User created successfully!");
-        return data.data;
-      } else {
-        toast.error(data.error || "Failed to create user");
+        if (response.ok) {
+          toast.success("User created successfully!");
+          return data.data;
+        } else {
+          toast.error(data.error || "Failed to create user");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        toast.error("Failed to create user");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error creating user:", error);
-      toast.error("Failed to create user");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Update user
-  const updateUser = useCallback(async (
-    id: string,
-    userData: Partial<User>
-  ): Promise<User | null> => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/admin/users", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-          ...userData,
-        }),
-      });
+  const updateUser = useCallback(
+    async (id: string, userData: Partial<User>): Promise<User | null> => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/admin/users", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id,
+            ...userData,
+          }),
+        });
 
-      const data: UserResponse = await response.json();
+        const data: UserResponse = await response.json();
 
-      if (response.ok) {
-        toast.success("User updated successfully!");
-        return data.data;
-      } else {
-        toast.error(data.error || "Failed to update user");
+        if (response.ok) {
+          toast.success("User updated successfully!");
+          return data.data;
+        } else {
+          toast.error(data.error || "Failed to update user");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error updating user:", error);
+        toast.error("Failed to update user");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error updating user:", error);
-      toast.error("Failed to update user");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Delete user
   const deleteUser = useCallback(async (id: string): Promise<boolean> => {

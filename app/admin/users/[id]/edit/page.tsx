@@ -12,11 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useUsers } from "@/hooks/use-users";
 import { validatePhoneNumber } from "@/lib/utils";
 import { ArrowLeft, Save, User } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { useUsers } from "@/hooks/use-users";
 
 interface User {
   id: string;
@@ -118,7 +118,7 @@ export default function EditUserPage({ params }: PageProps) {
         <div className="space-y-4">
           <Skeleton className="h-8 w-64" />
           <Skeleton className="h-4 w-96" />
-          <div className="grid gap-6 md:grid-cols-2 mt-8">
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
             <Skeleton className="h-64" />
             <Skeleton className="h-64" />
           </div>
@@ -131,11 +131,15 @@ export default function EditUserPage({ params }: PageProps) {
     return (
       <div className="container mx-auto p-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">User Not Found</h1>
-          <p className="text-gray-600 mb-6">The user you&apos;re looking for doesn&apos;t exist.</p>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">
+            User Not Found
+          </h1>
+          <p className="mb-6 text-gray-600">
+            The user you&apos;re looking for doesn&apos;t exist.
+          </p>
           <Button asChild>
             <Link href="/admin/users">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Users
             </Link>
           </Button>
@@ -151,13 +155,13 @@ export default function EditUserPage({ params }: PageProps) {
         <div className="flex items-center space-x-4">
           <Button variant="ghost" asChild>
             <Link href="/admin/users">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Users
             </Link>
           </Button>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Edit User</h1>
-            <p className="text-gray-600 mt-1">Update user information</p>
+            <p className="mt-1 text-gray-600">Update user information</p>
           </div>
         </div>
       </div>
@@ -174,7 +178,10 @@ export default function EditUserPage({ params }: PageProps) {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
-                  <Label htmlFor="name" className="mb-2 block text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="name"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Full Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -192,7 +199,10 @@ export default function EditUserPage({ params }: PageProps) {
                 </div>
 
                 <div>
-                  <Label htmlFor="role" className="mb-2 block text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="role"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Role <span className="text-red-500">*</span>
                   </Label>
                   <Select
@@ -204,7 +214,9 @@ export default function EditUserPage({ params }: PageProps) {
                       }
                     }}
                   >
-                    <SelectTrigger className={errors.role ? "border-red-500" : ""}>
+                    <SelectTrigger
+                      className={errors.role ? "border-red-500" : ""}
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -221,7 +233,10 @@ export default function EditUserPage({ params }: PageProps) {
 
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
-                  <Label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="email"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Email Address <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -239,7 +254,10 @@ export default function EditUserPage({ params }: PageProps) {
                 </div>
 
                 <div>
-                  <Label htmlFor="phone" className="mb-2 block text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="phone"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Phone Number <span className="text-red-500">*</span>
                   </Label>
                   <Input

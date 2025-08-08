@@ -22,7 +22,9 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -46,7 +48,10 @@ export default function ContactPage() {
     } else if (!validatePhoneNumber(formData.phone)) {
       newErrors.phone = "Phone number must be 11 digits";
     }
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (
+      formData.email.trim() &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
       newErrors.email = "Please enter a valid email address";
     }
     if (!formData.service.trim()) {
@@ -131,7 +136,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="name"
-                      className=" block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700"
                     >
                       Full Name <span className="text-red-500">*</span>
                     </label>
@@ -151,7 +156,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="email"
-                      className=" block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700"
                     >
                       Email Address
                     </label>
@@ -165,7 +170,9 @@ export default function ContactPage() {
                       className={`w-full ${errors.email ? "border-red-500" : ""}`}
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -188,7 +195,9 @@ export default function ContactPage() {
                       className={`w-full ${errors.phone ? "border-red-500" : ""}`}
                     />
                     {errors.phone && (
-                      <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.phone}
+                      </p>
                     )}
                   </div>
 
@@ -211,15 +220,17 @@ export default function ContactPage() {
                     htmlFor="heardFrom"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    How did you hear about us? <span className="text-red-500">*</span>
+                    How did you hear about us?{" "}
+                    <span className="text-red-500">*</span>
                   </label>
                   <select
                     id="heardFrom"
                     name="heardFrom"
                     value={formData.heardFrom}
                     onChange={handleInputChange}
-                    className={`w-full rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.heardFrom ? "border-red-500" : "border-gray-300"
-                      }`}
+                    className={`w-full rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.heardFrom ? "border-red-500" : "border-gray-300"
+                    }`}
                   >
                     {heardFromOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -228,7 +239,9 @@ export default function ContactPage() {
                     ))}
                   </select>
                   {errors.heardFrom && (
-                    <p className="mt-1 text-sm text-red-500">{errors.heardFrom}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.heardFrom}
+                    </p>
                   )}
                 </div>
 
@@ -246,8 +259,9 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     placeholder="Tell us about your professional services needs..."
                     rows={6}
-                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.message ? "border-red-500" : "border-gray-300"
-                      }`}
+                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.message ? "border-red-500" : "border-gray-300"
+                    }`}
                   />
                   {errors.message && (
                     <p className="mt-1 text-sm text-red-500">

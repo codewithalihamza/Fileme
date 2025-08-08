@@ -4,10 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Calendar, Edit, Mail, Phone, Shield, User } from "lucide-react";
+import { useUsers } from "@/hooks/use-users";
+import {
+  ArrowLeft,
+  Calendar,
+  Edit,
+  Mail,
+  Phone,
+  Shield,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { useUsers } from "@/hooks/use-users";
 
 interface User {
   id: string;
@@ -78,7 +86,7 @@ export default function UserDetailPage({ params }: PageProps) {
         <div className="space-y-4">
           <Skeleton className="h-8 w-64" />
           <Skeleton className="h-4 w-96" />
-          <div className="grid gap-6 lg:grid-cols-2 mt-8">
+          <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <Skeleton className="h-64" />
             <Skeleton className="h-64" />
           </div>
@@ -91,11 +99,15 @@ export default function UserDetailPage({ params }: PageProps) {
     return (
       <div className="container mx-auto p-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">User Not Found</h1>
-          <p className="text-gray-600 mb-6">The user you&apos;re looking for doesn&apos;t exist.</p>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">
+            User Not Found
+          </h1>
+          <p className="mb-6 text-gray-600">
+            The user you&apos;re looking for doesn&apos;t exist.
+          </p>
           <Button asChild>
             <Link href="/admin/users">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Users
             </Link>
           </Button>
@@ -112,18 +124,18 @@ export default function UserDetailPage({ params }: PageProps) {
           <div className="flex items-center space-x-4">
             <Button variant="ghost" asChild>
               <Link href="/admin/users">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Users
               </Link>
             </Button>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">User Details</h1>
-              <p className="text-gray-600 mt-1">View user information</p>
+              <p className="mt-1 text-gray-600">View user information</p>
             </div>
           </div>
           <Button asChild>
             <Link href={`/admin/users/${user.id}/edit`}>
-              <Edit className="h-4 w-4 mr-2" />
+              <Edit className="mr-2 h-4 w-4" />
               Edit User
             </Link>
           </Button>
@@ -141,12 +153,16 @@ export default function UserDetailPage({ params }: PageProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Full Name</p>
+              <p className="mb-1 text-sm font-medium text-gray-700">
+                Full Name
+              </p>
               <p className="text-gray-900">{user.name}</p>
             </div>
 
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Email Address</p>
+              <p className="mb-1 text-sm font-medium text-gray-700">
+                Email Address
+              </p>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-gray-400" />
                 <a
@@ -159,7 +175,9 @@ export default function UserDetailPage({ params }: PageProps) {
             </div>
 
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Phone Number</p>
+              <p className="mb-1 text-sm font-medium text-gray-700">
+                Phone Number
+              </p>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-gray-400" />
                 <a
@@ -172,7 +190,7 @@ export default function UserDetailPage({ params }: PageProps) {
             </div>
 
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Role</p>
+              <p className="mb-1 text-sm font-medium text-gray-700">Role</p>
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-gray-400" />
                 {getRoleBadge(user.role)}
@@ -191,17 +209,21 @@ export default function UserDetailPage({ params }: PageProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">User ID</p>
-              <p className="text-sm text-gray-600 font-mono">{user.id}</p>
+              <p className="mb-1 text-sm font-medium text-gray-700">User ID</p>
+              <p className="font-mono text-sm text-gray-600">{user.id}</p>
             </div>
 
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Created At</p>
+              <p className="mb-1 text-sm font-medium text-gray-700">
+                Created At
+              </p>
               <p className="text-gray-900">{formatDate(user.createdAt)}</p>
             </div>
 
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Last Updated</p>
+              <p className="mb-1 text-sm font-medium text-gray-700">
+                Last Updated
+              </p>
               <p className="text-gray-900">{formatDate(user.updatedAt)}</p>
             </div>
           </CardContent>
@@ -210,4 +232,3 @@ export default function UserDetailPage({ params }: PageProps) {
     </div>
   );
 }
-    

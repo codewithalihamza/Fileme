@@ -26,7 +26,7 @@ import {
   TrendingUp,
   User,
   Users2,
-  X
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -413,8 +413,6 @@ export default function ReferralDetailPage({ params }: PageProps) {
                     </p>
                   )}
                 </div>
-
-
               </div>
             </CardContent>
           </Card>
