@@ -5,13 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Phone number validation regex (11 digits)
-export const PHONE_REGEX = /^\d{11}$/;
-
-export function validatePhoneNumber(phone: string): boolean {
-  return PHONE_REGEX.test(phone.trim());
-}
-
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("en-PK", {
     style: "currency",
@@ -30,6 +23,12 @@ export const formatNumberWithCommas = (value: string): string => {
   if (isNaN(number)) return "";
 
   return number.toLocaleString("en-US");
+};
+
+export const validatePhoneNumber = (phone: string): boolean => {
+  // Pakistani phone number format: 03XXXXXXXXX (11 digits)
+  const phoneRegex = /^03\d{9}$/;
+  return phoneRegex.test(phone);
 };
 
 export const contactInfo = {

@@ -8,8 +8,8 @@ export interface Contact {
   phone: string;
   service: string;
   message: string;
-  status: "pending" | "in-progress" | "completed" | "unpaid" | "paid";
-  paidAmount: string | null;
+  status: "pending" | "in_progress" | "contacted";
+  heardFrom: "linkedin" | "website" | "instagram" | "facebook" | "others";
   createdAt: string;
   updatedAt: string;
 }
@@ -96,6 +96,7 @@ export function useContacts() {
     phone: string;
     service: string;
     message: string;
+    heardFrom: string;
   }) => {
     try {
       const response = await fetch("/api/contact", {

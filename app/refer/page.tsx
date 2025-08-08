@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ServiceDropdown } from "@/components/ui/service-dropdown";
-import { Textarea } from "@/components/ui/textarea";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { useToast } from "@/hooks/use-toast";
 import { contactInfo, validatePhoneNumber } from "@/lib/utils";
@@ -28,9 +27,6 @@ interface ReferralFormData {
   referrerEmail: string;
   referrerPhone: string;
   service: string;
-
-  // Account details
-  accountDetails: string;
 }
 
 export default function ReferPage() {
@@ -43,7 +39,6 @@ export default function ReferPage() {
     referrerEmail: "",
     referrerPhone: "",
     service: "tax",
-    accountDetails: "",
   });
 
   const [errors, setErrors] = useState<Partial<ReferralFormData>>({});
@@ -63,6 +58,11 @@ export default function ReferPage() {
     if (!formData.friendName.trim()) {
       newErrors.friendName = "Friend's name is required";
     }
+    if (!formData.friendEmail.trim()) {
+      newErrors.friendEmail = "Friend's email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.friendEmail)) {
+      newErrors.friendEmail = "Please enter a valid email address";
+    }
     if (!formData.friendPhone.trim()) {
       newErrors.friendPhone = "Friend's phone number is required";
     } else if (!validatePhoneNumber(formData.friendPhone)) {
@@ -71,6 +71,11 @@ export default function ReferPage() {
     if (!formData.referrerName.trim()) {
       newErrors.referrerName = "Your name is required";
     }
+    if (!formData.referrerEmail.trim()) {
+      newErrors.referrerEmail = "Your email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.referrerEmail)) {
+      newErrors.referrerEmail = "Please enter a valid email address";
+    }
     if (!formData.referrerPhone.trim()) {
       newErrors.referrerPhone = "Your phone number is required";
     } else if (!validatePhoneNumber(formData.referrerPhone)) {
@@ -78,9 +83,6 @@ export default function ReferPage() {
     }
     if (!formData.service.trim()) {
       newErrors.service = "Please select a service";
-    }
-    if (!formData.accountDetails.trim()) {
-      newErrors.accountDetails = "Account details are required";
     }
 
     setErrors(newErrors);
@@ -125,7 +127,6 @@ export default function ReferPage() {
           referrerEmail: "",
           referrerPhone: "",
           service: "tax",
-          accountDetails: "",
         });
         setErrors({});
       } else {
@@ -254,7 +255,7 @@ export default function ReferPage() {
                         htmlFor="friendEmail"
                         className="text-sm font-medium text-gray-700"
                       >
-                        Email (Optional)
+                        Email <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="friendEmail"
@@ -263,9 +264,14 @@ export default function ReferPage() {
                         onChange={(e) =>
                           handleInputChange("friendEmail", e.target.value)
                         }
-                        className="mt-1"
+                        className={`mt-1 ${errors.friendEmail ? "border-red-500" : ""}`}
                         placeholder="Enter friend's email"
                       />
+                      {errors.friendEmail && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {errors.friendEmail}
+                        </p>
+                      )}
                     </div>
                     <div className="md:col-span-2">
                       <Label
@@ -348,7 +354,7 @@ export default function ReferPage() {
                         htmlFor="referrerEmail"
                         className="text-sm font-medium text-gray-700"
                       >
-                        Email (Optional)
+                        Email <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="referrerEmail"
@@ -357,9 +363,14 @@ export default function ReferPage() {
                         onChange={(e) =>
                           handleInputChange("referrerEmail", e.target.value)
                         }
-                        className="mt-1"
+                        className={`mt-1 ${errors.referrerEmail ? "border-red-500" : ""}`}
                         placeholder="Enter your email"
                       />
+                      {errors.referrerEmail && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {errors.referrerEmail}
+                        </p>
+                      )}
                     </div>
                     <div className="md:col-span-2">
                       <Label
@@ -385,39 +396,6 @@ export default function ReferPage() {
                         </p>
                       )}
                     </div>
-                  </div>
-                </div>
-
-                {/* Account Details Section */}
-                <div>
-                  <h3 className="mb-4 border-b pb-2 text-lg font-semibold text-gray-900">
-                    Payment Details
-                  </h3>
-                  <div>
-                    <Label
-                      htmlFor="accountDetails"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Account Details <span className="text-red-500">*</span>
-                    </Label>
-                    <Textarea
-                      id="accountDetails"
-                      value={formData.accountDetails}
-                      onChange={(e) =>
-                        handleInputChange("accountDetails", e.target.value)
-                      }
-                      className={`mt-1 min-h-[100px] ${errors.accountDetails ? "border-red-500" : ""}`}
-                      placeholder="Enter your bank account number, IBAN, or preferred payment method where we can send your referral earnings"
-                    />
-                    {errors.accountDetails && (
-                      <p className="mt-1 text-sm text-red-500">
-                        {errors.accountDetails}
-                      </p>
-                    )}
-                    <p className="mt-2 text-sm text-gray-500">
-                      Provide your bank account details, IBAN, or preferred
-                      payment method for receiving referral earnings.
-                    </p>
                   </div>
                 </div>
 

@@ -17,7 +17,6 @@ import {
   Calendar,
   CheckCircle,
   Clock,
-  CreditCard,
   Edit,
   FileText,
   Gift,
@@ -27,55 +26,61 @@ import {
   TrendingUp,
   User,
   Users2,
-  X,
+  X
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface Referral {
   id: string;
   friendName: string;
-  friendEmail: string | null;
+  friendEmail: string;
   friendPhone: string;
   referrerName: string;
-  referrerEmail: string | null;
+  referrerEmail: string;
   referrerPhone: string;
   service: string;
-  accountDetails: string;
-  status: "pending" | "in-progress" | "completed" | "paid";
+  status: "pending" | "in_progress" | "completed" | "paid";
   totalEarned: string;
   amountSent: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export default function ReferralDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function ReferralDetailPage({ params }: PageProps) {
   const { logout, isLoading } = useAuth();
   const [referral, setReferral] = useState<Referral | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState<Partial<Referral>>({});
+  const [referralId, setReferralId] = useState<string>("");
 
   useEffect(() => {
-    fetchReferral();
-  }, [params.id]);
+    const getParams = async () => {
+      const resolvedParams = await params;
+      setReferralId(resolvedParams.id);
+    };
+    getParams();
+  }, [params]);
 
-  const fetchReferral = async () => {
+  const fetchReferral = useCallback(async () => {
+    if (!referralId) return;
+
     try {
       setLoading(true);
       // This would be replaced with actual API call
-      // const response = await fetch(`/api/admin/referrals/${params.id}`);
+      // const response = await fetch(`/api/admin/referrals/${referralId}`);
       // const data = await response.json();
       // setReferral(data);
 
       // Mock data for now
       setReferral({
-        id: params.id,
+        id: referralId,
         friendName: "Jane Smith",
         friendEmail: "jane.smith@example.com",
         friendPhone: "03000000001",
@@ -83,8 +88,6 @@ export default function ReferralDetailPage({
         referrerEmail: "john.doe@example.com",
         referrerPhone: "03000000000",
         service: "tax",
-        accountDetails:
-          "Bank: HBL, Account: 1234567890, IBAN: PK36HABB00001234567890",
         status: "pending",
         totalEarned: "150.00",
         amountSent: "0.00",
@@ -96,7 +99,11 @@ export default function ReferralDetailPage({
     } finally {
       setLoading(false);
     }
-  };
+  }, [referralId]);
+
+  useEffect(() => {
+    fetchReferral();
+  }, [fetchReferral]);
 
   const updateReferral = async () => {
     try {
@@ -407,29 +414,7 @@ export default function ReferralDetailPage({
                   )}
                 </div>
 
-                <div>
-                  <label className="flex items-center text-sm font-medium text-gray-600">
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    Account Details
-                  </label>
-                  {editing ? (
-                    <textarea
-                      value={editData.accountDetails || referral.accountDetails}
-                      onChange={(e) =>
-                        setEditData({
-                          ...editData,
-                          accountDetails: e.target.value,
-                        })
-                      }
-                      className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:border-transparent focus:ring-2 focus:ring-green-500"
-                      rows={3}
-                    />
-                  ) : (
-                    <p className="mt-1 rounded-lg bg-gray-50 p-3 text-gray-700">
-                      {referral.accountDetails}
-                    </p>
-                  )}
-                </div>
+
               </div>
             </CardContent>
           </Card>

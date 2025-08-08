@@ -1,24 +1,17 @@
 import { SignJWT, jwtVerify } from "jose";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const ADMIN_EMAIL = process.env.ADMIN_LOGIN_EMAIL!;
-const ADMIN_PASSWORD = process.env.ADMIN_LOGIN_PASSWORD!;
 
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET must be at least 32 characters long");
-}
-
-if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
-  throw new Error(
-    "ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment variables"
-  );
 }
 
 const secret = new TextEncoder().encode(JWT_SECRET);
 
 export interface AdminUser {
   email: string;
-  role: "admin";
+  role: "admin" | "employees";
+  userId: string;
 }
 
 export async function createToken(user: AdminUser): Promise<string> {
@@ -38,8 +31,4 @@ export async function verifyToken(token: string): Promise<AdminUser | null> {
   } catch (error) {
     return null;
   }
-}
-
-export function validateCredentials(email: string, password: string): boolean {
-  return email === ADMIN_EMAIL && password === ADMIN_PASSWORD;
 }

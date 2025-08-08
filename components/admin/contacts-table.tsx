@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Modal } from "@/components/ui/modal";
 import {
   Select,
   SelectContent,
@@ -31,7 +30,7 @@ import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useContacts } from "@/hooks/use-contacts";
 import { servicesNames } from "@/lib/services";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import {
   ChevronLeft,
   ChevronRight,
@@ -65,19 +64,6 @@ export function ContactsTable() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const router = useRouter();
-  const [paidModal, setPaidModal] = useState<{
-    isOpen: boolean;
-    contactId: string;
-    contactName: string;
-    currentAmount?: string | null;
-    phone: string;
-  }>({
-    isOpen: false,
-    contactId: "",
-    contactName: "",
-    currentAmount: null,
-    phone: "",
-  });
 
   const handleRowClick = (contactId: string) => {
     router.push(`/admin/contacts/${contactId}`);
@@ -86,40 +72,11 @@ export function ContactsTable() {
   const handleStatusChange = async (
     contactId: string,
     newStatus: string,
-    contactName: string,
-    phone: string,
-    currentAmount?: string | null
+    contactName: string
   ) => {
-    if (newStatus === "paid") {
-      setPaidModal({
-        isOpen: true,
-        contactId,
-        contactName,
-        currentAmount,
-        phone,
-      });
-    } else {
-      await updateContact(contactId, {
-        status: newStatus as
-          | "pending"
-          | "in-progress"
-          | "completed"
-          | "unpaid"
-          | "paid",
-      });
-    }
-  };
-
-  const handlePaidAmountSave = async (amount: string) => {
-    try {
-      await updateContact(paidModal.contactId, {
-        status: "paid",
-        paidAmount: amount,
-      });
-      toast.success("Payment recorded successfully");
-    } catch (error) {
-      toast.error("Failed to record payment");
-    }
+    await updateContact(contactId, {
+      status: newStatus as "pending" | "in_progress" | "contacted",
+    });
   };
 
   const handleQuickAction = (action: string, contactId: string) => {
@@ -142,6 +99,17 @@ export function ContactsTable() {
     } finally {
       setIsRefreshing(false);
     }
+  };
+
+  const getHeardFromLabel = (heardFrom: string) => {
+    const labels: Record<string, string> = {
+      linkedin: "LinkedIn",
+      website: "Website",
+      instagram: "Instagram",
+      facebook: "Facebook",
+      others: "Others",
+    };
+    return labels[heardFrom] || heardFrom;
   };
 
   return (
@@ -192,10 +160,8 @@ export function ContactsTable() {
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="in-progress">In Progress</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="unpaid">Unpaid</SelectItem>
-              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="in_progress">In Progress</SelectItem>
+              <SelectItem value="contacted">Contacted</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -209,8 +175,8 @@ export function ContactsTable() {
               <TableHead>Name</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Service</TableHead>
+              <TableHead>Heard From</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Paid Amount</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
@@ -233,14 +199,7 @@ export function ContactsTable() {
                   onClick={() => handleRowClick(contact.id)}
                 >
                   <TableCell>
-                    <div>
-                      <div className="font-medium">{contact.name}</div>
-                      {contact.email && (
-                        <div className="text-sm text-gray-500">
-                          {contact.email}
-                        </div>
-                      )}
-                    </div>
+                    <div className="font-medium">{contact.name}</div>
                   </TableCell>
                   <TableCell>{contact.phone}</TableCell>
                   <TableCell className="capitalize">
@@ -250,12 +209,10 @@ export function ContactsTable() {
                       )?.label
                     }
                   </TableCell>
-                  <TableCell>{getStatusBadge(contact.status)}</TableCell>
-                  <TableCell>
-                    {contact.paidAmount
-                      ? formatCurrency(Number(contact.paidAmount))
-                      : "-"}
+                  <TableCell className="capitalize">
+                    {getHeardFromLabel(contact.heardFrom)}
                   </TableCell>
+                  <TableCell>{getStatusBadge(contact.status)}</TableCell>
                   <TableCell>{formatDate(contact.createdAt)}</TableCell>
                   <TableCell>
                     {updatingId === contact.id ? (
@@ -274,9 +231,7 @@ export function ContactsTable() {
                               handleStatusChange(
                                 contact.id,
                                 value,
-                                contact.name,
-                                contact.phone,
-                                contact?.paidAmount
+                                contact.name
                               )
                             }
                             disabled={updatingId === contact.id}
@@ -286,14 +241,12 @@ export function ContactsTable() {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="pending">Pending</SelectItem>
-                              <SelectItem value="in-progress">
+                              <SelectItem value="in_progress">
                                 In Progress
                               </SelectItem>
-                              <SelectItem value="completed">
-                                Completed
+                              <SelectItem value="contacted">
+                                Contacted
                               </SelectItem>
-                              <SelectItem value="unpaid">Unpaid</SelectItem>
-                              <SelectItem value="paid">Paid</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -377,97 +330,6 @@ export function ContactsTable() {
           </div>
         </div>
       )}
-
-      {/* Paid Amount Modal */}
-      <PaidAmountModal
-        isOpen={paidModal.isOpen}
-        onClose={() =>
-          setPaidModal({
-            isOpen: false,
-            contactId: "",
-            contactName: "",
-            currentAmount: null,
-            phone: "",
-          })
-        }
-        onSave={handlePaidAmountSave}
-        contactName={paidModal.contactName}
-        currentAmount={paidModal.currentAmount}
-        phone={paidModal.phone}
-      />
     </div>
-  );
-}
-
-interface PaidAmountModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (amount: string) => void;
-  contactName: string;
-  currentAmount?: string | null;
-  phone: string;
-}
-
-function PaidAmountModal({
-  isOpen,
-  onClose,
-  onSave,
-  contactName,
-  currentAmount,
-  phone,
-}: PaidAmountModalProps) {
-  const [amount, setAmount] = useState(currentAmount || "");
-
-  const handleSave = () => {
-    if (!amount || parseFloat(amount) <= 0) {
-      toast.error("Please enter a valid amount");
-      return;
-    }
-    onSave(amount);
-    onClose();
-  };
-
-  return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Enter Paid Amount"
-      size="md"
-      footer={
-        <div className="flex justify-end space-x-3">
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave}>Save</Button>
-        </div>
-      }
-    >
-      <div className="space-y-4">
-        <div className="flex justify-between">
-          <label className="float-left text-sm font-medium text-gray-700">
-            Contact: {contactName}
-          </label>
-          <label className="float-right text-sm font-medium text-gray-700">
-            Phone: {phone}
-          </label>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            Paid Amount (PKR)
-          </label>
-          <Input
-            type="number"
-            step="0.01"
-            min="0"
-            placeholder="0.00"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full"
-            autoFocus
-          />
-        </div>
-      </div>
-    </Modal>
   );
 }

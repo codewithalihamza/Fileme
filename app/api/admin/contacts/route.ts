@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { contacts } from "@/lib/schema";
+import { contactUs } from "@/lib/schema";
 import { desc, eq, like, or, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,33 +20,32 @@ export async function GET(request: NextRequest) {
     if (search) {
       whereConditions.push(
         or(
-          like(contacts.name, `%${search}%`),
-          like(contacts.phone, `%${search}%`),
-          like(contacts.email || "", `%${search}%`)
+          like(contactUs.name, `%${search}%`),
+          like(contactUs.phone, `%${search}%`)
         )
       );
     }
 
     if (status) {
-      whereConditions.push(eq(contacts.status, status as any));
+      whereConditions.push(eq(contactUs.status, status as any));
     }
 
     if (service) {
-      whereConditions.push(eq(contacts.service, service));
+      whereConditions.push(eq(contactUs.service, service));
     }
 
     // Get total count
     const totalCount = await db
       .select({ count: sql<number>`count(*)` })
-      .from(contacts)
+      .from(contactUs)
       .where(whereConditions.length > 0 ? whereConditions[0] : undefined);
 
     // Get paginated results
     const results = await db
       .select()
-      .from(contacts)
+      .from(contactUs)
       .where(whereConditions.length > 0 ? whereConditions[0] : undefined)
-      .orderBy(desc(contacts.createdAt))
+      .orderBy(desc(contactUs.createdAt))
       .limit(limit)
       .offset(offset);
 
@@ -70,7 +69,7 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { id, status, paidAmount } = await request.json();
+    const { id, status } = await request.json();
 
     if (!id) {
       return NextResponse.json(
@@ -87,14 +86,10 @@ export async function PATCH(request: NextRequest) {
       updateData.status = status;
     }
 
-    if (paidAmount !== undefined) {
-      updateData.paidAmount = paidAmount;
-    }
-
     const updatedContact = await db
-      .update(contacts)
+      .update(contactUs)
       .set(updateData)
-      .where(eq(contacts.id, id))
+      .where(eq(contactUs.id, id))
       .returning();
 
     if (updatedContact.length === 0) {

@@ -2,16 +2,17 @@
 
 import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/constants";
 import { db } from "@/lib/db";
-import { contacts } from "@/lib/schema";
+import { contactUs } from "@/lib/schema";
 import { and, eq, or } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, phone, service, message } = await request.json();
+    const { name, email, phone, service, message, heardFrom } =
+      await request.json();
 
     // Basic validation
-    if (!name || !phone || !service || !message) {
+    if (!name || !phone || !service || !message || !heardFrom) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -38,19 +39,32 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Validate heardFrom enum
+    const validHeardFrom = [
+      "linkedin",
+      "website",
+      "instagram",
+      "facebook",
+      "others",
+    ];
+    if (!validHeardFrom.includes(heardFrom)) {
+      return NextResponse.json(
+        { error: "Invalid heard from source" },
+        { status: 400 }
+      );
+    }
+
     const existingSubmission = await db
       .select()
-      .from(contacts)
+      .from(contactUs)
       .where(
         and(
-          or(eq(contacts.phone, phone)),
+          eq(contactUs.phone, phone),
           or(
-            eq(contacts.status, "unpaid"),
-            eq(contacts.status, "in-progress"),
-            eq(contacts.status, "pending"),
-            eq(contacts.status, "completed")
+            eq(contactUs.status, "pending"),
+            eq(contactUs.status, "in_progress")
           ),
-          eq(contacts.service, service)
+          eq(contactUs.service, service)
         )
       );
 
@@ -66,13 +80,14 @@ export async function POST(request: NextRequest) {
 
     // Insert new contact submission
     const newContact = await db
-      .insert(contacts)
+      .insert(contactUs)
       .values({
         name,
         email: email || null,
         phone,
         service,
         message,
+        heardFrom,
         status: "pending",
       })
       .returning();

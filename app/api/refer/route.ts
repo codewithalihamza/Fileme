@@ -1,7 +1,7 @@
 "use server";
 import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/constants";
 import { db } from "@/lib/db";
-import { contacts, referrals } from "@/lib/schema";
+import { contactUs, referrals } from "@/lib/schema";
 import { and, eq, or } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,17 +15,17 @@ export async function POST(request: NextRequest) {
       referrerEmail,
       referrerPhone,
       service,
-      accountDetails,
     } = await request.json();
 
     // Basic validation
     if (
       !friendName ||
+      !friendEmail ||
       !friendPhone ||
       !referrerName ||
+      !referrerEmail ||
       !referrerPhone ||
-      !service ||
-      !accountDetails
+      !service
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -48,40 +48,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Email validation (if provided)
-    if (friendEmail) {
-      const emailRegex = EMAIL_REGEX;
-      if (!emailRegex.test(friendEmail)) {
-        return NextResponse.json(
-          { error: "Invalid friend's email format" },
-          { status: 400 }
-        );
-      }
+    // Email validation
+    const emailRegex = EMAIL_REGEX;
+    if (!emailRegex.test(friendEmail)) {
+      return NextResponse.json(
+        { error: "Invalid friend's email format" },
+        { status: 400 }
+      );
     }
-    if (referrerEmail) {
-      const emailRegex = EMAIL_REGEX;
-      if (!emailRegex.test(referrerEmail)) {
-        return NextResponse.json(
-          { error: "Invalid referrer's email format" },
-          { status: 400 }
-        );
-      }
+    if (!emailRegex.test(referrerEmail)) {
+      return NextResponse.json(
+        { error: "Invalid referrer's email format" },
+        { status: 400 }
+      );
     }
 
-    // Check if friend already exists in contacts with pending, in-progress, or unpaid status
+    // Check if friend already exists in contactUs with pending or in_progress status
     const existingContact = await db
       .select()
-      .from(contacts)
+      .from(contactUs)
       .where(
         and(
+          eq(contactUs.email, friendEmail),
           or(
-            eq(contacts.phone, friendPhone),
-            eq(contacts.email, friendEmail || "")
-          ),
-          or(
-            eq(contacts.status, "pending"),
-            eq(contacts.status, "in-progress"),
-            eq(contacts.status, "unpaid")
+            eq(contactUs.status, "pending"),
+            eq(contactUs.status, "in_progress")
           )
         )
       );
@@ -122,13 +113,12 @@ export async function POST(request: NextRequest) {
       .insert(referrals)
       .values({
         friendName,
-        friendEmail: friendEmail || null,
+        friendEmail,
         friendPhone,
         referrerName,
-        referrerEmail: referrerEmail || null,
+        referrerEmail,
         referrerPhone,
         service,
-        accountDetails,
         status: "pending",
       })
       .returning();

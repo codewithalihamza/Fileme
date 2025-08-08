@@ -17,18 +17,16 @@ import {
   Calendar,
   CheckCircle,
   Clock,
-  DollarSign,
   Edit,
   FileText,
   Mail,
   MessageSquare,
-  Phone,
   Save,
   User,
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface Contact {
@@ -38,46 +36,53 @@ interface Contact {
   phone: string;
   service: string;
   message: string;
-  status: "pending" | "in-progress" | "completed" | "unpaid" | "paid";
-  paidAmount: string | null;
+  status: "pending" | "in_progress" | "contacted";
+  heardFrom: "linkedin" | "website" | "instagram" | "facebook" | "others";
   createdAt: string;
   updatedAt: string;
 }
 
-export default function ContactDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function ContactDetailPage({ params }: PageProps) {
   const { logout, isLoading } = useAuth();
   const [contact, setContact] = useState<Contact | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState<Partial<Contact>>({});
+  const [contactId, setContactId] = useState<string>("");
 
   useEffect(() => {
-    fetchContact();
-  }, [params.id]);
+    const getParams = async () => {
+      const resolvedParams = await params;
+      setContactId(resolvedParams.id);
+    };
+    getParams();
+  }, [params]);
 
-  const fetchContact = async () => {
+  const fetchContact = useCallback(async () => {
+    if (!contactId) return;
+
     try {
       setLoading(true);
       // This would be replaced with actual API call
-      // const response = await fetch(`/api/admin/contacts/${params.id}`);
+      // const response = await fetch(`/api/admin/contacts/${contactId}`);
       // const data = await response.json();
       // setContact(data);
 
       // Mock data for now
       setContact({
-        id: params.id,
+        id: contactId,
         name: "John Doe",
         email: "john.doe@example.com",
-        phone: "03000000000",
+        phone: "123-456-7890",
         service: "tax",
         message:
           "I need help with my tax filing for the current year. I have multiple income sources and need professional assistance.",
         status: "pending",
-        paidAmount: null,
+        heardFrom: "website",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
@@ -86,12 +91,16 @@ export default function ContactDetailPage({
     } finally {
       setLoading(false);
     }
-  };
+  }, [contactId]);
+
+  useEffect(() => {
+    fetchContact();
+  }, [fetchContact]);
 
   const updateContact = async () => {
     try {
       // This would be replaced with actual API call
-      // const response = await fetch(`/api/admin/contacts/${params.id}`, {
+      // const response = await fetch(`/api/admin/contacts/${contactId}`, {
       //   method: "PATCH",
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify(editData),
@@ -99,6 +108,7 @@ export default function ContactDetailPage({
 
       toast.success("Contact updated successfully");
       setEditing(false);
+      setEditData({});
       fetchContact();
     } catch (error) {
       toast.error("Failed to update contact");
@@ -107,15 +117,14 @@ export default function ContactDetailPage({
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      pending: "bg-yellow-100 text-yellow-800",
-      "in-progress": "bg-blue-100 text-blue-800",
-      completed: "bg-green-100 text-green-800",
-      unpaid: "bg-red-100 text-red-800",
-      paid: "bg-green-100 text-green-800",
+      pending: "bg-yellow-500 text-white",
+      in_progress: "bg-blue-500 text-white",
+      contacted: "bg-green-500 text-white",
     };
     return (
       <Badge className={variants[status as keyof typeof variants]}>
-        {status.replace("-", " ")}
+        {status.replace("_", " ").charAt(0).toUpperCase() +
+          status.replace("_", " ").slice(1).toLowerCase()}
       </Badge>
     );
   };
@@ -130,95 +139,140 @@ export default function ContactDetailPage({
     });
   };
 
+  const getHeardFromLabel = (heardFrom: string) => {
+    const labels: Record<string, string> = {
+      linkedin: "LinkedIn",
+      website: "Website",
+      instagram: "Instagram",
+      facebook: "Facebook",
+      others: "Others",
+    };
+    return labels[heardFrom] || heardFrom;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4 text-2xl font-semibold">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        <div className="text-lg">Loading contact details...</div>
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-6 flex items-center gap-4">
+          <Link
+            href="/admin/contacts"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="size-4" />
+            Back to Contacts
+          </Link>
+        </div>
+        <div className="text-center">
+          <div className="mb-4 text-2xl font-semibold">Loading...</div>
+        </div>
       </div>
     );
   }
 
   if (!contact) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        <div className="text-lg">Contact not found</div>
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-6 flex items-center gap-4">
+          <Link
+            href="/admin/contacts"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="size-4" />
+            Back to Contacts
+          </Link>
+        </div>
+        <div className="text-center">
+          <div className="mb-4 text-2xl font-semibold">Contact not found</div>
+          <p className="text-gray-600">
+            The contact you&apos;re looking for doesn&apos;t exist.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="mx-auto max-w-4xl py-6 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="px-4 py-6 sm:px-0">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link href="/admin/contacts">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Contacts
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  Contact Details
-                </h1>
-                <p className="mt-1 text-sm text-gray-600">
-                  View and manage contact information
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              {editing ? (
-                <>
-                  <Button
-                    onClick={() => setEditing(false)}
-                    variant="outline"
-                    size="sm"
-                  >
-                    <X className="mr-2 h-4 w-4" />
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={updateContact}
-                    size="sm"
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Save className="mr-2 h-4 w-4" />
-                    Save Changes
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  onClick={() => setEditing(true)}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit
-                </Button>
-              )}
-            </div>
+    <div className="container mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin/contacts"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="size-4" />
+            Back to Contacts
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {editing ? "Edit Contact" : "Contact Details"}
+            </h1>
+            <p className="text-gray-600">
+              {editing
+                ? "Update contact information"
+                : "View and manage contact information"}
+            </p>
           </div>
         </div>
+        <div className="flex items-center gap-2">
+          {editing ? (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setEditing(false);
+                  setEditData({});
+                }}
+                className="flex items-center gap-2"
+              >
+                <X className="size-4" />
+                Cancel
+              </Button>
+              <Button
+                onClick={updateContact}
+                className="flex items-center gap-2"
+              >
+                <Save className="size-4" />
+                Save Changes
+              </Button>
+            </>
+          ) : (
+            <Button
+              onClick={() => setEditing(true)}
+              className="flex items-center gap-2"
+            >
+              <Edit className="size-4" />
+              Edit Contact
+            </Button>
+          )}
+        </div>
+      </div>
 
-        <div className="space-y-6 px-4 sm:px-0">
-          {/* Contact Information */}
-          <Card className="border-0 bg-white/80 shadow-lg backdrop-blur-sm">
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Main Content */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Basic Information */}
+          <Card>
             <CardHeader>
-              <CardTitle className="text-xl font-bold text-gray-900">
-                Contact Information
+              <CardTitle className="flex items-center gap-2">
+                <User className="size-5" />
+                Basic Information
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="flex items-center text-sm font-medium text-gray-600">
-                    <User className="mr-2 h-4 w-4" />
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
                     Full Name
                   </label>
                   {editing ? (
@@ -227,58 +281,73 @@ export default function ContactDetailPage({
                       onChange={(e) =>
                         setEditData({ ...editData, name: e.target.value })
                       }
-                      className="mt-1"
                     />
                   ) : (
-                    <p className="mt-1 text-lg font-medium text-gray-900">
-                      {contact.name}
-                    </p>
+                    <p className="text-gray-900">{contact.name}</p>
                   )}
                 </div>
-
                 <div>
-                  <label className="flex items-center text-sm font-medium text-gray-600">
-                    <Phone className="mr-2 h-4 w-4" />
-                    Phone Number
-                  </label>
-                  {editing ? (
-                    <Input
-                      value={editData.phone || contact.phone}
-                      onChange={(e) =>
-                        setEditData({ ...editData, phone: e.target.value })
-                      }
-                      className="mt-1"
-                    />
-                  ) : (
-                    <p className="mt-1 text-lg font-medium text-gray-900">
-                      {contact.phone}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="flex items-center text-sm font-medium text-gray-600">
-                    <Mail className="mr-2 h-4 w-4" />
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
                     Email Address
                   </label>
                   {editing ? (
                     <Input
+                      type="email"
                       value={editData.email || contact.email || ""}
                       onChange={(e) =>
                         setEditData({ ...editData, email: e.target.value })
                       }
-                      className="mt-1"
                     />
                   ) : (
-                    <p className="mt-1 text-lg font-medium text-gray-900">
-                      {contact.email || "Not provided"}
-                    </p>
+                    <>
+                      {contact.email ? (
+                        <div className="flex items-center gap-2">
+                          <Mail className="size-4 text-gray-400" />
+                          <a
+                            href={`mailto:${contact.email}`}
+                            className="text-blue-600 hover:underline"
+                          >
+                            {contact.email}
+                          </a>
+                        </div>
+                      ) : (
+                        <p className="text-gray-500">Not provided</p>
+                      )}
+                    </>
                   )}
                 </div>
-
                 <div>
-                  <label className="flex items-center text-sm font-medium text-gray-600">
-                    <FileText className="mr-2 h-4 w-4" />
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Phone Number
+                  </label>
+                  {editing ? (
+                    <Input
+                      type="tel"
+                      value={editData.phone || contact.phone}
+                      onChange={(e) =>
+                        setEditData({ ...editData, phone: e.target.value })
+                      }
+                    />
+                  ) : (
+                    <p className="text-gray-900">{contact.phone}</p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Service Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="size-5" />
+                Service Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
                     Service Required
                   </label>
                   {editing ? (
@@ -288,176 +357,144 @@ export default function ContactDetailPage({
                         setEditData({ ...editData, service: value })
                       }
                     >
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="tax">Tax Services</SelectItem>
+                        <SelectItem value="tax">Tax Filing</SelectItem>
                         <SelectItem value="accounting">Accounting</SelectItem>
                         <SelectItem value="audit">Audit</SelectItem>
-                        <SelectItem value="consulting">Consulting</SelectItem>
+                        <SelectItem value="consultation">Consultation</SelectItem>
                       </SelectContent>
                     </Select>
                   ) : (
-                    <p className="mt-1 text-lg font-medium capitalize text-gray-900">
-                      {contact.service}
+                    <p className="capitalize text-gray-900">{contact.service}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Heard From
+                  </label>
+                  {editing ? (
+                    <Select
+                      value={editData.heardFrom || contact.heardFrom}
+                      onValueChange={(value) =>
+                        setEditData({ ...editData, heardFrom: value as any })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="website">Website</SelectItem>
+                        <SelectItem value="linkedin">LinkedIn</SelectItem>
+                        <SelectItem value="instagram">Instagram</SelectItem>
+                        <SelectItem value="facebook">Facebook</SelectItem>
+                        <SelectItem value="others">Others</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <p className="text-gray-900">
+                      {getHeardFromLabel(contact.heardFrom)}
                     </p>
                   )}
                 </div>
-              </div>
-
-              <div>
-                <label className="flex items-center text-sm font-medium text-gray-600">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Message
-                </label>
-                {editing ? (
-                  <textarea
-                    value={editData.message || contact.message}
-                    onChange={(e) =>
-                      setEditData({ ...editData, message: e.target.value })
-                    }
-                    className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                    rows={4}
-                  />
-                ) : (
-                  <p className="mt-1 rounded-lg bg-gray-50 p-3 text-gray-700">
-                    {contact.message}
-                  </p>
-                )}
               </div>
             </CardContent>
           </Card>
 
-          {/* Status and Payment */}
-          <Card className="border-0 bg-white/80 shadow-lg backdrop-blur-sm">
+          {/* Message */}
+          <Card>
             <CardHeader>
-              <CardTitle className="text-xl font-bold text-gray-900">
-                Status & Payment
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="size-5" />
+                Message
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div>
-                  <label className="text-sm font-medium text-gray-600">
-                    Current Status
-                  </label>
-                  {editing ? (
-                    <Select
-                      value={editData.status || contact.status}
-                      onValueChange={(value) =>
-                        setEditData({ ...editData, status: value as any })
-                      }
-                    >
-                      <SelectTrigger className="mt-1">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="in-progress">In Progress</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                        <SelectItem value="unpaid">Unpaid</SelectItem>
-                        <SelectItem value="paid">Paid</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <div className="mt-1">{getStatusBadge(contact.status)}</div>
-                  )}
-                </div>
+            <CardContent>
+              {editing ? (
+                <textarea
+                  value={editData.message || contact.message}
+                  onChange={(e) =>
+                    setEditData({ ...editData, message: e.target.value })
+                  }
+                  rows={6}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <p className="whitespace-pre-wrap text-gray-700">
+                  {contact.message}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
-                <div>
-                  <label className="flex items-center text-sm font-medium text-gray-600">
-                    <DollarSign className="mr-2 h-4 w-4" />
-                    Paid Amount
-                  </label>
-                  {editing ? (
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={editData.paidAmount || contact.paidAmount || ""}
-                      onChange={(e) =>
-                        setEditData({ ...editData, paidAmount: e.target.value })
-                      }
-                      className="mt-1"
-                      placeholder="Enter amount"
-                    />
-                  ) : (
-                    <p className="mt-1 text-lg font-medium text-gray-900">
-                      {contact.paidAmount
-                        ? `$${contact.paidAmount}`
-                        : "Not paid"}
-                    </p>
-                  )}
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="size-5" />
+                Status
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {editing ? (
+                <Select
+                  value={editData.status || contact.status}
+                  onValueChange={(value) =>
+                    setEditData({ ...editData, status: value as any })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="in_progress">In Progress</SelectItem>
+                    <SelectItem value="contacted">Contacted</SelectItem>
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className="flex items-center gap-2">
+                  {getStatusBadge(contact.status)}
                 </div>
-              </div>
+              )}
             </CardContent>
           </Card>
 
           {/* Timestamps */}
-          <Card className="border-0 bg-white/80 shadow-lg backdrop-blur-sm">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-xl font-bold text-gray-900">
-                Timeline
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="size-5" />
+                Timestamps
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4">
-                  <div className="rounded-full bg-blue-100 p-2">
-                    <Calendar className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      Submitted
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {formatDate(contact.createdAt)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <div className="rounded-full bg-green-100 p-2">
-                    <Clock className="h-4 w-4 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      Last Updated
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {formatDate(contact.updatedAt)}
-                    </p>
-                  </div>
+            <CardContent className="space-y-3">
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  Created
+                </label>
+                <div className="flex items-center gap-2">
+                  <Clock className="size-4 text-gray-400" />
+                  <p className="text-sm text-gray-600">
+                    {formatDate(contact.createdAt)}
+                  </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card className="border-0 bg-white/80 shadow-lg backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold text-gray-900">
-                Quick Actions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-3">
-                <Button variant="outline" size="sm">
-                  <Mail className="mr-2 h-4 w-4" />
-                  Send Email
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Phone className="mr-2 h-4 w-4" />
-                  Call Contact
-                </Button>
-                <Button variant="outline" size="sm">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Create Invoice
-                </Button>
-                <Button variant="outline" size="sm">
-                  <CheckCircle className="mr-2 h-4 w-4" />
-                  Mark Complete
-                </Button>
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  Last Updated
+                </label>
+                <div className="flex items-center gap-2">
+                  <Clock className="size-4 text-gray-400" />
+                  <p className="text-sm text-gray-600">
+                    {formatDate(contact.updatedAt)}
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>

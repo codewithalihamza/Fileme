@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ServiceDropdown } from "@/components/ui/service-dropdown";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { heardFromOptions } from "@/lib/constants";
 import { contactInfo, validatePhoneNumber } from "@/lib/utils";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -16,12 +16,13 @@ export default function ContactPage() {
     phone: "",
     service: "tax",
     message: "",
+    heardFrom: "linkedin",
   });
   const [errors, setErrors] = useState<Partial<typeof formData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -45,11 +46,17 @@ export default function ContactPage() {
     } else if (!validatePhoneNumber(formData.phone)) {
       newErrors.phone = "Phone number must be 11 digits";
     }
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
     if (!formData.service.trim()) {
       newErrors.service = "Please select a service";
     }
     if (!formData.message.trim()) {
       newErrors.message = "Message is required";
+    }
+    if (!formData.heardFrom) {
+      newErrors.heardFrom = "Please select how you heard about us";
     }
 
     setErrors(newErrors);
@@ -85,6 +92,7 @@ export default function ContactPage() {
           phone: "",
           service: "tax",
           message: "",
+          heardFrom: "website",
         });
         setErrors({});
       } else {
@@ -119,78 +127,109 @@ export default function ContactPage() {
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className=" block text-sm font-medium text-gray-700"
+                    >
+                      Full Name <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter your full name"
+                      className={`w-full ${errors.name ? "border-red-500" : ""}`}
+                    />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className=" block text-sm font-medium text-gray-700"
+                    >
+                      Email Address
+                    </label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Enter your email address (optional)"
+                      className={`w-full ${errors.email ? "border-red-500" : ""}`}
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Phone Number <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="03XXXXXXXXX (11 digits)"
+                      maxLength={11}
+                      className={`w-full ${errors.phone ? "border-red-500" : ""}`}
+                    />
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <ServiceDropdown
+                      value={formData.service}
+                      onValueChange={(value) => {
+                        setFormData((prev) => ({ ...prev, service: value }));
+                        if (errors.service) {
+                          setErrors((prev) => ({ ...prev, service: "" }));
+                        }
+                      }}
+                      error={errors.service}
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <label
-                    htmlFor="name"
+                    htmlFor="heardFrom"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Full Name <span className="text-red-500">*</span>
+                    How did you hear about us? <span className="text-red-500">*</span>
                   </label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
+                  <select
+                    id="heardFrom"
+                    name="heardFrom"
+                    value={formData.heardFrom}
                     onChange={handleInputChange}
-                    placeholder="Enter your full name"
-                    className={`w-full ${errors.name ? "border-red-500" : ""}`}
-                  />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                    className={`w-full rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.heardFrom ? "border-red-500" : "border-gray-300"
+                      }`}
+                  >
+                    {heardFromOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.heardFrom && (
+                    <p className="mt-1 text-sm text-red-500">{errors.heardFrom}</p>
                   )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Email Address
-                  </label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="Enter your email address"
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Phone Number <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="03XXXXXXXXX (11 digits)"
-                    maxLength={11}
-                    className={`w-full ${errors.phone ? "border-red-500" : ""}`}
-                  />
-                  {errors.phone && (
-                    <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
-                  )}
-                </div>
-
-                <div>
-                  <ServiceDropdown
-                    value={formData.service}
-                    onValueChange={(value) => {
-                      setFormData((prev) => ({ ...prev, service: value }));
-                      if (errors.service) {
-                        setErrors((prev) => ({ ...prev, service: "" }));
-                      }
-                    }}
-                    error={errors.service}
-                  />
                 </div>
 
                 <div>
@@ -207,9 +246,8 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     placeholder="Tell us about your professional services needs..."
                     rows={6}
-                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.message ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.message ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.message && (
                     <p className="mt-1 text-sm text-red-500">

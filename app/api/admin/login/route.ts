@@ -1,4 +1,8 @@
-import { createToken, validateCredentials } from "@/lib/auth";
+import { createToken } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
+import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -12,8 +16,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate credentials
-    if (!validateCredentials(email, password)) {
+    // Find user by email
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    if (user.length === 0) {
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      );
+    }
+
+    const foundUser = user[0];
+
+    // Check if user is admin or employee
+    if (foundUser.role !== "admin" && foundUser.role !== "employees") {
+      return NextResponse.json(
+        { error: "Access denied. Admin privileges required." },
+        { status: 403 }
+      );
+    }
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, foundUser.password);
+    if (!isPasswordValid) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
@@ -21,11 +50,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Create JWT token
-    const token = await createToken({ email, role: "admin" });
+    const token = await createToken({
+      email: foundUser.email,
+      role: foundUser.role,
+      userId: foundUser.id,
+    });
 
     // Create response with token in cookie
     const response = NextResponse.json(
-      { message: "Login successful" },
+      {
+        message: "Login successful",
+        user: {
+          id: foundUser.id,
+          name: foundUser.name,
+          email: foundUser.email,
+          role: foundUser.role,
+        },
+      },
       { status: 200 }
     );
 

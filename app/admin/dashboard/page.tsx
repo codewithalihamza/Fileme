@@ -184,16 +184,34 @@ export default function AdminDashboardPage() {
               </Card>
             </Link>
 
-            <Link href="/admin/analytics">
+            <Link href="/admin/users">
               <Card className="group cursor-pointer border-0 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 transition-colors group-hover:text-purple-600">
-                        View Analytics
+                        Users Management
                       </h3>
                       <p className="mt-1 text-sm text-gray-600">
-                        Detailed reports and insights
+                        Manage users and their roles
+                      </p>
+                    </div>
+                    <BarChart3 className="h-5 w-5 text-gray-400 transition-colors group-hover:text-purple-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/admin/requests">
+              <Card className="group cursor-pointer border-0 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 transition-colors group-hover:text-purple-600">
+                        Requests Management
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-600">
+                        Manage requests and their status
                       </p>
                     </div>
                     <BarChart3 className="h-5 w-5 text-gray-400 transition-colors group-hover:text-purple-600" />

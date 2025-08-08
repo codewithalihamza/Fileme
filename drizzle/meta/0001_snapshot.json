@@ -1,6 +1,6 @@
 {
-  "id": "4e1745ca-70b0-485d-a1f1-0315c1f0cc47",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "524c523f-ea2d-498b-80e3-d2182350489c",
+  "prevId": "4e1745ca-70b0-485d-a1f1-0315c1f0cc47",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -22,6 +22,12 @@
         },
         "email": {
           "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -74,6 +80,21 @@
           "columns": [
             {
               "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "contact_us_phone_idx": {
+          "name": "contact_us_phone_idx",
+          "columns": [
+            {
+              "expression": "phone",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
