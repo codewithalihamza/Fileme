@@ -13,7 +13,8 @@ import { Label } from "@/components/ui/label";
 import { ServiceDropdown } from "@/components/ui/service-dropdown";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { useToast } from "@/hooks/use-toast";
-import { contactInfo, validatePhoneNumber } from "@/lib/utils";
+import { contactInfo, validateEmail, validatePhoneNumber } from "@/lib/utils";
+import { Send } from "lucide-react";
 import { useState } from "react";
 
 interface ReferralFormData {
@@ -31,6 +32,7 @@ interface ReferralFormData {
 
 export default function ReferPage() {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<ReferralFormData>({
     friendName: "",
     friendEmail: "",
@@ -60,26 +62,27 @@ export default function ReferPage() {
     }
     if (!formData.friendEmail.trim()) {
       newErrors.friendEmail = "Friend's email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.friendEmail)) {
+    } else if (!validateEmail(formData.friendEmail)) {
       newErrors.friendEmail = "Please enter a valid email address";
     }
     if (!formData.friendPhone.trim()) {
       newErrors.friendPhone = "Friend's phone number is required";
     } else if (!validatePhoneNumber(formData.friendPhone)) {
-      newErrors.friendPhone = "Phone number must be 11 digits";
+      newErrors.friendPhone = "Phone number must be 11 digits starting with 03";
     }
     if (!formData.referrerName.trim()) {
       newErrors.referrerName = "Your name is required";
     }
     if (!formData.referrerEmail.trim()) {
       newErrors.referrerEmail = "Your email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.referrerEmail)) {
+    } else if (!validateEmail(formData.referrerEmail)) {
       newErrors.referrerEmail = "Please enter a valid email address";
     }
     if (!formData.referrerPhone.trim()) {
       newErrors.referrerPhone = "Your phone number is required";
     } else if (!validatePhoneNumber(formData.referrerPhone)) {
-      newErrors.referrerPhone = "Phone number must be 11 digits";
+      newErrors.referrerPhone =
+        "Phone number must be 11 digits starting with 03";
     }
     if (!formData.service.trim()) {
       newErrors.service = "Please select a service";
@@ -102,6 +105,7 @@ export default function ReferPage() {
     }
 
     try {
+      setIsSubmitting(true);
       const response = await fetch("/api/refer", {
         method: "POST",
         headers: {
@@ -144,6 +148,8 @@ export default function ReferPage() {
         description: "Failed to submit referral. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -405,8 +411,19 @@ export default function ReferPage() {
                     type="submit"
                     size="lg"
                     className="bg-green-600 px-8 py-3 text-lg font-semibold text-white hover:bg-green-700"
+                    disabled={isSubmitting}
                   >
-                    Submit Referral
+                    {isSubmitting ? (
+                      <div className="flex items-center">
+                        <div className="mr-2 size-5 animate-spin rounded-full border-b-2 border-white"></div>
+                        Sending...
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <Send className="mr-2 size-5" />
+                        Submit Referral
+                      </div>
+                    )}
                   </Button>
                 </div>
               </form>

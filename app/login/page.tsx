@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -23,7 +24,7 @@ export default function AdminLoginPage() {
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    router.push("/dashboard");
+    router.push(ROUTES_CONSTANT.DASHBOARD);
     return null;
   }
 
@@ -34,7 +35,7 @@ export default function AdminLoginPage() {
     const result = await login(email, password);
 
     if (result.success) {
-      router.push("/dashboard");
+      router.push(ROUTES_CONSTANT.DASHBOARD);
     } else {
       setError(result.error || "Login failed");
     }
@@ -61,7 +62,7 @@ export default function AdminLoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@example.com"
+                  placeholder="Enter your email"
                   required
                   disabled={isLoading}
                 />

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ServiceDropdown } from "@/components/ui/service-dropdown";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
-import { contactInfo, validatePhoneNumber } from "@/lib/utils";
+import { contactInfo, validateEmail, validatePhoneNumber } from "@/lib/utils";
 import { heardFromNames } from "@/types";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
@@ -46,12 +46,9 @@ export default function ContactPage() {
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
     } else if (!validatePhoneNumber(formData.phone)) {
-      newErrors.phone = "Phone number must be 11 digits";
+      newErrors.phone = "Phone number must be 11 digits starting with 03";
     }
-    if (
-      formData.email.trim() &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
+    if (formData.email.trim() && !validateEmail(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
     if (!formData.service.trim()) {
