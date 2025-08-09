@@ -56,14 +56,14 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
             className="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 sm:h-8 sm:w-8"
             aria-label="Go to Dashboard"
           >
-            <Home className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            <Home className="size-3.5 sm:size-4" />
           </Link>
         </li>
 
         {/* Breadcrumb items */}
         {visibleItems.map((item, index) => (
-          <li key={index} className="flex flex-shrink-0 items-center">
-            <ChevronRight className="mx-1 h-3.5 w-3.5 text-gray-400 sm:mx-2 sm:h-4 sm:w-4" />
+          <li key={index} className="flex shrink-0 items-center">
+            <ChevronRight className="mx-1 size-3.5 text-gray-400 sm:mx-2 sm:size-4" />
             {item.href && index < visibleItems.length - 1 ? (
               <Link
                 href={item.href}

@@ -68,9 +68,9 @@ export function Modal({
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="h-8 w-8 p-0 hover:bg-gray-100"
+              className="size-8 p-0 hover:bg-gray-100"
             >
-              <X className="h-4 w-4" />
+              <X className="size-4" />
             </Button>
           )}
         </div>

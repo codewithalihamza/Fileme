@@ -119,12 +119,12 @@ export function DashboardSidebar({
           variant="ghost"
           size="sm"
           onClick={onToggle}
-          className="h-8 w-8 p-0 hover:bg-gray-100"
+          className="size-8 p-0 hover:bg-gray-100"
         >
           {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="size-4" />
           ) : (
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="size-4" />
           )}
         </Button>
       </div>
@@ -145,7 +145,7 @@ export function DashboardSidebar({
                 }`}
               >
                 <Icon
-                  className={`mr-3 h-5 w-5 flex-shrink-0 ${
+                  className={`mr-3 size-5 flex-shrink-0 ${
                     active
                       ? "text-blue-600"
                       : "text-gray-400 group-hover:text-gray-600"
@@ -176,7 +176,7 @@ export function DashboardSidebar({
               size="sm"
               className="w-full"
             >
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="mr-2 size-4" />
               {isLoading ? "Logging out..." : "Logout"}
             </Button>
           </div>
@@ -187,9 +187,9 @@ export function DashboardSidebar({
               disabled={isLoading}
               variant="ghost"
               size="sm"
-              className="h-8 w-8 p-0"
+              className="size-8 p-0"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="size-4" />
             </Button>
           </div>
         )}

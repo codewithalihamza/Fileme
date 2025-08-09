@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface Request {
+interface RequestData {
   id: string;
   status: RequestStatus;
-  paidAmount: number | null;
+  paidAmount: string | null;
   service: string;
   userId: string;
   assigneeId: string | null;
@@ -36,7 +36,7 @@ interface PageProps {
 }
 
 export default function EditRequestPage({ params }: PageProps) {
-  const [request, setRequest] = useState<Request | null>(null);
+  const [request, setRequest] = useState<RequestData | null>(null);
   const [requestId, setRequestId] = useState<string | null>(null);
   const { loading, fetchRequest, updateRequest } = useRequests();
   const router = useRouter();
@@ -76,7 +76,7 @@ export default function EditRequestPage({ params }: PageProps) {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6">
+        <div className="container mx-auto p-4 sm:p-6">
           <div className="space-y-4">
             <Skeleton className="h-8 w-64" />
             <Skeleton className="h-4 w-96" />
@@ -92,7 +92,7 @@ export default function EditRequestPage({ params }: PageProps) {
   if (!request) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6">
+        <div className="container mx-auto p-4 sm:p-6">
           <div className="text-center">
             <h1 className="mb-4 text-2xl font-bold text-gray-900">
               Request Not Found

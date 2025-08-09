@@ -95,7 +95,7 @@ export default function UserDetailPage({ params }: PageProps) {
           </p>
           <Button asChild>
             <Link href={ROUTES_CONSTANT.USERS}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 size-4" />
               Back to Users
             </Link>
           </Button>
@@ -119,7 +119,7 @@ export default function UserDetailPage({ params }: PageProps) {
           </div>
           <Button asChild>
             <Link href={`${ROUTES_CONSTANT.USERS}/${user.id}/edit`}>
-              <Edit className="mr-2 h-4 w-4" />
+              <Edit className="mr-2 size-4" />
               Edit User
             </Link>
           </Button>
@@ -131,7 +131,7 @@ export default function UserDetailPage({ params }: PageProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
+              <User className="size-5" />
               Basic Information
             </CardTitle>
           </CardHeader>
@@ -148,7 +148,7 @@ export default function UserDetailPage({ params }: PageProps) {
                 Email Address
               </p>
               <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-gray-400" />
+                <Mail className="size-4 text-gray-400" />
                 <a
                   href={`mailto:${user.email}`}
                   className="text-blue-600 hover:underline"
@@ -163,7 +163,7 @@ export default function UserDetailPage({ params }: PageProps) {
                 Phone Number
               </p>
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-gray-400" />
+                <Phone className="size-4 text-gray-400" />
                 <a
                   href={`tel:${user.phone}`}
                   className="text-blue-600 hover:underline"
@@ -176,7 +176,7 @@ export default function UserDetailPage({ params }: PageProps) {
             <div>
               <p className="mb-1 text-sm font-medium text-gray-700">Role</p>
               <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-gray-400" />
+                <Shield className="size-4 text-gray-400" />
                 {getRoleBadge(user.role)}
                 <span className="text-sm text-gray-600">
                   {getRoleDescription(user.role)}
@@ -190,7 +190,7 @@ export default function UserDetailPage({ params }: PageProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
+              <Calendar className="size-5" />
               Account Information
             </CardTitle>
           </CardHeader>

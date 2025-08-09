@@ -23,17 +23,17 @@ export const getRoleBadge = (role: string) => {
 export const getRequestsStatusIcon = (status: RequestStatus) => {
   switch (status) {
     case RequestStatus.PENDING:
-      return <Clock className="h-4 w-4 text-yellow-600" />;
+      return <Clock className="size-4 text-yellow-600" />;
     case RequestStatus.IN_PROGRESS:
-      return <FileText className="h-4 w-4 text-blue-600" />;
+      return <FileText className="size-4 text-blue-600" />;
     case RequestStatus.COMPLETED:
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
+      return <CheckCircle className="size-4 text-green-600" />;
     case RequestStatus.PAID:
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
+      return <CheckCircle className="size-4 text-green-600" />;
     case RequestStatus.UNPAID:
-      return <XCircle className="h-4 w-4 text-red-600" />;
+      return <XCircle className="size-4 text-red-600" />;
     default:
-      return <FileText className="h-4 w-4 text-gray-600" />;
+      return <FileText className="size-4 text-gray-600" />;
   }
 };
 

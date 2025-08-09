@@ -137,7 +137,7 @@ export function UserSearchDropdown({
     <div className="relative" ref={dropdownRef}>
       <div className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
           <Input
             placeholder={placeholder}
             value={searchValue}
@@ -160,7 +160,7 @@ export function UserSearchDropdown({
             disabled={disabled}
             className="whitespace-nowrap"
           >
-            <X className="mr-2 h-4 w-4" />
+            <X className="mr-2 size-4" />
             Remove
           </Button>
         ) : (
@@ -174,7 +174,7 @@ export function UserSearchDropdown({
             disabled={disabled || !searchValue.trim()}
             className="whitespace-nowrap"
           >
-            <Search className="mr-2 h-4 w-4" />
+            <Search className="mr-2 size-4" />
             Search
           </Button>
         )}
@@ -184,7 +184,7 @@ export function UserSearchDropdown({
       {selectedUser && (
         <div className="mt-2 rounded-md border bg-gray-50 p-3">
           <div className="flex items-center gap-2">
-            <User className="h-4 w-4 text-gray-600" />
+            <User className="size-4 text-gray-600" />
             <div className="flex flex-col">
               <span className="font-medium">{selectedUser.name}</span>
               <span className="text-sm text-gray-600">
@@ -202,7 +202,7 @@ export function UserSearchDropdown({
           <div className="p-2">
             {loading ? (
               <div className="flex items-center justify-center py-4">
-                <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-gray-600"></div>
+                <div className="size-4 animate-spin rounded-full border-b-2 border-gray-600"></div>
                 <span className="ml-2 text-sm text-gray-600">Searching...</span>
               </div>
             ) : searchResults.length === 0 ? (

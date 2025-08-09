@@ -46,7 +46,7 @@ export function WhatsAppButton({
       >
         {/* WhatsApp Icon */}
         <svg
-          className="h-7 w-7 text-white transition-transform duration-300 group-hover:scale-110"
+          className="size-7 text-white transition-transform duration-300 group-hover:scale-110"
           fill="currentColor"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"

@@ -111,7 +111,7 @@ export function ContactsTable() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex max-w-sm flex-1 items-center space-x-2">
           <div className="relative flex-1">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-2 top-2.5 size-4 text-gray-400" />
             <Input
               placeholder="Search by name or phone..."
               value={search}
@@ -129,7 +129,7 @@ export function ContactsTable() {
             className="flex items-center gap-2"
           >
             <RefreshCw
-              className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+              className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
             />
             Refresh
           </Button>
@@ -263,7 +263,7 @@ export function ContactsTable() {
                               size="sm"
                               className="h-8 w-8 p-0 hover:bg-gray-100"
                             >
-                              <MoreHorizontal className="h-4 w-4" />
+                              <MoreHorizontal className="size-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-48">
@@ -273,7 +273,7 @@ export function ContactsTable() {
                                 handleQuickAction("view", contact.id);
                               }}
                             >
-                              <Eye className="mr-2 h-4 w-4" />
+                              <Eye className="mr-2 size-4" />
                               View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -282,7 +282,7 @@ export function ContactsTable() {
                                 handleQuickAction("create-request", contact.id);
                               }}
                             >
-                              <FileText className="mr-2 h-4 w-4" />
+                              <FileText className="mr-2 size-4" />
                               Create Request
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -312,7 +312,7 @@ export function ContactsTable() {
               onClick={() => setPage(pagination.page - 1)}
               disabled={pagination.page === 1}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="size-4" />
               Previous
             </Button>
             <span className="text-sm">
@@ -325,7 +325,7 @@ export function ContactsTable() {
               disabled={pagination.page === pagination.totalPages}
             >
               Next
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="size-4" />
             </Button>
           </div>
         </div>

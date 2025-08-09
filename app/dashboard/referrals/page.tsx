@@ -18,7 +18,7 @@ const StatsCardSkeleton = () => (
   <Card className="border-0 bg-white shadow-lg">
     <CardContent className="p-6">
       <div className="flex items-center">
-        <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200"></div>
+        <div className="size-10 animate-pulse rounded-lg bg-gray-200"></div>
         <div className="ml-4 flex-1">
           <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200"></div>
           <div className="h-8 w-12 animate-pulse rounded bg-gray-200"></div>
@@ -53,7 +53,7 @@ export default function AdminReferralsPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="rounded-lg bg-green-100 p-2">
-                      <Users2 className="h-5 w-5 text-green-600" />
+                      <Users2 className="size-5 text-green-600" />
                     </div>
                     <div className="ml-4">
                       <p className="text-sm font-medium text-gray-600">
@@ -71,7 +71,7 @@ export default function AdminReferralsPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="rounded-lg bg-blue-100 p-2">
-                      <DollarSign className="h-5 w-5 text-blue-600" />
+                      <DollarSign className="size-5 text-blue-600" />
                     </div>
                     <div className="ml-4">
                       <p className="text-sm font-medium text-gray-600">
@@ -89,7 +89,7 @@ export default function AdminReferralsPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="rounded-lg bg-purple-100 p-2">
-                      <Gift className="h-5 w-5 text-purple-600" />
+                      <Gift className="size-5 text-purple-600" />
                     </div>
                     <div className="ml-4">
                       <p className="text-sm font-medium text-gray-600">

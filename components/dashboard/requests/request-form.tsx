@@ -230,7 +230,7 @@ export function RequestForm({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6">
+      <div className="container mx-auto p-4 sm:p-6">
         {/* Enhanced Header */}
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -250,7 +250,7 @@ export function RequestForm({
             <CardHeader className="rounded-t-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
               <CardTitle className="flex items-center gap-2 text-lg sm:gap-3 sm:text-xl">
                 <div className="rounded-lg bg-white/20 p-1.5 sm:p-2">
-                  <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <FileText className="size-5 sm:size-6" />
                 </div>
                 <span className="hidden sm:inline">Request Information</span>
                 <span className="sm:hidden">Request Info</span>
@@ -265,8 +265,8 @@ export function RequestForm({
                 {loadingContact && (
                   <div className="rounded-md bg-blue-50 p-4">
                     <div className="flex">
-                      <div className="flex-shrink-0">
-                        <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-blue-600"></div>
+                      <div className="shrink-0">
+                        <div className="size-4 animate-spin rounded-full border-b-2 border-blue-600"></div>
                       </div>
                       <div className="ml-3">
                         <p className="text-sm text-blue-700">
@@ -280,7 +280,7 @@ export function RequestForm({
                 {/* Service Information Section */}
                 <div className="space-y-4 sm:space-y-6">
                   <div className="mb-3 flex items-center gap-2 sm:mb-4">
-                    <FileText className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                    <FileText className="size-4 text-blue-600 sm:size-5" />
                     <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
                       Service Information
                     </h3>
@@ -292,7 +292,7 @@ export function RequestForm({
                         htmlFor="service"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <FileText className="h-4 w-4 text-gray-500" />
+                        <FileText className="size-4 text-gray-500" />
                         Service <span className="text-red-500">*</span>
                       </Label>
                       <Select
@@ -326,7 +326,7 @@ export function RequestForm({
                       </Select>
                       {errors.service && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="size-4" />
                           {errors.service}
                         </p>
                       )}
@@ -337,7 +337,7 @@ export function RequestForm({
                         htmlFor="status"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <FileText className="h-4 w-4 text-gray-500" />
+                        <FileText className="size-4 text-gray-500" />
                         Status <span className="text-red-500">*</span>
                       </Label>
                       <Select
@@ -374,7 +374,7 @@ export function RequestForm({
                       </Select>
                       {errors.status && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="size-4" />
                           {errors.status}
                         </p>
                       )}
@@ -385,7 +385,7 @@ export function RequestForm({
                 {/* Client Information Section */}
                 <div className="space-y-4 sm:space-y-6">
                   <div className="mb-3 flex items-center gap-2 sm:mb-4">
-                    <User className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                    <User className="size-4 text-blue-600 sm:size-5" />
                     <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
                       Client Information
                     </h3>
@@ -397,7 +397,7 @@ export function RequestForm({
                         htmlFor="userId"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <User className="h-4 w-4 text-gray-500" />
+                        <User className="size-4 text-gray-500" />
                         Client <span className="text-red-500">*</span>
                       </Label>
                       <UserSearchDropdown
@@ -417,7 +417,7 @@ export function RequestForm({
                       />
                       {errors.userId && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="size-4" />
                           {errors.userId}
                         </p>
                       )}
@@ -428,7 +428,7 @@ export function RequestForm({
                         htmlFor="assigneeId"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <Users className="h-4 w-4 text-gray-500" />
+                        <Users className="size-4 text-gray-500" />
                         Assignee
                         <span className="text-xs text-gray-400">
                           (Optional)
@@ -453,7 +453,7 @@ export function RequestForm({
                 {/* Financial Information Section */}
                 <div className="space-y-4 sm:space-y-6">
                   <div className="mb-3 flex items-center gap-2 sm:mb-4">
-                    <DollarSign className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                    <DollarSign className="size-4 text-blue-600 sm:size-5" />
                     <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
                       Financial Information
                     </h3>
@@ -464,7 +464,7 @@ export function RequestForm({
                       htmlFor="paidAmount"
                       className="flex items-center gap-2 text-sm font-medium text-gray-700"
                     >
-                      <DollarSign className="h-4 w-4 text-gray-500" />
+                      <DollarSign className="size-4 text-gray-500" />
                       Paid Amount
                       <span className="text-xs text-gray-400">(Optional)</span>
                     </Label>
@@ -480,7 +480,7 @@ export function RequestForm({
                     {formData.paidAmount &&
                       parseFloat(formData.paidAmount) > 0 && (
                         <p className="flex items-center gap-1 text-sm text-green-600">
-                          <CheckCircle className="h-4 w-4" />
+                          <CheckCircle className="size-4" />
                           Amount entered:{" "}
                           {formatCurrency(parseFloat(formData.paidAmount))}
                         </p>
@@ -497,12 +497,12 @@ export function RequestForm({
                   >
                     {loading || isSubmitting ? (
                       <div className="flex items-center justify-center">
-                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-white"></div>
+                        <div className="mr-2 size-4 animate-spin rounded-full border-b-2 border-white"></div>
                         <span>{isEditing ? "Updating..." : "Creating..."}</span>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center">
-                        <Save className="mr-2 h-4 w-4" />
+                        <Save className="mr-2 size-4" />
                         <span>{isEditing ? "Update" : "Create"} Request</span>
                       </div>
                     )}

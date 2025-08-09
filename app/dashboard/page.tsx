@@ -18,7 +18,7 @@ const StatsCardSkeleton = () => (
   <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <div className="h-4 w-32 animate-pulse rounded bg-gray-200"></div>
-      <div className="h-9 w-9 animate-pulse rounded-lg bg-gray-200"></div>
+      <div className="size-9 animate-pulse rounded-lg bg-gray-200"></div>
     </CardHeader>
     <CardContent>
       <div className="h-8 w-16 animate-pulse rounded bg-gray-200"></div>
@@ -55,7 +55,7 @@ export default function DashboardPage() {
                     Pending Contacts
                   </CardTitle>
                   <div className="rounded-lg bg-blue-100 p-2">
-                    <MessageSquare className="h-5 w-5 text-blue-600" />
+                    <MessageSquare className="size-5 text-blue-600" />
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -74,7 +74,7 @@ export default function DashboardPage() {
                     Pending Referrals
                   </CardTitle>
                   <div className="rounded-lg bg-green-100 p-2">
-                    <Users2 className="h-5 w-5 text-green-600" />
+                    <Users2 className="size-5 text-green-600" />
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -93,7 +93,7 @@ export default function DashboardPage() {
                     Pending Requests
                   </CardTitle>
                   <div className="rounded-lg bg-yellow-100 p-2">
-                    <Clock className="h-5 w-5 text-yellow-600" />
+                    <Clock className="size-5 text-yellow-600" />
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -126,7 +126,7 @@ export default function DashboardPage() {
                       Manage users and their roles
                     </p>
                   </div>
-                  <BarChart3 className="h-5 w-5 text-gray-400 transition-colors group-hover:text-purple-600" />
+                  <BarChart3 className="size-5 text-gray-400 transition-colors group-hover:text-purple-600" />
                 </div>
               </CardContent>
             </Card>
@@ -144,7 +144,7 @@ export default function DashboardPage() {
                       View and manage all contact submissions
                     </p>
                   </div>
-                  <ArrowRight className="h-5 w-5 text-gray-400 transition-colors group-hover:text-blue-600" />
+                  <ArrowRight className="size-5 text-gray-400 transition-colors group-hover:text-blue-600" />
                 </div>
               </CardContent>
             </Card>
@@ -162,7 +162,7 @@ export default function DashboardPage() {
                       Track referrals and manage earnings
                     </p>
                   </div>
-                  <ArrowRight className="h-5 w-5 text-gray-400 transition-colors group-hover:text-green-600" />
+                  <ArrowRight className="size-5 text-gray-400 transition-colors group-hover:text-green-600" />
                 </div>
               </CardContent>
             </Card>
@@ -179,7 +179,7 @@ export default function DashboardPage() {
                       Manage requests and their status
                     </p>
                   </div>
-                  <BarChart3 className="h-5 w-5 text-gray-400 transition-colors group-hover:text-purple-600" />
+                  <BarChart3 className="size-5 text-gray-400 transition-colors group-hover:text-purple-600" />
                 </div>
               </CardContent>
             </Card>

@@ -72,7 +72,7 @@ const StatsCardSkeleton = () => (
           <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200"></div>
           <div className="h-8 w-12 animate-pulse rounded bg-gray-200"></div>
         </div>
-        <div className="h-8 w-8 animate-pulse rounded bg-gray-200"></div>
+        <div className="size-8 animate-pulse rounded bg-gray-200"></div>
       </div>
     </CardContent>
   </Card>
@@ -216,7 +216,7 @@ export default function UsersPage() {
                       {stats.total}
                     </p>
                   </div>
-                  <Users className="h-8 w-8 text-blue-600" />
+                  <Users className="size-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
@@ -230,7 +230,7 @@ export default function UsersPage() {
                       {stats.admins}
                     </p>
                   </div>
-                  <UserCheck className="h-8 w-8 text-red-600" />
+                  <UserCheck className="size-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>
@@ -246,7 +246,7 @@ export default function UsersPage() {
                       {stats.employees}
                     </p>
                   </div>
-                  <UserPlus className="h-8 w-8 text-blue-600" />
+                  <UserPlus className="size-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
@@ -262,7 +262,7 @@ export default function UsersPage() {
                       {stats.customers}
                     </p>
                   </div>
-                  <UserX className="h-8 w-8 text-green-600" />
+                  <UserX className="size-8 text-green-600" />
                 </div>
               </CardContent>
             </Card>
@@ -294,7 +294,7 @@ export default function UsersPage() {
                 className="flex items-center gap-2"
               >
                 <RefreshCw
-                  className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+                  className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
                 />
                 Refresh
               </Button>
@@ -313,7 +313,7 @@ export default function UsersPage() {
               </Select>
               <Button asChild>
                 <Link href={ROUTES_CONSTANT.NEW_USER}>
-                  <Plus className="mr-2 h-4 w-4" />
+                  <Plus className="mr-2 size-4" />
                   Add User
                 </Link>
               </Button>
@@ -377,7 +377,7 @@ export default function UsersPage() {
                       <TableCell>
                         {updatingId === user.id ? (
                           <div className="flex items-center justify-center">
-                            <Skeleton className="h-8 w-8 rounded-md" />
+                            <Skeleton className="size-8 rounded-md" />
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
@@ -422,7 +422,7 @@ export default function UsersPage() {
                                   size="sm"
                                   className="h-8 w-8 p-0 hover:bg-gray-100"
                                 >
-                                  <MoreHorizontal className="h-4 w-4" />
+                                  <MoreHorizontal className="size-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end" className="w-48">
@@ -432,7 +432,7 @@ export default function UsersPage() {
                                     handleQuickAction("view", user.id);
                                   }}
                                 >
-                                  <Eye className="mr-2 h-4 w-4" />
+                                  <Eye className="mr-2 size-4" />
                                   View Details
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
@@ -441,7 +441,7 @@ export default function UsersPage() {
                                     handleQuickAction("edit", user.id);
                                   }}
                                 >
-                                  <Edit className="mr-2 h-4 w-4" />
+                                  <Edit className="mr-2 size-4" />
                                   Edit User
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
@@ -453,7 +453,7 @@ export default function UsersPage() {
                                     }}
                                     className="text-orange-600"
                                   >
-                                    <UserMinus className="mr-2 h-4 w-4" />
+                                    <UserMinus className="mr-2 size-4" />
                                     Mark as Disable
                                   </DropdownMenuItem>
                                 ) : (
@@ -464,7 +464,7 @@ export default function UsersPage() {
                                     }}
                                     className="text-green-600"
                                   >
-                                    <UserCheck2 className="mr-2 h-4 w-4" />
+                                    <UserCheck2 className="mr-2 size-4" />
                                     Mark as Active
                                   </DropdownMenuItem>
                                 )}

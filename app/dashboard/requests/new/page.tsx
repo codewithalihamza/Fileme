@@ -3,9 +3,10 @@
 import { RequestForm } from "@/components/dashboard/requests/request-form";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { toast } from "sonner";
 
-export default function NewRequestPage() {
+function NewRequestContent() {
   const searchParams = useSearchParams();
   const contactId = searchParams.get("contactId");
   const referralId = searchParams.get("referralId");
@@ -54,5 +55,13 @@ export default function NewRequestPage() {
       contactId={contactId}
       referralId={referralId}
     />
+  );
+}
+
+export default function NewRequestPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NewRequestContent />
+    </Suspense>
   );
 }

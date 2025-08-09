@@ -21,7 +21,7 @@ export function TableEmpty({
       <TableCell colSpan={columns} className="h-32 text-center">
         <div className="flex flex-col items-center justify-center space-y-3">
           <div className="rounded-full bg-gray-100 p-3">
-            <IconComponent className="h-6 w-6 text-gray-400" />
+            <IconComponent className="size-6 text-gray-400" />
           </div>
           <div className="space-y-1">
             <h3 className="text-sm font-medium text-gray-900">{message}</h3>

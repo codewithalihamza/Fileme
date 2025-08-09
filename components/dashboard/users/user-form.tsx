@@ -120,7 +120,7 @@ export function UserForm({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6">
+      <div className="container mx-auto p-4 sm:p-6">
         {/* Enhanced Header */}
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -140,7 +140,7 @@ export function UserForm({
             <CardHeader className="rounded-t-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
               <CardTitle className="flex items-center gap-2 text-lg sm:gap-3 sm:text-xl">
                 <div className="rounded-lg bg-white/20 p-1.5 sm:p-2">
-                  <User className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <User className="size-5 sm:size-6" />
                 </div>
                 <span className="hidden sm:inline">User Information</span>
                 <span className="sm:hidden">User Info</span>
@@ -155,7 +155,7 @@ export function UserForm({
                 {/* Personal Information Section */}
                 <div className="space-y-4 sm:space-y-6">
                   <div className="mb-3 flex items-center gap-2 sm:mb-4">
-                    <User className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                    <User className="size-4 text-blue-600 sm:size-5" />
                     <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
                       Personal Information
                     </h3>
@@ -167,7 +167,7 @@ export function UserForm({
                         htmlFor="name"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <User className="h-4 w-4 text-gray-500" />
+                        <User className="size-4 text-gray-500" />
                         Full Name <span className="text-red-500">*</span>
                       </Label>
                       <Input
@@ -177,14 +177,15 @@ export function UserForm({
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter full name"
-                        className={`transition-all duration-200 ${errors.name
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                          : "focus:border-blue-500 focus:ring-blue-200"
-                          }`}
+                        className={`transition-all duration-200 ${
+                          errors.name
+                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                            : "focus:border-blue-500 focus:ring-blue-200"
+                        }`}
                       />
                       {errors.name && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="size-4" />
                           {errors.name}
                         </p>
                       )}
@@ -195,7 +196,7 @@ export function UserForm({
                         htmlFor="role"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <Shield className="h-4 w-4 text-gray-500" />
+                        <Shield className="size-4 text-gray-500" />
                         Role <span className="text-red-500">*</span>
                       </Label>
                       <Select
@@ -211,10 +212,11 @@ export function UserForm({
                         }}
                       >
                         <SelectTrigger
-                          className={`transition-all duration-200 ${errors.role
-                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                            : "focus:border-blue-500 focus:ring-blue-200"
-                            }`}
+                          className={`transition-all duration-200 ${
+                            errors.role
+                              ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                              : "focus:border-blue-500 focus:ring-blue-200"
+                          }`}
                         >
                           <SelectValue />
                         </SelectTrigger>
@@ -241,13 +243,13 @@ export function UserForm({
                       </Select>
                       {formData.role && (
                         <p className="flex items-center gap-1 text-sm text-gray-600">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <CheckCircle className="size-4 text-green-500" />
                           {getRoleDescription(formData.role)}
                         </p>
                       )}
                       {errors.role && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="size-4" />
                           {errors.role}
                         </p>
                       )}
@@ -258,7 +260,7 @@ export function UserForm({
                 {/* Contact Information Section */}
                 <div className="space-y-4 sm:space-y-6">
                   <div className="mb-3 flex items-center gap-2 sm:mb-4">
-                    <Mail className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                    <Mail className="size-4 text-blue-600 sm:size-5" />
                     <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
                       Contact Information
                     </h3>
@@ -270,7 +272,7 @@ export function UserForm({
                         htmlFor="email"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <Mail className="h-4 w-4 text-gray-500" />
+                        <Mail className="size-4 text-gray-500" />
                         Email Address{" "}
                         <span className="text-xs text-gray-400">
                           (Optional)
@@ -283,20 +285,21 @@ export function UserForm({
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Enter email address (optional)"
-                        className={`transition-all duration-200 ${errors.email
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                          : "focus:border-blue-500 focus:ring-blue-200"
-                          }`}
+                        className={`transition-all duration-200 ${
+                          errors.email
+                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                            : "focus:border-blue-500 focus:ring-blue-200"
+                        }`}
                       />
                       {errors.email && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="size-4" />
                           {errors.email}
                         </p>
                       )}
                       {!errors.email && formData.email && (
                         <p className="flex items-center gap-1 text-sm text-green-600">
-                          <CheckCircle className="h-4 w-4" />
+                          <CheckCircle className="size-4" />
                           Valid email format
                         </p>
                       )}
@@ -307,7 +310,7 @@ export function UserForm({
                         htmlFor="phone"
                         className="flex items-center gap-2 text-sm font-medium text-gray-700"
                       >
-                        <Phone className="h-4 w-4 text-gray-500" />
+                        <Phone className="size-4 text-gray-500" />
                         Phone Number <span className="text-red-500">*</span>
                       </Label>
                       <Input
@@ -318,10 +321,11 @@ export function UserForm({
                         onChange={handleInputChange}
                         placeholder="03XXXXXXXXX (11 digits)"
                         maxLength={11}
-                        className={`transition-all duration-200 ${errors.phone
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                          : "focus:border-blue-500 focus:ring-blue-200"
-                          }`}
+                        className={`transition-all duration-200 ${
+                          errors.phone
+                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                            : "focus:border-blue-500 focus:ring-blue-200"
+                        }`}
                       />
                       {errors.phone && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
@@ -367,10 +371,11 @@ export function UserForm({
                           ? "Enter new password (optional)"
                           : "Enter password (min 6 characters)"
                       }
-                      className={`transition-all duration-200 ${errors.password
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                        : "focus:border-blue-500 focus:ring-blue-200"
-                        }`}
+                      className={`transition-all duration-200 ${
+                        errors.password
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                          : "focus:border-blue-500 focus:ring-blue-200"
+                      }`}
                     />
                     {formData.password && formData.password.length >= 6 && (
                       <p className="flex items-center gap-1 text-sm text-green-600">

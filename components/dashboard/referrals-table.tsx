@@ -141,7 +141,7 @@ export function ReferralsTable() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex max-w-sm flex-1 items-center space-x-2">
           <div className="relative flex-1">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-2 top-2.5 size-4 text-gray-400" />
             <Input
               placeholder="Search by name or phone..."
               value={search}
@@ -159,7 +159,7 @@ export function ReferralsTable() {
             className="flex items-center gap-2"
           >
             <RefreshCw
-              className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+              className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
             />
             Refresh
           </Button>
@@ -327,7 +327,7 @@ export function ReferralsTable() {
                               size="sm"
                               className="h-8 w-8 p-0 hover:bg-gray-100"
                             >
-                              <MoreHorizontal className="h-4 w-4" />
+                              <MoreHorizontal className="size-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-48">
@@ -336,7 +336,7 @@ export function ReferralsTable() {
                                 handleQuickAction("view", referral.id)
                               }
                             >
-                              <Eye className="mr-2 h-4 w-4" />
+                              <Eye className="mr-2 size-4" />
                               View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -344,7 +344,7 @@ export function ReferralsTable() {
                                 handleQuickAction("create-request", referral.id)
                               }
                             >
-                              <Plus className="mr-2 h-4 w-4" />
+                              <Plus className="mr-2 size-4" />
                               Create Request
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
@@ -358,7 +358,7 @@ export function ReferralsTable() {
                                 )
                               }
                             >
-                              <DollarSign className="mr-2 h-4 w-4" />
+                              <DollarSign className="mr-2 size-4" />
                               Update Earnings
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -371,7 +371,7 @@ export function ReferralsTable() {
                                 )
                               }
                             >
-                              <Send className="mr-2 h-4 w-4" />
+                              <Send className="mr-2 size-4" />
                               Update Amount Sent
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -401,7 +401,7 @@ export function ReferralsTable() {
               onClick={() => setPage(pagination.page - 1)}
               disabled={pagination.page === 1}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="size-4" />
               Previous
             </Button>
             <span className="text-sm">
@@ -414,7 +414,7 @@ export function ReferralsTable() {
               disabled={pagination.page === pagination.totalPages}
             >
               Next
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="size-4" />
             </Button>
           </div>
         </div>

@@ -83,7 +83,7 @@ const StatsCardSkeleton = () => (
           <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200"></div>
           <div className="h-8 w-12 animate-pulse rounded bg-gray-200"></div>
         </div>
-        <div className="h-8 w-8 animate-pulse rounded bg-gray-200"></div>
+        <div className="size-8 animate-pulse rounded bg-gray-200"></div>
       </div>
     </CardContent>
   </Card>
@@ -283,7 +283,7 @@ export default function RequestsPage() {
                       {stats.total}
                     </p>
                   </div>
-                  <FileText className="h-8 w-8 text-blue-600" />
+                  <FileText className="size-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
@@ -297,7 +297,7 @@ export default function RequestsPage() {
                       {stats.pending}
                     </p>
                   </div>
-                  <Clock className="h-8 w-8 text-yellow-600" />
+                  <Clock className="size-8 text-yellow-600" />
                 </div>
               </CardContent>
             </Card>
@@ -313,7 +313,7 @@ export default function RequestsPage() {
                       {stats.inProgress}
                     </p>
                   </div>
-                  <FileText className="h-8 w-8 text-blue-600" />
+                  <FileText className="size-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
@@ -329,7 +329,7 @@ export default function RequestsPage() {
                       {stats.completed}
                     </p>
                   </div>
-                  <CheckCircle className="h-8 w-8 text-green-600" />
+                  <CheckCircle className="size-8 text-green-600" />
                 </div>
               </CardContent>
             </Card>
@@ -376,7 +376,7 @@ export default function RequestsPage() {
                 className="flex items-center gap-2"
               >
                 <RefreshCw
-                  className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+                  className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
                 />
                 Refresh
               </Button>
@@ -408,7 +408,7 @@ export default function RequestsPage() {
               </Select>
               <Button asChild>
                 <Link href={ROUTES_CONSTANT.NEW_REQUEST}>
-                  <Plus className="mr-2 h-4 w-4" />
+                  <Plus className="mr-2 size-4" />
                   Add Request
                 </Link>
               </Button>
@@ -566,7 +566,7 @@ export default function RequestsPage() {
                                   size="sm"
                                   className="h-8 w-8 p-0 hover:bg-gray-100"
                                 >
-                                  <MoreHorizontal className="h-4 w-4" />
+                                  <MoreHorizontal className="size-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end" className="w-48">
@@ -576,7 +576,7 @@ export default function RequestsPage() {
                                     handleQuickAction("view", request.id);
                                   }}
                                 >
-                                  <Eye className="mr-2 h-4 w-4" />
+                                  <Eye className="mr-2 size-4" />
                                   View Details
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
@@ -585,7 +585,7 @@ export default function RequestsPage() {
                                     handleQuickAction("edit", request.id);
                                   }}
                                 >
-                                  <Edit className="mr-2 h-4 w-4" />
+                                  <Edit className="mr-2 size-4" />
                                   Edit Request
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />

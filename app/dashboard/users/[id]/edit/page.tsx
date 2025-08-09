@@ -60,7 +60,7 @@ export default function EditUserPage({ params }: PageProps) {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6">
+        <div className="container mx-auto p-4 sm:p-6">
           <div className="space-y-4">
             <Skeleton className="h-8 w-64" />
             <Skeleton className="h-4 w-96" />
@@ -77,7 +77,7 @@ export default function EditUserPage({ params }: PageProps) {
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6">
+        <div className="container mx-auto p-4 sm:p-6">
           <div className="text-center">
             <h1 className="mb-4 text-2xl font-bold text-gray-900">
               User Not Found
@@ -89,7 +89,7 @@ export default function EditUserPage({ params }: PageProps) {
               href={ROUTES_CONSTANT.USERS}
               className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 size-4" />
               Back to Users
             </Link>
           </div>

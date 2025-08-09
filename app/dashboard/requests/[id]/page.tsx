@@ -115,7 +115,7 @@ export default function RequestDetailPage({ params }: PageProps) {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Skeleton className="h-5 w-5" />
+                <Skeleton className="size-5" />
                 <Skeleton className="h-6 w-40" />
               </div>
             </CardHeader>
@@ -139,7 +139,7 @@ export default function RequestDetailPage({ params }: PageProps) {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Skeleton className="h-5 w-5" />
+                <Skeleton className="size-5" />
                 <Skeleton className="h-6 w-40" />
               </div>
             </CardHeader>
@@ -167,7 +167,7 @@ export default function RequestDetailPage({ params }: PageProps) {
           <Card className="lg:col-span-2">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Skeleton className="h-5 w-5" />
+                <Skeleton className="size-5" />
                 <Skeleton className="h-6 w-32" />
               </div>
             </CardHeader>
@@ -205,7 +205,7 @@ export default function RequestDetailPage({ params }: PageProps) {
           </p>
           <Button asChild>
             <Link href={ROUTES_CONSTANT.REQUESTS}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 size-4" />
               Back to Requests
             </Link>
           </Button>
@@ -231,7 +231,7 @@ export default function RequestDetailPage({ params }: PageProps) {
           </div>
           <Button asChild>
             <Link href={`${ROUTES_CONSTANT.REQUESTS}/${request.id}/edit`}>
-              <Edit className="mr-2 h-4 w-4" />
+              <Edit className="mr-2 size-4" />
               Edit Request
             </Link>
           </Button>
@@ -243,7 +243,7 @@ export default function RequestDetailPage({ params }: PageProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
+              <FileText className="size-5" />
               Request Information
             </CardTitle>
           </CardHeader>
@@ -272,7 +272,7 @@ export default function RequestDetailPage({ params }: PageProps) {
                 Paid Amount
               </p>
               <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-gray-400" />
+                <DollarSign className="size-4 text-gray-400" />
                 <span className="text-gray-900">
                   {request.paidAmount
                     ? formatCurrency(request.paidAmount)
@@ -287,7 +287,7 @@ export default function RequestDetailPage({ params }: PageProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
+              <User className="size-5" />
               Client Information
             </CardTitle>
           </CardHeader>
@@ -337,7 +337,7 @@ export default function RequestDetailPage({ params }: PageProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
+              <Users className="size-5" />
               Assignee Information
             </CardTitle>
           </CardHeader>
@@ -391,7 +391,7 @@ export default function RequestDetailPage({ params }: PageProps) {
               </>
             ) : (
               <div className="py-8 text-center">
-                <Users className="mx-auto mb-4 h-12 w-12 text-gray-300" />
+                <Users className="mx-auto mb-4 size-12 text-gray-300" />
                 <p className="font-medium text-gray-500">No Assignee</p>
                 <p className="mt-1 text-sm text-gray-400">
                   This request has not been assigned yet
@@ -405,7 +405,7 @@ export default function RequestDetailPage({ params }: PageProps) {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
+              <Calendar className="size-5" />
               Timestamps
             </CardTitle>
           </CardHeader>
