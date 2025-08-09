@@ -23,6 +23,7 @@ import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useReferrals } from "@/hooks/use-referrals";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { formatCurrency } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, Edit, Eye, Search } from "lucide-react";
 import Link from "next/link";
 
@@ -48,10 +49,6 @@ export function ReferralsTable() {
       hour: "2-digit",
       minute: "2-digit",
     });
-  };
-
-  const formatCurrency = (amount: string) => {
-    return amount ? `$${parseFloat(amount).toFixed(2)}` : "$0.00";
   };
   return (
     <div className="space-y-4">
@@ -141,10 +138,10 @@ export function ReferralsTable() {
                   </TableCell>
                   <TableCell>{getStatusBadge(referral.status)}</TableCell>
                   <TableCell className="font-medium">
-                    {formatCurrency(referral.totalEarned)}
+                    {formatCurrency(parseFloat(referral.totalEarned))}
                   </TableCell>
                   <TableCell className="font-medium">
-                    {formatCurrency(referral.amountSent)}
+                    {formatCurrency(parseFloat(referral.amountSent))}
                   </TableCell>
                   <TableCell>{formatDate(referral.createdAt)}</TableCell>
                   <TableCell>

@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
+import { formatCurrency } from "@/lib/utils";
 import { DollarSign, Download, Gift, TrendingUp, Users2 } from "lucide-react";
 
 export default function AdminReferralsPage() {
@@ -55,7 +56,9 @@ export default function AdminReferralsPage() {
                   <p className="text-sm font-medium text-gray-600">
                     Total Earnings
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">$0.00</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {formatCurrency(0)}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -69,7 +72,9 @@ export default function AdminReferralsPage() {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Paid Out</p>
-                  <p className="text-2xl font-bold text-gray-900">$0.00</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {formatCurrency(0)}
+                  </p>
                 </div>
               </div>
             </CardContent>

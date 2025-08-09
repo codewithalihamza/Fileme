@@ -45,18 +45,6 @@ export function DashboardSidebar({
       description: "Overview and analytics",
     },
     {
-      name: "Contacts",
-      href: ROUTES_CONSTANT.CONTACTS,
-      icon: MessageSquare,
-      description: "Manage contact submissions",
-    },
-    {
-      name: "Referrals",
-      href: ROUTES_CONSTANT.REFERRALS,
-      icon: Users2,
-      description: "Track referrals and earnings",
-    },
-    {
       name: "Users",
       href: ROUTES_CONSTANT.USERS,
       icon: Users,
@@ -67,6 +55,18 @@ export function DashboardSidebar({
       href: ROUTES_CONSTANT.REQUESTS,
       icon: Calendar,
       description: "Manage service requests",
+    },
+    {
+      name: "Contacts",
+      href: ROUTES_CONSTANT.CONTACTS,
+      icon: MessageSquare,
+      description: "Manage contact submissions",
+    },
+    {
+      name: "Referrals",
+      href: ROUTES_CONSTANT.REFERRALS,
+      icon: Users2,
+      description: "Track referrals and earnings",
     },
     // {
     //   name: "Analytics",

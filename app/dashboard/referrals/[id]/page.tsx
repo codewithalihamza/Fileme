@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { formatCurrency } from "@/lib/utils";
 import {
   ArrowLeft,
   Calendar,
@@ -145,10 +146,6 @@ export default function ReferralDetailPage({ params }: PageProps) {
       hour: "2-digit",
       minute: "2-digit",
     });
-  };
-
-  const formatCurrency = (amount: string) => {
-    return amount ? `$${parseFloat(amount).toFixed(2)}` : "$0.00";
   };
 
   if (loading) {
@@ -476,7 +473,7 @@ export default function ReferralDetailPage({ params }: PageProps) {
                     />
                   ) : (
                     <p className="mt-1 text-lg font-medium text-gray-900">
-                      {formatCurrency(referral.totalEarned)}
+                      {formatCurrency(parseFloat(referral.totalEarned))}
                     </p>
                   )}
                 </div>
@@ -499,7 +496,7 @@ export default function ReferralDetailPage({ params }: PageProps) {
                     />
                   ) : (
                     <p className="mt-1 text-lg font-medium text-gray-900">
-                      {formatCurrency(referral.amountSent)}
+                      {formatCurrency(parseFloat(referral.amountSent))}
                     </p>
                   )}
                 </div>
@@ -514,23 +511,21 @@ export default function ReferralDetailPage({ params }: PageProps) {
                   <div>
                     <span className="text-gray-600">Total Earned:</span>
                     <span className="ml-2 font-medium text-gray-900">
-                      {formatCurrency(referral.totalEarned)}
+                      {formatCurrency(parseFloat(referral.totalEarned))}
                     </span>
                   </div>
                   <div>
                     <span className="text-gray-600">Amount Sent:</span>
                     <span className="ml-2 font-medium text-gray-900">
-                      {formatCurrency(referral.amountSent)}
+                      {formatCurrency(parseFloat(referral.amountSent))}
                     </span>
                   </div>
                   <div>
                     <span className="text-gray-600">Pending:</span>
                     <span className="ml-2 font-medium text-gray-900">
                       {formatCurrency(
-                        (
-                          parseFloat(referral.totalEarned) -
+                        parseFloat(referral.totalEarned) -
                           parseFloat(referral.amountSent)
-                        ).toString()
                       )}
                     </span>
                   </div>
