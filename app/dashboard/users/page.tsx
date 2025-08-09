@@ -117,11 +117,7 @@ export default function UsersPage() {
     router.push(`${ROUTES_CONSTANT.USERS}/${userId}`);
   };
 
-  const handleRoleChange = async (
-    userId: string,
-    newRole: string,
-    userName: string
-  ) => {
+  const handleRoleChange = async (userId: string, newRole: string) => {
     await updateUser(userId, {
       role: newRole as "admin" | "employees" | "customer",
     });
@@ -137,6 +133,8 @@ export default function UsersPage() {
       case "edit":
         router.push(`${ROUTES_CONSTANT.USERS}/${userId}/edit`);
         break;
+      default:
+        console.log("Unknown action:", action);
     }
   };
 
@@ -347,7 +345,7 @@ export default function UsersPage() {
                               <Select
                                 value={user.role}
                                 onValueChange={(value) =>
-                                  handleRoleChange(user.id, value, user.name)
+                                  handleRoleChange(user.id, value)
                                 }
                                 disabled={updatingId === user.id}
                               >
@@ -384,17 +382,19 @@ export default function UsersPage() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end" className="w-48">
                                 <DropdownMenuItem
-                                  onClick={() =>
-                                    handleQuickAction("view", user.id)
-                                  }
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleQuickAction("view", user.id);
+                                  }}
                                 >
                                   <Eye className="mr-2 h-4 w-4" />
                                   View Details
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                  onClick={() =>
-                                    handleQuickAction("edit", user.id)
-                                  }
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleQuickAction("edit", user.id);
+                                  }}
                                 >
                                   <Edit className="mr-2 h-4 w-4" />
                                   Edit User
