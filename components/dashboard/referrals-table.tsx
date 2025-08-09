@@ -1,7 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Modal } from "@/components/ui/modal";
 import {
   Select,
   SelectContent,
@@ -21,12 +30,21 @@ import {
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useReferrals } from "@/hooks/use-referrals";
-import { getContactsStatusBadge } from "@/lib/color-constants";
+import { getReferralStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { formatCurrency } from "@/lib/utils";
-import { ReferralStatus } from "@/types";
-import { ChevronLeft, ChevronRight, Edit, Eye, Search } from "lucide-react";
-import Link from "next/link";
+import { formatCurrency, formatDate } from "@/lib/utils";
+import { ReferralStatus, referralStatusNames, servicesNames } from "@/types";
+import {
+  ChevronLeft,
+  ChevronRight,
+  DollarSign,
+  Edit,
+  Eye,
+  MoreHorizontal,
+  Search,
+  Send,
+} from "lucide-react";
+import { useState } from "react";
 
 export function ReferralsTable() {
   const {
@@ -42,15 +60,73 @@ export function ReferralsTable() {
     setPage,
   } = useReferrals();
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+  const [earningsModal, setEarningsModal] = useState<{
+    isOpen: boolean;
+    referralId: string | null;
+    currentAmount: string | null;
+    referralName: string;
+    field: "totalEarned" | "amountSent";
+  }>({
+    isOpen: false,
+    referralId: null,
+    currentAmount: null,
+    referralName: "",
+    field: "totalEarned",
+  });
+
+  const [modalValue, setModalValue] = useState<string>("");
+
+  const openEarningsModal = (
+    referralId: string,
+    currentAmount: string | null,
+    referralName: string,
+    field: "totalEarned" | "amountSent"
+  ) => {
+    setEarningsModal({
+      isOpen: true,
+      referralId,
+      currentAmount,
+      referralName,
+      field,
     });
+    setModalValue(currentAmount || "");
   };
+
+  const closeEarningsModal = () => {
+    setEarningsModal({
+      isOpen: false,
+      referralId: null,
+      currentAmount: null,
+      referralName: "",
+      field: "totalEarned",
+    });
+    setModalValue("");
+  };
+
+  const handleSaveEarnings = async () => {
+    if (earningsModal.referralId) {
+      const stringValue = modalValue === "" ? null : modalValue;
+      await updateReferral(earningsModal.referralId, {
+        [earningsModal.field]: stringValue,
+      });
+      closeEarningsModal();
+    }
+  };
+
+  const handleQuickAction = (action: string, referralId: string) => {
+    switch (action) {
+      case "view":
+        window.open(`${ROUTES_CONSTANT.REFERRALS}/${referralId}`, "_blank");
+        break;
+      case "edit":
+        window.open(
+          `${ROUTES_CONSTANT.REFERRALS}/${referralId}/edit`,
+          "_blank"
+        );
+        break;
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* Search and Filters */}
@@ -72,10 +148,11 @@ export function ReferralsTable() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="in-progress">In Progress</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-            <SelectItem value="paid">Paid</SelectItem>
+            {referralStatusNames.map((status) => (
+              <SelectItem key={status.value} value={status.value}>
+                {status.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -92,7 +169,7 @@ export function ReferralsTable() {
               <TableHead>Earnings</TableHead>
               <TableHead>Amount Sent</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -114,11 +191,6 @@ export function ReferralsTable() {
                       <div className="text-sm text-gray-500">
                         {referral.friendPhone}
                       </div>
-                      {referral.friendEmail && (
-                        <div className="text-sm text-gray-500">
-                          {referral.friendEmail}
-                        </div>
-                      )}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -127,110 +199,161 @@ export function ReferralsTable() {
                       <div className="text-sm text-gray-500">
                         {referral.referrerPhone}
                       </div>
-                      {referral.referrerEmail && (
-                        <div className="text-sm text-gray-500">
-                          {referral.referrerEmail}
-                        </div>
-                      )}
                     </div>
                   </TableCell>
                   <TableCell className="capitalize">
-                    {referral.service}
+                    {
+                      servicesNames.find(
+                        (service: { value: string; label: string }) =>
+                          service.value === referral.service
+                      )?.label
+                    }
                   </TableCell>
                   <TableCell>
-                    {getContactsStatusBadge(referral.status)}
+                    {getReferralStatusBadge(referral.status)}
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {formatCurrency(parseFloat(referral.totalEarned))}
+                  <TableCell>
+                    {updatingId === referral.id ? (
+                      <div className="flex items-center justify-center">
+                        <Skeleton className="h-8 w-full rounded-md" />
+                      </div>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() =>
+                          openEarningsModal(
+                            referral.id,
+                            referral.totalEarned,
+                            referral.friendName,
+                            "totalEarned"
+                          )
+                        }
+                        className="text-xs"
+                      >
+                        {referral.totalEarned
+                          ? formatCurrency(parseFloat(referral.totalEarned))
+                          : "Set Earnings"}
+                      </Button>
+                    )}
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {formatCurrency(parseFloat(referral.amountSent))}
+                  <TableCell>
+                    {updatingId === referral.id ? (
+                      <div className="flex items-center justify-center">
+                        <Skeleton className="h-8 w-full rounded-md" />
+                      </div>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() =>
+                          openEarningsModal(
+                            referral.id,
+                            referral.amountSent,
+                            referral.referrerName,
+                            "amountSent"
+                          )
+                        }
+                        className="text-xs"
+                      >
+                        {referral.amountSent
+                          ? formatCurrency(parseFloat(referral.amountSent))
+                          : "Set Amount"}
+                      </Button>
+                    )}
                   </TableCell>
                   <TableCell>{formatDate(referral.createdAt)}</TableCell>
                   <TableCell>
                     {updatingId === referral.id ? (
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <Skeleton className="h-8 w-8" />
-                          <Skeleton className="h-8 w-8" />
-                        </div>
-                        <Skeleton className="h-10 w-[140px]" />
-                        <Skeleton className="h-10 w-[140px]" />
-                        <Skeleton className="h-10 w-[140px]" />
+                      <div className="flex items-center justify-center">
+                        <Skeleton className="h-8 w-8 rounded-md" />
                       </div>
                     ) : (
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <Link
-                            href={`${ROUTES_CONSTANT.REFERRALS}/${referral.id}`}
+                      <div className="flex items-center gap-2">
+                        {/* Quick Status Update */}
+                        <div>
+                          <Select
+                            value={referral.status}
+                            onValueChange={(value) =>
+                              updateReferral(referral.id, {
+                                status: value as ReferralStatus,
+                              })
+                            }
+                            disabled={updatingId === referral.id}
                           >
+                            <SelectTrigger className="h-8 w-[120px] text-xs">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {referralStatusNames.map((status) => (
+                                <SelectItem
+                                  key={status.value}
+                                  value={status.value}
+                                >
+                                  {status.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Actions Dropdown */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-8 w-8 p-0"
+                              className="h-8 w-8 p-0 hover:bg-gray-100"
                             >
-                              <Eye className="h-4 w-4" />
+                              <MoreHorizontal className="h-4 w-4" />
                             </Button>
-                          </Link>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                        </div>
-                        <Select
-                          value={referral.status}
-                          onValueChange={(value) =>
-                            updateReferral(referral.id, {
-                              status: value as ReferralStatus,
-                            })
-                          }
-                          disabled={updatingId === referral.id}
-                        >
-                          <SelectTrigger className="w-[140px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="in-progress">
-                              In Progress
-                            </SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
-                            <SelectItem value="paid">Paid</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Input
-                          placeholder="Total earned"
-                          type="number"
-                          step="0.01"
-                          className="w-[140px]"
-                          defaultValue={referral.totalEarned || ""}
-                          onBlur={(e) => {
-                            const value = e.target.value;
-                            if (value) {
-                              updateReferral(referral.id, {
-                                totalEarned: value,
-                              });
-                            }
-                          }}
-                        />
-                        <Input
-                          placeholder="Amount sent"
-                          type="number"
-                          step="0.01"
-                          className="w-[140px]"
-                          defaultValue={referral.amountSent || ""}
-                          onBlur={(e) => {
-                            const value = e.target.value;
-                            if (value) {
-                              updateReferral(referral.id, {
-                                amountSent: value,
-                              });
-                            }
-                          }}
-                        />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleQuickAction("view", referral.id)
+                              }
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleQuickAction("edit", referral.id)
+                              }
+                            >
+                              <Edit className="mr-2 h-4 w-4" />
+                              Edit Referral
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openEarningsModal(
+                                  referral.id,
+                                  referral.totalEarned,
+                                  referral.friendName,
+                                  "totalEarned"
+                                )
+                              }
+                            >
+                              <DollarSign className="mr-2 h-4 w-4" />
+                              Update Earnings
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                openEarningsModal(
+                                  referral.id,
+                                  referral.amountSent,
+                                  referral.referrerName,
+                                  "amountSent"
+                                )
+                              }
+                            >
+                              <Send className="mr-2 h-4 w-4" />
+                              Update Amount Sent
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     )}
                   </TableCell>
@@ -274,6 +397,50 @@ export function ReferralsTable() {
           </div>
         </div>
       )}
+
+      {/* Earnings Modal */}
+      <Modal
+        isOpen={earningsModal.isOpen}
+        onClose={closeEarningsModal}
+        title={`Update ${earningsModal.field === "totalEarned" ? "Earnings" : "Amount Sent"}`}
+      >
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="earningsAmount" className="text-sm font-medium">
+              {earningsModal.field === "totalEarned"
+                ? "Total Earned"
+                : "Amount Sent"}{" "}
+              for {earningsModal.referralName}
+            </Label>
+            <Input
+              id="earningsAmount"
+              type="number"
+              step="0.01"
+              placeholder="0"
+              value={modalValue}
+              onChange={(e) => setModalValue(e.target.value)}
+              className="mt-1"
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              Leave empty to clear the amount
+            </p>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={closeEarningsModal}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSaveEarnings}
+              disabled={updatingId === earningsModal.referralId}
+            >
+              {updatingId === earningsModal.referralId
+                ? "Saving..."
+                : "Save Amount"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

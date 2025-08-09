@@ -1,7 +1,6 @@
 "use client";
 
 import { ContactsTable } from "@/components/dashboard/contacts-table";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { useContactStats } from "@/hooks/use-contacts";
-import { Calendar, Download, MessageSquare, Phone, User } from "lucide-react";
+import { Calendar, MessageSquare, Phone, User } from "lucide-react";
 
 // Skeleton component for stats cards
 const StatsCardSkeleton = () => (
@@ -37,12 +36,7 @@ export default function AdminContactsPage() {
       <PageHeader
         title="Contact Management"
         description="Manage and track all contact form submissions"
-      >
-        <Button variant="outline" size="sm" className="bg-white shadow-sm">
-          <Download className="mr-2 h-4 w-4" />
-          Export
-        </Button>
-      </PageHeader>
+      />
 
       {/* Stats Overview */}
       <div className="mb-8">

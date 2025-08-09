@@ -1,12 +1,17 @@
 import { Badge } from "@/components/ui/badge";
-import { RequestStatus } from "@/types";
+import {
+  ContactStatus,
+  ReferralStatus,
+  RequestStatus,
+  UserRole,
+} from "@/types";
 import { CheckCircle, Clock, FileText, XCircle } from "lucide-react";
 
 export const getRoleBadge = (role: string) => {
   const variants = {
-    admin: "bg-red-500 text-white",
-    employees: "bg-blue-500 text-white",
-    customer: "bg-green-500 text-white",
+    [UserRole.ADMIN]: "bg-red-500 text-white",
+    [UserRole.EMPLOYEES]: "bg-blue-500 text-white",
+    [UserRole.CUSTOMER]: "bg-green-500 text-white",
   };
   return (
     <Badge className={variants[role as keyof typeof variants]}>
@@ -50,9 +55,24 @@ export const getRequestsStatusBadge = (status: RequestStatus) => {
 
 export const getContactsStatusBadge = (status: string) => {
   const variants = {
-    pending: "bg-yellow-500 text-white",
-    in_progress: "bg-blue-500 text-white",
-    contacted: "bg-green-500 text-white",
+    [ContactStatus.PENDING]: "bg-yellow-500 text-white",
+    [ContactStatus.IN_PROGRESS]: "bg-blue-500 text-white",
+    [ContactStatus.CONTACTED]: "bg-green-500 text-white",
+  };
+  return (
+    <Badge className={variants[status as keyof typeof variants]}>
+      {status.replace("_", " ").charAt(0).toUpperCase() +
+        status.replace("_", " ").slice(1).toLowerCase()}
+    </Badge>
+  );
+};
+
+export const getReferralStatusBadge = (status: string) => {
+  const variants = {
+    [ReferralStatus.PENDING]: "bg-yellow-500 text-white",
+    [ReferralStatus.IN_PROGRESS]: "bg-blue-500 text-white",
+    [ReferralStatus.COMPLETED]: "bg-green-500 text-white",
+    [ReferralStatus.PAID]: "bg-green-600 text-white",
   };
   return (
     <Badge className={variants[status as keyof typeof variants]}>
