@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       .from(requests)
       .where(whereConditions.length > 0 ? whereConditions[0] : undefined);
 
-    // Get paginated results with user and assignee info
+    // Get paginated results with user info only
     const results = await db
       .select({
         id: requests.id,
@@ -52,23 +52,43 @@ export async function GET(request: NextRequest) {
           email: users.email,
           phone: users.phone,
         },
-        assignee: {
-          id: users.id,
-          name: users.name,
-          email: users.email,
-          phone: users.phone,
-        },
       })
       .from(requests)
       .leftJoin(users, eq(requests.userId, users.id))
-      .leftJoin(users, eq(requests.assigneeId, users.id))
       .where(whereConditions.length > 0 ? whereConditions[0] : undefined)
       .orderBy(desc(requests.createdAt))
       .limit(limit)
       .offset(offset);
 
+    // Get assignee info for requests that have assignees
+    const assigneeIds = results
+      .map((result) => result.assigneeId)
+      .filter((id) => id !== null) as string[];
+
+    let assignees: any[] = [];
+    if (assigneeIds.length > 0) {
+      assignees = await db
+        .select({
+          id: users.id,
+          name: users.name,
+          email: users.email,
+          phone: users.phone,
+        })
+        .from(users)
+        .where(sql`${users.id} IN (${assigneeIds.join(",")})`);
+    }
+
+    // Combine results with assignee info
+    const resultsWithAssignees = results.map((result) => ({
+      ...result,
+      assignee: result.assigneeId
+        ? assignees.find((assignee) => assignee.id === result.assigneeId) ||
+          null
+        : null,
+    }));
+
     return NextResponse.json({
-      data: results,
+      data: resultsWithAssignees,
       pagination: {
         page,
         limit,

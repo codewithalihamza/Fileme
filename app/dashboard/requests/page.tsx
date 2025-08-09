@@ -27,6 +27,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { servicesNames } from "@/lib/services";
 import { formatCurrency } from "@/lib/utils";
 import {
   CheckCircle,
@@ -287,10 +288,11 @@ export default function RequestsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Services</SelectItem>
-                  <SelectItem value="tax">Tax Filing</SelectItem>
-                  <SelectItem value="accounting">Accounting</SelectItem>
-                  <SelectItem value="audit">Audit</SelectItem>
-                  <SelectItem value="consultation">Consultation</SelectItem>
+                  {servicesNames.map((service) => (
+                    <SelectItem key={service.value} value={service.value}>
+                      {service.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
