@@ -2,22 +2,34 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
+import { useDashboardStats } from "@/hooks/use-dashboard-stats";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { formatCurrency } from "@/lib/utils";
 import {
-  Activity,
-  AlertCircle,
   ArrowRight,
   BarChart3,
   Clock,
-  DollarSign,
   MessageSquare,
-  TrendingUp,
   Users2,
 } from "lucide-react";
 import Link from "next/link";
 
-export default function AdminDashboardPage() {
+// Skeleton component for stats cards
+const StatsCardSkeleton = () => (
+  <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
+    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="h-4 w-32 animate-pulse rounded bg-gray-200"></div>
+      <div className="h-9 w-9 animate-pulse rounded-lg bg-gray-200"></div>
+    </CardHeader>
+    <CardContent>
+      <div className="h-8 w-16 animate-pulse rounded bg-gray-200"></div>
+      <div className="mt-1 h-3 w-24 animate-pulse rounded bg-gray-200"></div>
+    </CardContent>
+  </Card>
+);
+
+export default function DashboardPage() {
+  const { stats, loading } = useDashboardStats();
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -28,94 +40,73 @@ export default function AdminDashboardPage() {
 
       {/* Quick Stats */}
       <div className="mb-8">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Total Contacts
-              </CardTitle>
-              <div className="rounded-lg bg-blue-100 p-2">
-                <MessageSquare className="h-5 w-5 text-blue-600" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">0</div>
-              <p className="mt-1 text-xs text-gray-500">
-                Contact form submissions
-              </p>
-              <div className="mt-2 flex items-center">
-                <Activity className="mr-1 h-3 w-3 text-green-500" />
-                <span className="text-xs text-green-600">
-                  +0% from last month
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {loading ? (
+            <>
+              <StatsCardSkeleton />
+              <StatsCardSkeleton />
+              <StatsCardSkeleton />
+            </>
+          ) : (
+            <>
+              <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">
+                    Pending Contacts
+                  </CardTitle>
+                  <div className="rounded-lg bg-blue-100 p-2">
+                    <MessageSquare className="h-5 w-5 text-blue-600" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {stats.pendingContacts}
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Contact form submissions
+                  </p>
+                </CardContent>
+              </Card>
 
-          <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Total Referrals
-              </CardTitle>
-              <div className="rounded-lg bg-green-100 p-2">
-                <Users2 className="h-5 w-5 text-green-600" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">0</div>
-              <p className="mt-1 text-xs text-gray-500">Referral submissions</p>
-              <div className="mt-2 flex items-center">
-                <Activity className="mr-1 h-3 w-3 text-green-500" />
-                <span className="text-xs text-green-600">
-                  +0% from last month
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+              <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">
+                    Pending Referrals
+                  </CardTitle>
+                  <div className="rounded-lg bg-green-100 p-2">
+                    <Users2 className="h-5 w-5 text-green-600" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {stats.pendingReferrals}
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Referral submissions
+                  </p>
+                </CardContent>
+              </Card>
 
-          <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Pending Contacts
-              </CardTitle>
-              <div className="rounded-lg bg-yellow-100 p-2">
-                <Clock className="h-5 w-5 text-yellow-600" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">0</div>
-              <p className="mt-1 text-xs text-gray-500">Awaiting response</p>
-              <div className="mt-2 flex items-center">
-                <AlertCircle className="mr-1 h-3 w-3 text-yellow-500" />
-                <span className="text-xs text-yellow-600">
-                  Requires attention
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Total Earnings
-              </CardTitle>
-              <div className="rounded-lg bg-purple-100 p-2">
-                <DollarSign className="h-5 w-5 text-purple-600" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-gray-900">
-                {formatCurrency(0)}
-              </div>
-              <p className="mt-1 text-xs text-gray-500">From referrals</p>
-              <div className="mt-2 flex items-center">
-                <TrendingUp className="mr-1 h-3 w-3 text-green-500" />
-                <span className="text-xs text-green-600">
-                  +0% from last month
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+              <Card className="border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">
+                    Pending Requests
+                  </CardTitle>
+                  <div className="rounded-lg bg-yellow-100 p-2">
+                    <Clock className="h-5 w-5 text-yellow-600" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {stats.pendingRequests}
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Awaiting response
+                  </p>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </div>
       </div>
 
