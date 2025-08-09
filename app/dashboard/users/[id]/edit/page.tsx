@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUsers } from "@/hooks/use-users";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { validatePhoneNumber } from "@/lib/utils";
 import { ArrowLeft, Save, User } from "lucide-react";
 import Link from "next/link";
@@ -138,7 +139,7 @@ export default function EditUserPage({ params }: PageProps) {
             The user you&apos;re looking for doesn&apos;t exist.
           </p>
           <Button asChild>
-            <Link href="/admin/users">
+            <Link href={ROUTES_CONSTANT.USERS}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Users
             </Link>
@@ -154,7 +155,7 @@ export default function EditUserPage({ params }: PageProps) {
       <div className="mb-8">
         <div className="flex items-center space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="/admin/users">
+            <Link href={ROUTES_CONSTANT.USERS}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Users
             </Link>
@@ -291,7 +292,9 @@ export default function EditUserPage({ params }: PageProps) {
                   )}
                 </Button>
                 <Button type="button" variant="outline" asChild>
-                  <Link href={`/admin/users/${user.id}`}>Cancel</Link>
+                  <Link href={`${ROUTES_CONSTANT.USERS}/${user.id}`}>
+                    Cancel
+                  </Link>
                 </Button>
               </div>
             </form>

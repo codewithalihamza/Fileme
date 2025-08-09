@@ -29,6 +29,7 @@ import {
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useContacts } from "@/hooks/use-contacts";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { servicesNames } from "@/lib/services";
 import { formatDate } from "@/lib/utils";
 import {
@@ -66,7 +67,7 @@ export function ContactsTable() {
   const router = useRouter();
 
   const handleRowClick = (contactId: string) => {
-    router.push(`/admin/contacts/${contactId}`);
+    router.push(`${ROUTES_CONSTANT.CONTACTS}/${contactId}`);
   };
 
   const handleStatusChange = async (
@@ -82,10 +83,10 @@ export function ContactsTable() {
   const handleQuickAction = (action: string, contactId: string) => {
     switch (action) {
       case "view":
-        router.push(`/admin/contacts/${contactId}`);
+        router.push(`${ROUTES_CONSTANT.CONTACTS}/${contactId}`);
         break;
       case "edit":
-        router.push(`/admin/contacts/${contactId}`);
+        router.push(`${ROUTES_CONSTANT.CONTACTS}/${contactId}`);
         break;
     }
   };

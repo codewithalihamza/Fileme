@@ -123,7 +123,7 @@ export const useRequests = () => {
           body: JSON.stringify(requestData),
         });
 
-        const data: RequestResponse = await response.json();
+        const data = await response.json();
 
         if (response.ok) {
           toast.success("Request created successfully!");
@@ -162,7 +162,7 @@ export const useRequests = () => {
           }),
         });
 
-        const data: RequestResponse = await response.json();
+        const data = await response.json();
 
         if (response.ok) {
           toast.success("Request updated successfully!");

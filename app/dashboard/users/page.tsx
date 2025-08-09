@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
   MoreHorizontal,
   Plus,
@@ -230,7 +231,7 @@ export default function UsersPage() {
               </Select>
             </div>
             <Button asChild>
-              <Link href="/admin/users/new">
+              <Link href={ROUTES_CONSTANT.NEW_USER}>
                 <Plus className="mr-2 h-4 w-4" />
                 Add User
               </Link>
@@ -295,12 +296,16 @@ export default function UsersPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem asChild>
-                              <Link href={`/admin/users/${user.id}`}>
+                              <Link
+                                href={`${ROUTES_CONSTANT.USERS}/${user.id}`}
+                              >
                                 View Details
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                              <Link href={`/admin/users/${user.id}/edit`}>
+                              <Link
+                                href={`${ROUTES_CONSTANT.USERS}/${user.id}/edit`}
+                              >
                                 Edit User
                               </Link>
                             </DropdownMenuItem>

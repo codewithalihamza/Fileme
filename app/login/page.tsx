@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    router.push("/admin/dashboard");
+    router.push("/dashboard");
     return null;
   }
 
@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
     const result = await login(email, password);
 
     if (result.success) {
-      router.push("/admin/dashboard");
+      router.push("/dashboard");
     } else {
       setError(result.error || "Login failed");
     }

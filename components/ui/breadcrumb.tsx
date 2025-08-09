@@ -24,10 +24,6 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
       for (let i = 0; i < segments.length; i++) {
         const segment = segments[i];
         const href = "/" + segments.slice(0, i + 1).join("/");
-
-        // Skip admin segment as it's the root
-        if (segment === "admin") continue;
-
         // Format the label
         let label = segment.charAt(0).toUpperCase() + segment.slice(1);
 
@@ -49,7 +45,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
   return (
     <nav className="flex items-center space-x-1 text-sm text-gray-500">
       <Link
-        href="/admin/dashboard"
+        href="/dashboard"
         className="flex items-center transition-colors hover:text-gray-700"
       >
         <Home className="h-4 w-4" />

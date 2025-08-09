@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUsers } from "@/hooks/use-users";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { validatePhoneNumber } from "@/lib/utils";
 import { ArrowLeft, Save, User } from "lucide-react";
 import Link from "next/link";
@@ -103,7 +104,7 @@ export default function NewUserPage() {
       <div className="mb-8">
         <div className="flex items-center space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="/admin/users">
+            <Link href={ROUTES_CONSTANT.USERS}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Users
             </Link>
@@ -263,7 +264,7 @@ export default function NewUserPage() {
                   )}
                 </Button>
                 <Button type="button" variant="outline" asChild>
-                  <Link href="/admin/users">Cancel</Link>
+                  <Link href={ROUTES_CONSTANT.USERS}>Cancel</Link>
                 </Button>
               </div>
             </form>

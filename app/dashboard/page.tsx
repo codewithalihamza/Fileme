@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
   Activity,
   AlertCircle,
@@ -119,7 +120,7 @@ export default function AdminDashboardPage() {
       <div className="mb-8">
         <h2 className="mb-6 text-2xl font-bold text-gray-900">Quick Actions</h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <Link href="/admin/contacts">
+          <Link href={ROUTES_CONSTANT.CONTACTS}>
             <Card className="group cursor-pointer border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -137,7 +138,7 @@ export default function AdminDashboardPage() {
             </Card>
           </Link>
 
-          <Link href="/admin/referrals">
+          <Link href={ROUTES_CONSTANT.REFERRALS}>
             <Card className="group cursor-pointer border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -155,7 +156,7 @@ export default function AdminDashboardPage() {
             </Card>
           </Link>
 
-          <Link href="/admin/users">
+          <Link href={ROUTES_CONSTANT.USERS}>
             <Card className="group cursor-pointer border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -173,7 +174,7 @@ export default function AdminDashboardPage() {
             </Card>
           </Link>
 
-          <Link href="/admin/requests">
+          <Link href={ROUTES_CONSTANT.REQUESTS}>
             <Card className="group cursor-pointer border-0 bg-white shadow-lg transition-all duration-300 hover:shadow-xl">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">

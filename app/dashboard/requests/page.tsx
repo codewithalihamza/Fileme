@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatCurrency } from "@/lib/utils";
 import {
   CheckCircle,
@@ -294,7 +295,7 @@ export default function RequestsPage() {
               </Select>
             </div>
             <Button asChild>
-              <Link href="/admin/requests/new">
+              <Link href={ROUTES_CONSTANT.NEW_REQUEST}>
                 <Plus className="mr-2 h-4 w-4" />
                 Add Request
               </Link>
@@ -383,12 +384,16 @@ export default function RequestsPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem asChild>
-                              <Link href={`/admin/requests/${request.id}`}>
+                              <Link
+                                href={`${ROUTES_CONSTANT.REQUESTS}/${request.id}`}
+                              >
                                 View Details
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                              <Link href={`/admin/requests/${request.id}/edit`}>
+                              <Link
+                                href={`${ROUTES_CONSTANT.REQUESTS}/${request.id}/edit`}
+                              >
                                 Edit Request
                               </Link>
                             </DropdownMenuItem>

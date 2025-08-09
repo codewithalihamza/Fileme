@@ -1,20 +1,20 @@
 "use client";
 
-import { AdminSidebar } from "@/components/ui/admin-sidebar";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { DashboardSidebar } from "@/components/ui/dashboard-sidebar";
 import { ReactNode, useState } from "react";
 
-interface AdminLayoutProps {
+interface DashboardLayoutProps {
   children: ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <AdminSidebar
+      <DashboardSidebar
         isCollapsed={isSidebarCollapsed}
         onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />

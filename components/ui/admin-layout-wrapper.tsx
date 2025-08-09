@@ -11,7 +11,7 @@ interface AdminLayoutWrapperProps {
 
 export function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps) {
   const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith("/admin");
+  const isAdminRoute = pathname?.startsWith("/dashboard");
 
   return (
     <>

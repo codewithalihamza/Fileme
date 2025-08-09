@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { motion } from "framer-motion";
 import {
-  BarChart3,
   Calendar,
   ChevronLeft,
   ChevronRight,
@@ -14,19 +15,20 @@ import {
   Users,
   Users2,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-interface AdminSidebarProps {
+interface DashboardSidebarProps {
   isCollapsed?: boolean;
   onToggle?: () => void;
 }
 
-export function AdminSidebar({
+export function DashboardSidebar({
   isCollapsed = false,
   onToggle,
-}: AdminSidebarProps) {
+}: DashboardSidebarProps) {
   const pathname = usePathname();
   const { logout, isLoading } = useAuth();
   const [isHovered, setIsHovered] = useState(false);
@@ -38,51 +40,51 @@ export function AdminSidebar({
   const navigationItems = [
     {
       name: "Dashboard",
-      href: "/admin/dashboard",
+      href: ROUTES_CONSTANT.DASHBOARD,
       icon: Home,
       description: "Overview and analytics",
     },
     {
       name: "Contacts",
-      href: "/admin/contacts",
+      href: ROUTES_CONSTANT.CONTACTS,
       icon: MessageSquare,
       description: "Manage contact submissions",
     },
     {
       name: "Referrals",
-      href: "/admin/referrals",
+      href: ROUTES_CONSTANT.REFERRALS,
       icon: Users2,
       description: "Track referrals and earnings",
     },
     {
       name: "Users",
-      href: "/admin/users",
+      href: ROUTES_CONSTANT.USERS,
       icon: Users,
       description: "User management",
     },
     {
       name: "Requests",
-      href: "/admin/requests",
+      href: ROUTES_CONSTANT.REQUESTS,
       icon: Calendar,
       description: "Manage service requests",
     },
-    {
-      name: "Analytics",
-      href: "/admin/analytics",
-      icon: BarChart3,
-      description: "Detailed reports",
-    },
+    // {
+    //   name: "Analytics",
+    //   href: ROUTES_CONSTANT.ANALYTICS,
+    //   icon: BarChart3,
+    //   description: "Detailed reports",
+    // },
     {
       name: "Settings",
-      href: "/admin/settings",
+      href: ROUTES_CONSTANT.SETTINGS,
       icon: Settings,
       description: "System configuration",
     },
   ];
 
   const isActive = (href: string) => {
-    if (href === "/admin/dashboard") {
-      return pathname === "/admin/dashboard";
+    if (href === ROUTES_CONSTANT.DASHBOARD) {
+      return pathname === ROUTES_CONSTANT.DASHBOARD;
     }
     return pathname?.startsWith(href);
   };
@@ -99,8 +101,19 @@ export function AdminSidebar({
       <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600"></div>
-            <span className="text-lg font-bold text-gray-900">Admin</span>
+            <motion.div
+              className="flex size-8 items-center justify-center rounded-lg"
+              whileHover={{ rotate: 5 }}
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Image src="/logo.png" alt="FileMe" width={25} height={25} />
+            </motion.div>
+            <span className="text-lg font-bold text-gray-900">FileMe</span>
           </div>
         )}
         <Button
@@ -147,12 +160,6 @@ export function AdminSidebar({
                     </div>
                   </div>
                 )}
-                {isCollapsed && isHovered && (
-                  <div className="absolute left-full z-50 ml-2 rounded-md bg-gray-900 px-2 py-1 text-xs text-white opacity-90">
-                    <div className="font-medium">{item.name}</div>
-                    <div className="text-gray-300">{item.description}</div>
-                  </div>
-                )}
               </div>
             </Link>
           );
@@ -163,13 +170,6 @@ export function AdminSidebar({
       <div className="border-t border-gray-200 p-4">
         {!isCollapsed ? (
           <div className="space-y-3">
-            <div className="flex items-center space-x-3">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">Admin User</p>
-                <p className="text-xs text-gray-500">admin@fileme.com</p>
-              </div>
-            </div>
             <Button
               onClick={handleLogout}
               disabled={isLoading}

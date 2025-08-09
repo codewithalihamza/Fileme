@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
   ArrowLeft,
   Calendar,
@@ -173,7 +174,7 @@ export default function ReferralDetailPage({ params }: PageProps) {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/admin/referrals">
+              <Link href={ROUTES_CONSTANT.REFERRALS}>
                 <Button
                   variant="ghost"
                   size="sm"

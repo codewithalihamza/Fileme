@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUsers } from "@/hooks/use-users";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
   ArrowLeft,
   Calendar,
@@ -106,7 +107,7 @@ export default function UserDetailPage({ params }: PageProps) {
             The user you&apos;re looking for doesn&apos;t exist.
           </p>
           <Button asChild>
-            <Link href="/admin/users">
+            <Link href={ROUTES_CONSTANT.USERS}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Users
             </Link>
@@ -123,7 +124,7 @@ export default function UserDetailPage({ params }: PageProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Button variant="ghost" asChild>
-              <Link href="/admin/users">
+              <Link href={ROUTES_CONSTANT.USERS}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Users
               </Link>
@@ -134,7 +135,7 @@ export default function UserDetailPage({ params }: PageProps) {
             </div>
           </div>
           <Button asChild>
-            <Link href={`/admin/users/${user.id}/edit`}>
+            <Link href={`${ROUTES_CONSTANT.USERS}/${user.id}/edit`}>
               <Edit className="mr-2 h-4 w-4" />
               Edit User
             </Link>

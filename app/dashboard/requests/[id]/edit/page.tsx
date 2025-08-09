@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRequests } from "@/hooks/use-requests";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { ArrowLeft, FileText, Save } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -139,7 +140,7 @@ export default function EditRequestPage({ params }: PageProps) {
             The request you&apos;re looking for doesn&apos;t exist.
           </p>
           <Button asChild>
-            <Link href="/admin/requests">
+            <Link href={ROUTES_CONSTANT.REQUESTS}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Requests
             </Link>
@@ -155,7 +156,7 @@ export default function EditRequestPage({ params }: PageProps) {
       <div className="mb-8">
         <div className="flex items-center space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="/admin/requests">
+            <Link href={ROUTES_CONSTANT.REQUESTS}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Requests
             </Link>
@@ -266,7 +267,9 @@ export default function EditRequestPage({ params }: PageProps) {
                     )}
                   </Button>
                   <Button type="button" variant="outline" asChild>
-                    <Link href={`/admin/requests/${request.id}`}>Cancel</Link>
+                    <Link href={`${ROUTES_CONSTANT.REQUESTS}/${request.id}`}>
+                      Cancel
+                    </Link>
                   </Button>
                 </div>
               </form>

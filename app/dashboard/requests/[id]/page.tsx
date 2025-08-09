@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatCurrency } from "@/lib/utils";
 import {
   ArrowLeft,
@@ -201,7 +202,7 @@ export default function RequestDetailPage({ params }: PageProps) {
             The request you&apos;re looking for doesn&apos;t exist.
           </p>
           <Button asChild>
-            <Link href="/admin/requests">
+            <Link href={ROUTES_CONSTANT.REQUESTS}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Requests
             </Link>
@@ -218,7 +219,7 @@ export default function RequestDetailPage({ params }: PageProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Button variant="ghost" asChild>
-              <Link href="/admin/requests">
+              <Link href={ROUTES_CONSTANT.REQUESTS}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Requests
               </Link>

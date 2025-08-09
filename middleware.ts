@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Handle login page redirect for authenticated users
-  if (pathname === "/admin/login") {
+  if (pathname === "/login") {
     const token = request.cookies.get("admin-token")?.value;
 
     if (token) {
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
 
       if (user && user.role === "admin") {
         // User is already logged in, redirect to dashboard
-        return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+        return NextResponse.redirect(new URL("/dashboard", request.url));
       }
     }
 
@@ -23,12 +23,12 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protect other admin routes
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/dashboard")) {
     const token = request.cookies.get("admin-token")?.value;
 
     if (!token) {
       // No token found, redirect to login
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+      return NextResponse.redirect(new URL("/login", request.url));
     }
 
     // Verify the token
@@ -36,9 +36,7 @@ export async function middleware(request: NextRequest) {
 
     if (!user || user.role !== "admin") {
       // Invalid token, redirect to login
-      const response = NextResponse.redirect(
-        new URL("/admin/login", request.url)
-      );
+      const response = NextResponse.redirect(new URL("/login", request.url));
       response.cookies.delete("admin-token");
       return response;
     }

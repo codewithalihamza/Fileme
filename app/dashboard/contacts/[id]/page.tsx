@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
   ArrowLeft,
   Calendar,
@@ -165,7 +166,7 @@ export default function ContactDetailPage({ params }: PageProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6 flex items-center gap-4">
           <Link
-            href="/admin/contacts"
+            href={ROUTES_CONSTANT.CONTACTS}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
           >
             <ArrowLeft className="size-4" />
@@ -184,7 +185,7 @@ export default function ContactDetailPage({ params }: PageProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6 flex items-center gap-4">
           <Link
-            href="/admin/contacts"
+            href={ROUTES_CONSTANT.CONTACTS}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
           >
             <ArrowLeft className="size-4" />
@@ -207,7 +208,7 @@ export default function ContactDetailPage({ params }: PageProps) {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/contacts"
+            href={ROUTES_CONSTANT.CONTACTS}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
           >
             <ArrowLeft className="size-4" />

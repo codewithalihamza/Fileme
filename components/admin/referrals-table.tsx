@@ -22,6 +22,7 @@ import {
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useReferrals } from "@/hooks/use-referrals";
+import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { ChevronLeft, ChevronRight, Edit, Eye, Search } from "lucide-react";
 import Link from "next/link";
 
@@ -160,7 +161,9 @@ export function ReferralsTable() {
                     ) : (
                       <div className="flex flex-col gap-2">
                         <div className="flex items-center gap-2">
-                          <Link href={`/admin/referrals/${referral.id}`}>
+                          <Link
+                            href={`${ROUTES_CONSTANT.REFERRALS}/${referral.id}`}
+                          >
                             <Button
                               variant="ghost"
                               size="sm"
