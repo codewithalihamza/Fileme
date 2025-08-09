@@ -1,3 +1,4 @@
+import { AdminLayoutWrapper } from "@/components/ui/admin-layout-wrapper";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
@@ -127,7 +128,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AdminLayoutWrapper>{children}</AdminLayoutWrapper>
         <SpeedInsights />
         <Analytics />
         <Toaster position="top-right" />

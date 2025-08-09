@@ -106,7 +106,7 @@ export const TaxCalculator = () => {
                 <Calculator className="size-10 text-blue-600" />
               </div>
               <motion.div
-                className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-400"
+                className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-yellow-400"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               >
@@ -241,7 +241,7 @@ export const TaxCalculator = () => {
                         className="flex items-center gap-2"
                       >
                         <motion.div
-                          className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white"
+                          className="size-4 rounded-full border-2 border-white/30 border-t-white"
                           animate={{ rotate: 360 }}
                           transition={{
                             duration: 1,
@@ -280,7 +280,7 @@ export const TaxCalculator = () => {
                 className="flex w-full items-center justify-center gap-3 transition-all duration-300 hover:scale-105"
               >
                 <motion.div
-                  className="h-3 w-3 rounded-full bg-green-500"
+                  className="size-3 rounded-full bg-green-500"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{
                     duration: 2,
@@ -315,7 +315,7 @@ export const TaxCalculator = () => {
                 {/* Close button */}
                 <motion.button
                   onClick={handleCloseResults}
-                  className="absolute -right-4 -top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white shadow-lg transition-all duration-300 hover:bg-red-600"
+                  className="absolute -right-4 -top-4 z-20 flex size-10 items-center justify-center rounded-full bg-red-500 text-white shadow-lg transition-all duration-300 hover:bg-red-600"
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                   initial={{ opacity: 0, scale: 0 }}
@@ -517,7 +517,7 @@ export const TaxCalculator = () => {
                           key={index}
                           className="flex items-start gap-3 border-b border-gray-100 py-2 last:border-b-0"
                         >
-                          <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500"></div>
+                          <div className="mt-2 size-2 flex-shrink-0 rounded-full bg-blue-500"></div>
                           <span className="text-sm text-gray-700">
                             {line.trim().substring(1).trim()}
                           </span>

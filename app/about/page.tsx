@@ -1,7 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Footer } from "@/components/ui/footer";
-import { Navigation } from "@/components/ui/navigation";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { getServices } from "@/lib/services";
 import { contactInfo } from "@/lib/utils";
@@ -15,8 +13,6 @@ export default function AboutPage() {
 
   return (
     <div>
-      <Navigation />
-
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-800 py-20">
         <div className="absolute inset-0">
@@ -297,8 +293,6 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
 
       {/* WhatsApp Floating Button */}
       <WhatsAppButton phoneNumber={contactInfo.Phone} />

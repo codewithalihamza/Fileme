@@ -13,8 +13,10 @@ export function WhatsAppButton({
   className,
 }: WhatsAppButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Show the button after a short delay for better UX
     const timer = setTimeout(() => setIsVisible(true), 1000);
     return () => clearTimeout(timer);
@@ -26,10 +28,13 @@ export function WhatsAppButton({
     window.open(whatsappUrl, "_blank");
   };
 
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) return null;
+
   return (
     <div
       className={cn(
-        "fixed bottom-10 right-10 z-50 transition-all duration-500 ease-in-out",
+        "fixed bottom-10 right-5 z-50 transition-all duration-500 ease-in-out",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
         className
       )}
@@ -41,7 +46,7 @@ export function WhatsAppButton({
       >
         {/* WhatsApp Icon */}
         <svg
-          className="h-7 w-7 text-white transition-transform duration-300 group-hover:scale-110"
+          className="size-7 text-white transition-transform duration-300 group-hover:scale-110"
           fill="currentColor"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"

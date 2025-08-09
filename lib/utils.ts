@@ -1,15 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { EMAIL_REGEX, PHONE_REGEX } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-// Phone number validation regex (11 digits)
-export const PHONE_REGEX = /^\d{11}$/;
-
-export function validatePhoneNumber(phone: string): boolean {
-  return PHONE_REGEX.test(phone.trim());
 }
 
 export const formatCurrency = (amount: number): string => {
@@ -32,9 +26,27 @@ export const formatNumberWithCommas = (value: string): string => {
   return number.toLocaleString("en-US");
 };
 
+export const validatePhoneNumber = (phone: string): boolean => {
+  // Pakistani phone number format: 03XXXXXXXXX (11 digits)
+  return PHONE_REGEX.test(phone);
+};
+export const validateEmail = (email: string): boolean => {
+  return EMAIL_REGEX.test(email);
+};
+
 export const contactInfo = {
   Email: "info@fileme.com",
   Phone: "+92 348 6512212",
   Hours: "Mon-Fri 9AM-6PM",
   Address: "Modal Town, Lahore",
+};
+
+export const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 };
