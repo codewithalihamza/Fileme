@@ -49,6 +49,7 @@ interface RequestFormProps {
   title: string;
   description: string;
   contactId?: string | null;
+  referralId?: string | null;
 }
 
 export function RequestForm({
@@ -59,6 +60,7 @@ export function RequestForm({
   title,
   description,
   contactId,
+  referralId,
 }: RequestFormProps) {
   const [formData, setFormData] = useState<RequestFormData>({
     service: initialData?.service || "tax",
@@ -71,7 +73,9 @@ export function RequestForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { checkOrCreateUser } = useUserSearch();
   const [contactData, setContactData] = useState<any>(null);
+  const [referralData, setReferralData] = useState<any>(null);
   const [loadingContact, setLoadingContact] = useState(false);
+  const [loadingReferral, setLoadingReferral] = useState(false);
   const router = useRouter();
 
   // Memoize the fetch function to prevent infinite re-renders
@@ -120,12 +124,65 @@ export function RequestForm({
     }
   }, [contactId, checkOrCreateUser]);
 
+  // Memoize the fetch function for referrals
+  const fetchReferralAndCreateUser = useCallback(async () => {
+    if (!referralId) return;
+
+    setLoadingReferral(true);
+    try {
+      // Fetch referral data
+      const referralResponse = await fetch(
+        `/api/dashboard/referrals/${referralId}`
+      );
+      if (referralResponse.ok) {
+        const response = await referralResponse.json();
+        const referral = response.referral;
+        setReferralData(referral);
+
+        // Pre-fill service
+        setFormData((prev) => ({
+          ...prev,
+          service: referral.service,
+        }));
+
+        // Check if user exists or create new user from friend details
+        const userResult = await checkOrCreateUser(
+          referral.friendName,
+          referral.friendPhone,
+          referral.friendEmail
+        );
+
+        if (userResult) {
+          setFormData((prev) => ({
+            ...prev,
+            userId: userResult.user.id,
+          }));
+          toast.success(
+            `Client ${userResult.isNew ? "created and " : ""}selected: ${userResult.user.name}`
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching referral data:", error);
+      toast.error("Failed to load referral data");
+    } finally {
+      setLoadingReferral(false);
+    }
+  }, [referralId, checkOrCreateUser]);
+
   // Fetch contact data and pre-fill form if contactId is provided
   useEffect(() => {
     if (contactId) {
       fetchContactAndCreateUser();
     }
   }, [fetchContactAndCreateUser]);
+
+  // Fetch referral data and pre-fill form if referralId is provided
+  useEffect(() => {
+    if (referralId) {
+      fetchReferralAndCreateUser();
+    }
+  }, [fetchReferralAndCreateUser]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<RequestFormData> = {};

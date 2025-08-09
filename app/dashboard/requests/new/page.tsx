@@ -8,6 +8,7 @@ import { toast } from "sonner";
 export default function NewRequestPage() {
   const searchParams = useSearchParams();
   const contactId = searchParams.get("contactId");
+  const referralId = searchParams.get("referralId");
   const router = useRouter();
 
   const handleSubmit = async (formData: any) => {
@@ -34,17 +35,24 @@ export default function NewRequestPage() {
     }
   };
 
+  const getDescription = () => {
+    if (referralId) {
+      return "Create a new service request from referral";
+    }
+    if (contactId) {
+      return "Create a new service request from contact";
+    }
+    return "Add a new service request";
+  };
+
   return (
     <RequestForm
       onSubmit={handleSubmit}
       isEditing={false}
       title="Create New Request"
-      description={
-        contactId
-          ? "Create a new service request from contact"
-          : "Add a new service request"
-      }
+      description={getDescription()}
       contactId={contactId}
+      referralId={referralId}
     />
   );
 }

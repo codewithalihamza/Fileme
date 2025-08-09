@@ -32,6 +32,12 @@ interface ReferralsResponse {
   pagination: Pagination;
 }
 
+export interface ReferralStats {
+  total: number;
+  totalEarnings: number;
+  totalPaidOut: number;
+}
+
 export function useReferrals() {
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
@@ -135,18 +141,21 @@ export function useReferrals() {
     }
   };
 
-  const getReferral = async (id: string): Promise<Referral | null> => {
-    try {
-      const response = await fetch(`/api/dashboard/referrals/${id}`);
-      if (!response.ok) throw new Error("Failed to fetch referral");
+  const getReferral = useCallback(
+    async (id: string): Promise<Referral | null> => {
+      try {
+        const response = await fetch(`/api/dashboard/referrals/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch referral");
 
-      const data = await response.json();
-      return data.referral;
-    } catch (error) {
-      toast.error("Failed to fetch referral");
-      return null;
-    }
-  };
+        const data = await response.json();
+        return data.referral;
+      } catch (error) {
+        toast.error("Failed to fetch referral");
+        return null;
+      }
+    },
+    []
+  );
 
   const setPage = (page: number) => {
     setPagination((prev) => ({ ...prev, page }));
@@ -171,5 +180,52 @@ export function useReferrals() {
     setPage,
     setLimit,
     refetch: fetchReferrals,
+  };
+}
+
+export function useReferralStats() {
+  const [stats, setStats] = useState<ReferralStats>({
+    total: 0,
+    totalEarnings: 0,
+    totalPaidOut: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/dashboard/referrals/stats");
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch referral stats");
+      }
+
+      const data = await response.json();
+      setStats(data.data);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch referral stats";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  return {
+    stats,
+    loading,
+    error,
+    refetch: fetchStats,
   };
 }

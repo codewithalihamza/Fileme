@@ -38,12 +38,14 @@ import {
   ChevronLeft,
   ChevronRight,
   DollarSign,
-  Edit,
   Eye,
   MoreHorizontal,
+  Plus,
+  RefreshCw,
   Search,
   Send,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function ReferralsTable() {
@@ -58,7 +60,10 @@ export function ReferralsTable() {
     updatingId,
     updateReferral,
     setPage,
+    refetch,
   } = useReferrals();
+
+  const router = useRouter();
 
   const [earningsModal, setEarningsModal] = useState<{
     isOpen: boolean;
@@ -75,7 +80,7 @@ export function ReferralsTable() {
   });
 
   const [modalValue, setModalValue] = useState<string>("");
-
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const openEarningsModal = (
     referralId: string,
     currentAmount: string | null,
@@ -116,15 +121,18 @@ export function ReferralsTable() {
   const handleQuickAction = (action: string, referralId: string) => {
     switch (action) {
       case "view":
-        window.open(`${ROUTES_CONSTANT.REFERRALS}/${referralId}`, "_blank");
+        router.push(`${ROUTES_CONSTANT.REFERRALS}/${referralId}`);
         break;
-      case "edit":
-        window.open(
-          `${ROUTES_CONSTANT.REFERRALS}/${referralId}/edit`,
-          "_blank"
-        );
+      case "create-request":
+        router.push(`${ROUTES_CONSTANT.REQUESTS}/new?referralId=${referralId}`);
         break;
     }
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
   };
 
   return (
@@ -142,19 +150,33 @@ export function ReferralsTable() {
             />
           </div>
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            {referralStatusNames.map((status) => (
-              <SelectItem key={status.value} value={status.value}>
-                {status.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing || loading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              {referralStatusNames.map((status) => (
+                <SelectItem key={status.value} value={status.value}>
+                  {status.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Table */}
@@ -319,11 +341,11 @@ export function ReferralsTable() {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() =>
-                                handleQuickAction("edit", referral.id)
+                                handleQuickAction("create-request", referral.id)
                               }
                             >
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit Referral
+                              <Plus className="mr-2 h-4 w-4" />
+                              Create Request
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
