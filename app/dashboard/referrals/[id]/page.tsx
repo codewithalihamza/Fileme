@@ -75,7 +75,7 @@ export default function ReferralDetailPage({ params }: PageProps) {
     try {
       setLoading(true);
       // This would be replaced with actual API call
-      // const response = await fetch(`/api/admin/referrals/${referralId}`);
+      // const response = await fetch(`/api/dashboard/referrals/${referralId}`);
       // const data = await response.json();
       // setReferral(data);
 
@@ -109,7 +109,7 @@ export default function ReferralDetailPage({ params }: PageProps) {
   const updateReferral = async () => {
     try {
       // This would be replaced with actual API call
-      // const response = await fetch(`/api/admin/referrals/${params.id}`, {
+      // const response = await fetch(`/api/dashboard/referrals/${params.id}`, {
       //   method: "PATCH",
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify(editData),

@@ -59,7 +59,7 @@ export const useRequests = () => {
           ...(service && service !== "all" && { service }),
         });
 
-        const response = await fetch(`/api/admin/requests?${params}`);
+        const response = await fetch(`/api/dashboard/requests?${params}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -84,7 +84,7 @@ export const useRequests = () => {
     async (id: string): Promise<Request | null> => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/admin/requests/${id}`);
+        const response = await fetch(`/api/dashboard/requests/${id}`);
         const data: RequestResponse = await response.json();
 
         if (response.ok) {
@@ -115,7 +115,7 @@ export const useRequests = () => {
     }): Promise<Request | null> => {
       try {
         setLoading(true);
-        const response = await fetch("/api/admin/requests", {
+        const response = await fetch("/api/dashboard/requests", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -151,7 +151,7 @@ export const useRequests = () => {
     ): Promise<Request | null> => {
       try {
         setLoading(true);
-        const response = await fetch("/api/admin/requests", {
+        const response = await fetch("/api/dashboard/requests", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -186,7 +186,7 @@ export const useRequests = () => {
   const deleteRequest = useCallback(async (id: string): Promise<boolean> => {
     try {
       setLoading(true);
-      const response = await fetch("/api/admin/requests", {
+      const response = await fetch("/api/dashboard/requests", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

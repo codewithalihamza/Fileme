@@ -28,7 +28,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <span>Welcome back, Admin</span>
+              <span>Welcome back</span>
             </div>
           </div>
         </header>

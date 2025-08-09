@@ -85,7 +85,7 @@ export default function RequestsPage() {
           serviceFilter !== "all" && { service: serviceFilter }),
       });
 
-      const response = await fetch(`/api/admin/requests?${params}`);
+      const response = await fetch(`/api/dashboard/requests?${params}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -111,7 +111,7 @@ export default function RequestsPage() {
     if (!confirm("Are you sure you want to delete this request?")) return;
 
     try {
-      const response = await fetch(`/api/admin/requests`, {
+      const response = await fetch(`/api/dashboard/requests`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

@@ -61,7 +61,7 @@ export default function NewRequestPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/admin/requests", {
+      const response = await fetch("/api/dashboard/requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

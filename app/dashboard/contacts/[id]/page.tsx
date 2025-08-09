@@ -69,7 +69,7 @@ export default function ContactDetailPage({ params }: PageProps) {
     try {
       setLoading(true);
       // This would be replaced with actual API call
-      // const response = await fetch(`/api/admin/contacts/${contactId}`);
+      // const response = await fetch(`/api/dashboard/contacts/${contactId}`);
       // const data = await response.json();
       // setContact(data);
 
@@ -101,7 +101,7 @@ export default function ContactDetailPage({ params }: PageProps) {
   const updateContact = async () => {
     try {
       // This would be replaced with actual API call
-      // const response = await fetch(`/api/admin/contacts/${contactId}`, {
+      // const response = await fetch(`/api/dashboard/contacts/${contactId}`, {
       //   method: "PATCH",
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify(editData),

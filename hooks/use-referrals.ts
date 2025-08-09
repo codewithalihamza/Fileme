@@ -63,7 +63,7 @@ export function useReferrals() {
         ...(statusFilter && statusFilter !== "all" && { status: statusFilter }),
       });
 
-      const response = await fetch(`/api/admin/referrals?${params}`);
+      const response = await fetch(`/api/dashboard/referrals?${params}`);
       if (!response.ok) throw new Error("Failed to fetch referrals");
 
       const data: ReferralsResponse = await response.json();
@@ -116,7 +116,7 @@ export function useReferrals() {
   const updateReferral = async (id: string, updates: Partial<Referral>) => {
     try {
       setUpdatingId(id);
-      const response = await fetch("/api/admin/referrals", {
+      const response = await fetch("/api/dashboard/referrals", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, ...updates }),
@@ -135,7 +135,7 @@ export function useReferrals() {
 
   const getReferral = async (id: string): Promise<Referral | null> => {
     try {
-      const response = await fetch(`/api/admin/referrals/${id}`);
+      const response = await fetch(`/api/dashboard/referrals/${id}`);
       if (!response.ok) throw new Error("Failed to fetch referral");
 
       const data = await response.json();

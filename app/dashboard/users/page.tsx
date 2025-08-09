@@ -69,7 +69,7 @@ export default function UsersPage() {
         ...(roleFilter && roleFilter !== "all" && { role: roleFilter }),
       });
 
-      const response = await fetch(`/api/admin/users?${params}`);
+      const response = await fetch(`/api/dashboard/users?${params}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -95,7 +95,7 @@ export default function UsersPage() {
     if (!confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      const response = await fetch(`/api/admin/users`, {
+      const response = await fetch(`/api/dashboard/users`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

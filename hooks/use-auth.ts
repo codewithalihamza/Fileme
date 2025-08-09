@@ -66,7 +66,7 @@ export function useAuth() {
 
   const logout = async () => {
     try {
-      await fetch("/api/admin/logout", {
+      await fetch("/api/dashboard/logout", {
         method: "POST",
       });
     } catch (error) {

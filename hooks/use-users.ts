@@ -45,7 +45,7 @@ export const useUsers = () => {
           ...(role && role !== "all" && { role }),
         });
 
-        const response = await fetch(`/api/admin/users?${params}`);
+        const response = await fetch(`/api/dashboard/users?${params}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -69,7 +69,7 @@ export const useUsers = () => {
   const fetchUser = useCallback(async (id: string): Promise<User | null> => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/users/${id}`);
+      const response = await fetch(`/api/dashboard/users/${id}`);
       const data: UserResponse = await response.json();
 
       if (response.ok) {
@@ -98,7 +98,7 @@ export const useUsers = () => {
     }): Promise<User | null> => {
       try {
         setLoading(true);
-        const response = await fetch("/api/admin/users", {
+        const response = await fetch("/api/dashboard/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -106,7 +106,7 @@ export const useUsers = () => {
           body: JSON.stringify(userData),
         });
 
-        const data: UserResponse = await response.json();
+        const data = await response.json();
 
         if (response.ok) {
           toast.success("User created successfully!");
@@ -131,7 +131,7 @@ export const useUsers = () => {
     async (id: string, userData: Partial<User>): Promise<User | null> => {
       try {
         setLoading(true);
-        const response = await fetch("/api/admin/users", {
+        const response = await fetch("/api/dashboard/users", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -142,7 +142,7 @@ export const useUsers = () => {
           }),
         });
 
-        const data: UserResponse = await response.json();
+        const data = await response.json();
 
         if (response.ok) {
           toast.success("User updated successfully!");
@@ -166,7 +166,7 @@ export const useUsers = () => {
   const deleteUser = useCallback(async (id: string): Promise<boolean> => {
     try {
       setLoading(true);
-      const response = await fetch("/api/admin/users", {
+      const response = await fetch("/api/dashboard/users", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

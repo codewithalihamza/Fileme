@@ -62,7 +62,7 @@ export function useContacts() {
           serviceFilter !== "all" && { service: serviceFilter }),
       });
 
-      const response = await fetch(`/api/admin/contacts?${params}`);
+      const response = await fetch(`/api/dashboard/contacts?${params}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -124,7 +124,7 @@ export function useContacts() {
   const updateContact = async (id: string, updates: Partial<Contact>) => {
     try {
       setUpdatingId(id);
-      const response = await fetch("/api/admin/contacts", {
+      const response = await fetch("/api/dashboard/contacts", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, ...updates }),
@@ -149,7 +149,7 @@ export function useContacts() {
 
   const getContact = async (id: string): Promise<Contact | null> => {
     try {
-      const response = await fetch(`/api/admin/contacts/${id}`);
+      const response = await fetch(`/api/dashboard/contacts/${id}`);
       if (!response.ok) throw new Error("Failed to fetch contact");
 
       const data = await response.json();

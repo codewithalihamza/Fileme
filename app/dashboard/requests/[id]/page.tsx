@@ -78,7 +78,7 @@ export default function RequestDetailPage({ params }: PageProps) {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/requests/${requestId}`);
+      const response = await fetch(`/api/dashboard/requests/${requestId}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -103,7 +103,7 @@ export default function RequestDetailPage({ params }: PageProps) {
     if (!request) return;
 
     try {
-      const response = await fetch(`/api/admin/requests`, {
+      const response = await fetch(`/api/dashboard/requests`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
