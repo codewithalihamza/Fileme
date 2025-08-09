@@ -1,6 +1,5 @@
 "use client";
 
-import { getStatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,9 +27,15 @@ import {
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useContacts } from "@/hooks/use-contacts";
+import { getContactsStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatDate } from "@/lib/utils";
-import { ContactStatus, contactStatusNames, servicesNames } from "@/types";
+import {
+  ContactStatus,
+  contactStatusNames,
+  heardFromNames,
+  servicesNames,
+} from "@/types";
 import {
   ChevronLeft,
   ChevronRight,
@@ -98,17 +103,6 @@ export function ContactsTable() {
     } finally {
       setIsRefreshing(false);
     }
-  };
-
-  const getHeardFromLabel = (heardFrom: string) => {
-    const labels: Record<string, string> = {
-      linkedin: "LinkedIn",
-      website: "Website",
-      instagram: "Instagram",
-      facebook: "Facebook",
-      others: "Others",
-    };
-    return labels[heardFrom] || heardFrom;
   };
 
   return (
@@ -211,9 +205,16 @@ export function ContactsTable() {
                     }
                   </TableCell>
                   <TableCell className="capitalize">
-                    {getHeardFromLabel(contact.heardFrom)}
+                    {
+                      heardFromNames.find(
+                        (heardFrom: { value: string; label: string }) =>
+                          heardFrom.value === contact.heardFrom
+                      )?.label
+                    }
                   </TableCell>
-                  <TableCell>{getStatusBadge(contact.status)}</TableCell>
+                  <TableCell>
+                    {getContactsStatusBadge(contact.status)}
+                  </TableCell>
                   <TableCell>{formatDate(contact.createdAt)}</TableCell>
                   <TableCell>
                     {updatingId === contact.id ? (

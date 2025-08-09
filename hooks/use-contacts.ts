@@ -28,6 +28,13 @@ export interface ContactsResponse {
   pagination: Pagination;
 }
 
+export interface ContactStats {
+  total: number;
+  pending: number;
+  completed: number;
+  contacted: number;
+}
+
 export function useContacts() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
@@ -193,5 +200,53 @@ export function useContacts() {
     setPage,
     setLimit,
     refetch: fetchContacts,
+  };
+}
+
+export function useContactStats() {
+  const [stats, setStats] = useState<ContactStats>({
+    total: 0,
+    pending: 0,
+    completed: 0,
+    contacted: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/dashboard/contacts/stats");
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch contact stats");
+      }
+
+      const data = await response.json();
+      setStats(data.data);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch contact stats";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  return {
+    stats,
+    loading,
+    error,
+    refetch: fetchStats,
   };
 }

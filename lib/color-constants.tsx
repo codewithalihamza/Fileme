@@ -47,3 +47,17 @@ export const getRequestsStatusBadge = (status: RequestStatus) => {
     </Badge>
   );
 };
+
+export const getContactsStatusBadge = (status: string) => {
+  const variants = {
+    pending: "bg-yellow-500 text-white",
+    in_progress: "bg-blue-500 text-white",
+    contacted: "bg-green-500 text-white",
+  };
+  return (
+    <Badge className={variants[status as keyof typeof variants]}>
+      {status.replace("_", " ").charAt(0).toUpperCase() +
+        status.replace("_", " ").slice(1).toLowerCase()}
+    </Badge>
+  );
+};

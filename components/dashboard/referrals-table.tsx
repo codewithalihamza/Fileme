@@ -1,6 +1,5 @@
 "use client";
 
-import { getStatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,6 +21,7 @@ import {
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useReferrals } from "@/hooks/use-referrals";
+import { getContactsStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatCurrency } from "@/lib/utils";
 import { ReferralStatus } from "@/types";
@@ -137,7 +137,9 @@ export function ReferralsTable() {
                   <TableCell className="capitalize">
                     {referral.service}
                   </TableCell>
-                  <TableCell>{getStatusBadge(referral.status)}</TableCell>
+                  <TableCell>
+                    {getContactsStatusBadge(referral.status)}
+                  </TableCell>
                   <TableCell className="font-medium">
                     {formatCurrency(parseFloat(referral.totalEarned))}
                   </TableCell>

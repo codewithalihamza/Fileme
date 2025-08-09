@@ -34,27 +34,3 @@ function Badge({ className, variant, ...props }: BadgeProps) {
 }
 
 export { Badge, badgeVariants };
-
-export const getStatusBadge = (status: string) => {
-  const variants = {
-    // Contact statuses
-    pending: "bg-yellow-500 text-white hover:text-white hover:bg-yellow-600",
-    in_progress: "bg-blue-500 text-white hover:text-white hover:bg-blue-600",
-    contacted: "bg-green-500 text-white hover:text-white hover:bg-green-600",
-
-    // Referral statuses
-    completed: "bg-purple-500 text-white hover:text-white hover:bg-purple-600",
-    paid: "bg-emerald-500 text-white hover:text-white hover:bg-emerald-600",
-
-    // Request statuses
-    unpaid: "bg-amber-500 text-white hover:text-white hover:bg-amber-600",
-  };
-
-  const label =
-    status.replace("_", " ").charAt(0).toUpperCase() +
-    status.replace("_", " ").slice(1).toLowerCase();
-
-  return (
-    <Badge className={variants[status as keyof typeof variants]}>{label}</Badge>
-  );
-};
