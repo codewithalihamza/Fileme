@@ -267,17 +267,19 @@ export function ContactsTable() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuItem
-                              onClick={() =>
-                                handleQuickAction("view", contact.id)
-                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleQuickAction("view", contact.id);
+                              }}
                             >
                               <Eye className="mr-2 h-4 w-4" />
                               View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              onClick={() =>
-                                handleQuickAction("create-request", contact.id)
-                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleQuickAction("create-request", contact.id);
+                              }}
                             >
                               <FileText className="mr-2 h-4 w-4" />
                               Create Request

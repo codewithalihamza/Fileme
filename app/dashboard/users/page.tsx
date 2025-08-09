@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -30,7 +29,9 @@ import {
 } from "@/components/ui/table";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useUsers } from "@/hooks/use-users";
+import { getRoleBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { formatDate } from "@/lib/utils";
 import {
   Edit,
   Eye,
@@ -149,27 +150,6 @@ export default function UsersPage() {
     }
   };
 
-  const getRoleBadge = (role: string) => {
-    const variants = {
-      admin: "bg-red-500 text-white",
-      employees: "bg-blue-500 text-white",
-      customer: "bg-gray-500 text-white",
-    };
-    return (
-      <Badge className={variants[role as keyof typeof variants]}>
-        {role.charAt(0).toUpperCase() + role.slice(1)}
-      </Badge>
-    );
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   return (
     <div className="p-6">
       {/* Header */}
@@ -229,7 +209,7 @@ export default function UsersPage() {
                   {users.filter((u) => u.role === "customer").length}
                 </p>
               </div>
-              <UserX className="h-8 w-8 text-gray-600" />
+              <UserX className="h-8 w-8 text-green-600" />
             </div>
           </CardContent>
         </Card>

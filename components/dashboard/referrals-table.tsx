@@ -24,6 +24,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useReferrals } from "@/hooks/use-referrals";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatCurrency } from "@/lib/utils";
+import { ReferralStatus } from "@/types";
 import { ChevronLeft, ChevronRight, Edit, Eye, Search } from "lucide-react";
 import Link from "next/link";
 
@@ -181,11 +182,7 @@ export function ReferralsTable() {
                           value={referral.status}
                           onValueChange={(value) =>
                             updateReferral(referral.id, {
-                              status: value as
-                                | "pending"
-                                | "in-progress"
-                                | "completed"
-                                | "paid",
+                              status: value as ReferralStatus,
                             })
                           }
                           disabled={updatingId === referral.id}

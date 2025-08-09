@@ -45,6 +45,7 @@ export async function GET(
         name: users.name,
         email: users.email,
         phone: users.phone,
+        role: users.role,
       })
       .from(users)
       .where(eq(users.id, requestRecord.userId));
@@ -57,6 +58,8 @@ export async function GET(
           id: users.id,
           name: users.name,
           email: users.email,
+          phone: users.phone,
+          role: users.role,
         })
         .from(users)
         .where(eq(users.id, requestRecord.assigneeId));

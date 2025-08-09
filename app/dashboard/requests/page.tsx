@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -30,6 +29,7 @@ import {
 } from "@/components/ui/table";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useRequests } from "@/hooks/use-requests";
+import { getRequestsStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { RequestStatus, requestStatusNames, servicesNames } from "@/types";
 import {
@@ -139,21 +139,6 @@ export default function RequestsPage() {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      pending: "bg-yellow-500 text-white",
-      in_progress: "bg-blue-500 text-white",
-      completed: "bg-green-500 text-white",
-      cancelled: "bg-red-500 text-white",
-    };
-    return (
-      <Badge className={variants[status as keyof typeof variants]}>
-        {status.replace("_", " ").charAt(0).toUpperCase() +
-          status.replace("_", " ").slice(1)}
-      </Badge>
-    );
-  };
-
   const handleRowClick = (requestId: string) => {
     router.push(`${ROUTES_CONSTANT.REQUESTS}/${requestId}`);
   };
@@ -224,16 +209,6 @@ export default function RequestsPage() {
     } finally {
       setIsRefreshing(false);
     }
-  };
-
-  const getServiceLabel = (service: string) => {
-    const services = {
-      tax: "Tax Filing",
-      accounting: "Accounting",
-      audit: "Audit",
-      consultation: "Consultation",
-    };
-    return services[service as keyof typeof services] || service;
   };
 
   const formatDate = (dateString: string) => {
@@ -446,8 +421,16 @@ export default function RequestsPage() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{getServiceLabel(request.service)}</TableCell>
-                      <TableCell>{getStatusBadge(request.status)}</TableCell>
+                      <TableCell>
+                        {
+                          servicesNames.find(
+                            (service) => service.value === request.service
+                          )?.label
+                        }
+                      </TableCell>
+                      <TableCell>
+                        {getRequestsStatusBadge(request.status)}
+                      </TableCell>
                       <TableCell>
                         {request.assignee ? (
                           <div>
@@ -575,17 +558,19 @@ export default function RequestsPage() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end" className="w-48">
                                 <DropdownMenuItem
-                                  onClick={() =>
-                                    handleQuickAction("view", request.id)
-                                  }
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleQuickAction("view", request.id);
+                                  }}
                                 >
                                   <Eye className="mr-2 h-4 w-4" />
                                   View Details
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                  onClick={() =>
-                                    handleQuickAction("edit", request.id)
-                                  }
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleQuickAction("edit", request.id);
+                                  }}
                                 >
                                   <Edit className="mr-2 h-4 w-4" />
                                   Edit Request

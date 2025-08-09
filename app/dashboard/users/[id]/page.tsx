@@ -1,10 +1,10 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUsers } from "@/hooks/use-users";
+import { getRoleBadge } from "@/lib/color-constants";
 import { getRoleDescription } from "@/lib/constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
@@ -57,19 +57,6 @@ export default function UserDetailPage({ params }: PageProps) {
   useEffect(() => {
     loadUser();
   }, [loadUser]);
-
-  const getRoleBadge = (role: string) => {
-    const variants = {
-      admin: "bg-red-500 text-white",
-      employees: "bg-blue-500 text-white",
-      customer: "bg-gray-500 text-white",
-    };
-    return (
-      <Badge className={variants[role as keyof typeof variants]}>
-        {role.charAt(0).toUpperCase() + role.slice(1)}
-      </Badge>
-    );
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
