@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { RequestStatus } from "@/types";
@@ -34,7 +34,13 @@ interface RequestsResponse {
     limit: number;
   };
 }
-
+export interface RequestStats {
+  total: number;
+  pending: number;
+  inProgress: number;
+  completed: number;
+  totalRevenue: number;
+}
 interface RequestResponse {
   data: Request;
 }
@@ -221,3 +227,52 @@ export const useRequests = () => {
     deleteRequest,
   };
 };
+
+export function useRequestStats() {
+  const [stats, setStats] = useState<RequestStats>({
+    total: 0,
+    pending: 0,
+    inProgress: 0,
+    completed: 0,
+    totalRevenue: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/dashboard/requests/stats");
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch request stats");
+      }
+
+      const data = await response.json();
+      setStats(data.data);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch request stats";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  return {
+    stats,
+    loading,
+    error,
+    refetch: fetchStats,
+  };
+}

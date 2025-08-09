@@ -30,10 +30,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
-import { useRequests } from "@/hooks/use-requests";
+import { useRequests, useRequestStats } from "@/hooks/use-requests";
 import { getRequestsStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/utils";
 import { RequestStatus, requestStatusNames, servicesNames } from "@/types";
 import {
   CheckCircle,
@@ -74,8 +74,24 @@ interface Request {
   } | null;
 }
 
+// Skeleton component for stats cards
+const StatsCardSkeleton = () => (
+  <Card className="border-0 bg-white shadow-lg">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200"></div>
+          <div className="h-8 w-12 animate-pulse rounded bg-gray-200"></div>
+        </div>
+        <div className="h-8 w-8 animate-pulse rounded bg-gray-200"></div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 export default function RequestsPage() {
   const { loading, updatingId, fetchRequests, updateRequest } = useRequests();
+  const { stats, loading: statsLoading } = useRequestStats();
 
   const [requests, setRequests] = useState<Request[]>([]);
   const [search, setSearch] = useState("");
@@ -236,13 +252,6 @@ export default function RequestsPage() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
   return (
     <div className="p-6">
       {/* Header */}
@@ -253,86 +262,94 @@ export default function RequestsPage() {
 
       {/* Stats Cards */}
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-5">
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">
-                  Total Requests
-                </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {totalRequests}
-                </p>
-              </div>
-              <FileText className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+        {statsLoading ? (
+          <>
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+          </>
+        ) : (
+          <>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Total Requests
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.total}
+                    </p>
+                  </div>
+                  <FileText className="h-8 w-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {
-                    requests.filter((r) => r.status === RequestStatus.PENDING)
-                      .length
-                  }
-                </p>
-              </div>
-              <Clock className="h-8 w-8 text-yellow-600" />
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Pending</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.pending}
+                    </p>
+                  </div>
+                  <Clock className="h-8 w-8 text-yellow-600" />
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">In Progress</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {
-                    requests.filter(
-                      (r) => r.status === RequestStatus.IN_PROGRESS
-                    ).length
-                  }
-                </p>
-              </div>
-              <FileText className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      In Progress
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.inProgress}
+                    </p>
+                  </div>
+                  <FileText className="h-8 w-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {
-                    requests.filter((r) => r.status === RequestStatus.COMPLETED)
-                      .length
-                  }
-                </p>
-              </div>
-              <CheckCircle className="h-8 w-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Completed
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.completed}
+                    </p>
+                  </div>
+                  <CheckCircle className="h-8 w-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold text-gray-900">0</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Total Revenue
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {formatCurrency(stats.totalRevenue)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
 
       {/* Search and Filters */}

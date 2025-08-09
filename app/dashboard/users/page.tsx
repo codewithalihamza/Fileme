@@ -28,7 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
-import { useUsers } from "@/hooks/use-users";
+import { useUsers, useUserStats } from "@/hooks/use-users";
 import { getRoleBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatDate } from "@/lib/utils";
@@ -59,8 +59,24 @@ interface User {
   updatedAt: string;
 }
 
+// Skeleton component for stats cards
+const StatsCardSkeleton = () => (
+  <Card className="border-0 bg-white shadow-lg">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className="mb-2 h-4 w-20 animate-pulse rounded bg-gray-200"></div>
+          <div className="h-8 w-12 animate-pulse rounded bg-gray-200"></div>
+        </div>
+        <div className="h-8 w-8 animate-pulse rounded bg-gray-200"></div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 export default function UsersPage() {
   const { loading, updatingId, fetchUsers, updateUser } = useUsers();
+  const { stats, loading: statsLoading } = useUserStats();
 
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
@@ -160,59 +176,78 @@ export default function UsersPage() {
 
       {/* Stats Cards */}
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
-                <p className="text-2xl font-bold text-gray-900">{totalUsers}</p>
-              </div>
-              <Users className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+        {statsLoading ? (
+          <>
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+          </>
+        ) : (
+          <>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Total Users
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.total}
+                    </p>
+                  </div>
+                  <Users className="h-8 w-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Admins</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u) => u.role === "admin").length}
-                </p>
-              </div>
-              <UserCheck className="h-8 w-8 text-red-600" />
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Admins</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.admins}
+                    </p>
+                  </div>
+                  <UserCheck className="h-8 w-8 text-red-600" />
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Employees</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u) => u.role === "employees").length}
-                </p>
-              </div>
-              <UserPlus className="h-8 w-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Employees
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.employees}
+                    </p>
+                  </div>
+                  <UserPlus className="h-8 w-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
 
-        <Card className="border-0 bg-white shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Customers</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {users.filter((u) => u.role === "customer").length}
-                </p>
-              </div>
-              <UserX className="h-8 w-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">
+                      Customers
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.customers}
+                    </p>
+                  </div>
+                  <UserX className="h-8 w-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
 
       {/* Search and Filters */}

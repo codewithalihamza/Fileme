@@ -1,5 +1,12 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+
+export interface UserStats {
+  total: number;
+  admins: number;
+  employees: number;
+  customers: number;
+}
 
 interface User {
   id: string;
@@ -199,3 +206,49 @@ export const useUsers = () => {
     deleteUser,
   };
 };
+
+export function useUserStats() {
+  const [stats, setStats] = useState<UserStats>({
+    total: 0,
+    admins: 0,
+    employees: 0,
+    customers: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/dashboard/users/stats");
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch user stats");
+      }
+
+      const data = await response.json();
+      setStats(data.data);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch user stats";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  return {
+    stats,
+    loading,
+    error,
+    refetch: fetchStats,
+  };
+}
