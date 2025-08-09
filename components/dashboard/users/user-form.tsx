@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getRoleDescription } from "@/lib/constants";
 import { validateEmail, validatePhoneNumber } from "@/lib/utils";
 import {
   AlertCircle,
@@ -109,19 +110,6 @@ export function UserForm({
     // Clear error when user starts typing
     if (errors[name as keyof UserFormData]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const getRoleDescription = (role: string) => {
-    switch (role) {
-      case "admin":
-        return "Full system access and management";
-      case "employees":
-        return "Limited access for team members";
-      case "customer":
-        return "Basic access for customers";
-      default:
-        return "";
     }
   };
 

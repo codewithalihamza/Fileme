@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUsers } from "@/hooks/use-users";
+import { getRoleDescription } from "@/lib/constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
   ArrowLeft,
@@ -17,7 +18,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-
 interface User {
   id: string;
   name: string;
@@ -122,17 +122,13 @@ export default function UserDetailPage({ params }: PageProps) {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" asChild>
-              <Link href={ROUTES_CONSTANT.USERS}>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Users
-              </Link>
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">User Details</h1>
-              <p className="mt-1 text-gray-600">View user information</p>
-            </div>
+          <div className="flex-1">
+            <h1 className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-2xl font-bold text-transparent sm:text-3xl lg:text-4xl">
+              User Details
+            </h1>
+            <p className="mt-2 text-sm text-gray-600 sm:text-base">
+              Complete user details and account information
+            </p>
           </div>
           <Button asChild>
             <Link href={`${ROUTES_CONSTANT.USERS}/${user.id}/edit`}>
@@ -195,6 +191,9 @@ export default function UserDetailPage({ params }: PageProps) {
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-gray-400" />
                 {getRoleBadge(user.role)}
+                <span className="text-sm text-gray-600">
+                  {getRoleDescription(user.role)}
+                </span>
               </div>
             </div>
           </CardContent>
