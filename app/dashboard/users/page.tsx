@@ -59,12 +59,7 @@ interface User {
 }
 
 export default function UsersPage() {
-  const {
-    loading,
-    updatingId,
-    fetchUsers,
-    updateUser,
-  } = useUsers();
+  const { loading, updatingId, fetchUsers, updateUser } = useUsers();
 
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
@@ -345,7 +340,9 @@ export default function UsersPage() {
                           <div className="flex items-center gap-2">
                             {/* Quick Role Update */}
                             <div
-                              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                              onClick={(e: React.MouseEvent) =>
+                                e.stopPropagation()
+                              }
                             >
                               <Select
                                 value={user.role}
@@ -359,8 +356,12 @@ export default function UsersPage() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="admin">Admin</SelectItem>
-                                  <SelectItem value="employees">Employees</SelectItem>
-                                  <SelectItem value="customer">Customer</SelectItem>
+                                  <SelectItem value="employees">
+                                    Employees
+                                  </SelectItem>
+                                  <SelectItem value="customer">
+                                    Customer
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>

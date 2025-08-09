@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { EMAIL_REGEX, PHONE_REGEX } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,8 +28,10 @@ export const formatNumberWithCommas = (value: string): string => {
 
 export const validatePhoneNumber = (phone: string): boolean => {
   // Pakistani phone number format: 03XXXXXXXXX (11 digits)
-  const phoneRegex = /^03\d{9}$/;
-  return phoneRegex.test(phone);
+  return PHONE_REGEX.test(phone);
+};
+export const validateEmail = (email: string): boolean => {
+  return EMAIL_REGEX.test(email);
 };
 
 export const contactInfo = {

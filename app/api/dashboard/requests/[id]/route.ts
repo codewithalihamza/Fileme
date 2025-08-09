@@ -17,6 +17,7 @@ export async function GET(
       );
     }
 
+    // First, get the request data
     const requestData = await db
       .select({
         id: requests.id,
@@ -27,39 +28,54 @@ export async function GET(
         assigneeId: requests.assigneeId,
         createdAt: requests.createdAt,
         updatedAt: requests.updatedAt,
-        user: {
-          id: users.id,
-          name: users.name,
-          email: users.email,
-          phone: users.phone,
-        },
-        assignee: {
-          id: users.id,
-          name: users.name,
-          email: users.email,
-        },
       })
       .from(requests)
-      .leftJoin(users, eq(requests.userId, users.id))
-      .leftJoin(users, eq(requests.assigneeId, users.id))
       .where(eq(requests.id, id));
 
     if (requestData.length === 0) {
       return NextResponse.json({ error: "Request not found" }, { status: 404 });
     }
 
+    const requestRecord = requestData[0];
+
+    // Get user data
+    const userData = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        phone: users.phone,
+      })
+      .from(users)
+      .where(eq(users.id, requestRecord.userId));
+
+    // Get assignee data if assigneeId exists
+    let assigneeData = null;
+    if (requestRecord.assigneeId) {
+      const assigneeResult = await db
+        .select({
+          id: users.id,
+          name: users.name,
+          email: users.email,
+        })
+        .from(users)
+        .where(eq(users.id, requestRecord.assigneeId));
+
+      assigneeData = assigneeResult.length > 0 ? assigneeResult[0] : null;
+    }
+
     // Transform the data to match the expected format
     const request = {
-      id: requestData[0].id,
-      status: requestData[0].status,
-      paidAmount: requestData[0].paidAmount,
-      service: requestData[0].service,
-      userId: requestData[0].userId,
-      assigneeId: requestData[0].assigneeId,
-      createdAt: requestData[0].createdAt,
-      updatedAt: requestData[0].updatedAt,
-      user: requestData[0].user,
-      assignee: requestData[0].assignee,
+      id: requestRecord.id,
+      status: requestRecord.status,
+      paidAmount: requestRecord.paidAmount,
+      service: requestRecord.service,
+      userId: requestRecord.userId,
+      assigneeId: requestRecord.assigneeId,
+      createdAt: requestRecord.createdAt,
+      updatedAt: requestRecord.updatedAt,
+      user: userData.length > 0 ? userData[0] : null,
+      assignee: assigneeData,
     };
 
     return NextResponse.json({

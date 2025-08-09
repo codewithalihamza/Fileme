@@ -43,7 +43,7 @@ import {
   Plus,
   RefreshCw,
   Search,
-  X
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -73,12 +73,7 @@ interface Request {
 }
 
 export default function RequestsPage() {
-  const {
-    loading,
-    updatingId,
-    fetchRequests,
-    updateRequest,
-  } = useRequests();
+  const { loading, updatingId, fetchRequests, updateRequest } = useRequests();
 
   const [requests, setRequests] = useState<Request[]>([]);
   const [search, setSearch] = useState("");
@@ -88,14 +83,23 @@ export default function RequestsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalRequests, setTotalRequests] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [editingPaidAmount, setEditingPaidAmount] = useState<string | null>(null);
-  const [editingPaidAmountValue, setEditingPaidAmountValue] = useState<string>("");
+  const [editingPaidAmount, setEditingPaidAmount] = useState<string | null>(
+    null
+  );
+  const [editingPaidAmountValue, setEditingPaidAmountValue] =
+    useState<string>("");
 
   const router = useRouter();
 
   const loadRequests = useCallback(async () => {
     try {
-      const data = await fetchRequests(page, 10, search, statusFilter, serviceFilter);
+      const data = await fetchRequests(
+        page,
+        10,
+        search,
+        statusFilter,
+        serviceFilter
+      );
       if (data) {
         setRequests(data.data);
         setTotalPages(data.pagination.totalPages);
@@ -180,17 +184,17 @@ export default function RequestsPage() {
     setEditingPaidAmountValue("");
   };
 
-  const handlePaidAmountInputChange = (
-    requestId: string,
-    value: string
-  ) => {
+  const handlePaidAmountInputChange = (requestId: string, value: string) => {
     setEditingPaidAmount(requestId);
     setEditingPaidAmountValue(value);
   };
 
   const handleSavePaidAmount = () => {
     if (editingPaidAmount) {
-      const numValue = editingPaidAmountValue === "" ? null : parseFloat(editingPaidAmountValue);
+      const numValue =
+        editingPaidAmountValue === ""
+          ? null
+          : parseFloat(editingPaidAmountValue);
       handlePaidAmountChange(editingPaidAmount, numValue);
     }
   };
@@ -324,9 +328,7 @@ export default function RequestsPage() {
                 <p className="text-sm font-medium text-gray-600">
                   Total Revenue
                 </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  0
-                </p>
+                <p className="text-2xl font-bold text-gray-900">0</p>
               </div>
             </div>
           </CardContent>
@@ -467,15 +469,24 @@ export default function RequestsPage() {
                           </div>
                         ) : (
                           <div
-                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                            onClick={(e: React.MouseEvent) =>
+                              e.stopPropagation()
+                            }
                             className="flex items-center gap-1"
                           >
                             <Input
                               type="number"
                               placeholder="0.00"
-                              value={editingPaidAmount === request.id ? editingPaidAmountValue : (request.paidAmount || "")}
+                              value={
+                                editingPaidAmount === request.id
+                                  ? editingPaidAmountValue
+                                  : request.paidAmount || ""
+                              }
                               onChange={(e) => {
-                                handlePaidAmountInputChange(request.id, e.target.value);
+                                handlePaidAmountInputChange(
+                                  request.id,
+                                  e.target.value
+                                );
                               }}
                               disabled={updatingId === request.id}
                               className="h-8 w-[100px] text-xs"
@@ -515,12 +526,18 @@ export default function RequestsPage() {
                           <div className="flex items-center gap-2">
                             {/* Quick Status Update */}
                             <div
-                              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                              onClick={(e: React.MouseEvent) =>
+                                e.stopPropagation()
+                              }
                             >
                               <Select
                                 value={request.status}
                                 onValueChange={(value) =>
-                                  handleStatusChange(request.id, value, request.user.name)
+                                  handleStatusChange(
+                                    request.id,
+                                    value,
+                                    request.user.name
+                                  )
                                 }
                                 disabled={updatingId === request.id}
                               >

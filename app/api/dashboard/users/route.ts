@@ -87,11 +87,11 @@ export async function POST(request: NextRequest) {
     const existingUser = await db
       .select()
       .from(users)
-      .where(or(eq(users.email, email), eq(users.phone, phone)));
+      .where(eq(users.phone, phone));
 
     if (existingUser.length > 0) {
       return NextResponse.json(
-        { error: "User with this email or phone already exists" },
+        { error: "User with this phone already exists" },
         { status: 400 }
       );
     }
