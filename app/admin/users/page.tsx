@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   Select,
   SelectContent,
@@ -136,15 +137,16 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
-        <p className="mt-2 text-gray-600">Manage all users in the system</p>
-      </div>
+    <div className="p-6">
+      {/* Header */}
+      <PageHeader
+        title="User Management"
+        description="Manage all users in the system"
+      />
 
       {/* Stats Cards */}
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
-        <Card>
+        <Card className="border-0 bg-white shadow-lg">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -156,7 +158,7 @@ export default function UsersPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 bg-white shadow-lg">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -170,7 +172,7 @@ export default function UsersPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 bg-white shadow-lg">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -184,7 +186,7 @@ export default function UsersPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 bg-white shadow-lg">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -200,7 +202,7 @@ export default function UsersPage() {
       </div>
 
       {/* Search and Filters */}
-      <Card className="mb-6">
+      <Card className="mb-6 border-0 bg-white shadow-lg">
         <CardContent className="p-6">
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="flex-1">
@@ -238,7 +240,7 @@ export default function UsersPage() {
       </Card>
 
       {/* Users Table */}
-      <Card>
+      <Card className="border-0 bg-white shadow-lg">
         <CardHeader>
           <CardTitle>Users</CardTitle>
         </CardHeader>
