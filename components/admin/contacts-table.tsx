@@ -6,7 +6,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -35,7 +34,6 @@ import { formatDate } from "@/lib/utils";
 import {
   ChevronLeft,
   ChevronRight,
-  Edit,
   Eye,
   MoreHorizontal,
   RefreshCw,
@@ -70,11 +68,7 @@ export function ContactsTable() {
     router.push(`${ROUTES_CONSTANT.CONTACTS}/${contactId}`);
   };
 
-  const handleStatusChange = async (
-    contactId: string,
-    newStatus: string,
-    contactName: string
-  ) => {
+  const handleStatusChange = async (contactId: string, newStatus: string) => {
     await updateContact(contactId, {
       status: newStatus as "pending" | "in_progress" | "contacted",
     });
@@ -229,11 +223,7 @@ export function ContactsTable() {
                           <Select
                             value={contact.status}
                             onValueChange={(value) =>
-                              handleStatusChange(
-                                contact.id,
-                                value,
-                                contact.name
-                              )
+                              handleStatusChange(contact.id, value)
                             }
                             disabled={updatingId === contact.id}
                           >
@@ -277,15 +267,6 @@ export function ContactsTable() {
                               <Eye className="mr-2 h-4 w-4" />
                               View Details
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleQuickAction("edit", contact.id)
-                              }
-                            >
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit Contact
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>

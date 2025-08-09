@@ -11,8 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAuth } from "@/hooks/use-auth";
+import { Contact, useContacts } from "@/hooks/use-contacts";
+import { heardFromOptions } from "@/lib/constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { servicesNames } from "@/lib/services";
 import {
   ArrowLeft,
   Calendar,
@@ -30,25 +32,12 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface Contact {
-  id: string;
-  name: string;
-  email: string | null;
-  phone: string;
-  service: string;
-  message: string;
-  status: "pending" | "in_progress" | "contacted";
-  heardFrom: "linkedin" | "website" | "instagram" | "facebook" | "others";
-  createdAt: string;
-  updatedAt: string;
-}
-
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default function ContactDetailPage({ params }: PageProps) {
-  const { logout, isLoading } = useAuth();
+  const { getContact, updateContact, updatingId } = useContacts();
   const [contact, setContact] = useState<Contact | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -63,58 +52,44 @@ export default function ContactDetailPage({ params }: PageProps) {
     getParams();
   }, [params]);
 
-  const fetchContact = useCallback(async () => {
+  useEffect(() => {
+    if (!contactId) return;
+
+    const fetchContact = async () => {
+      try {
+        setLoading(true);
+        const contactData = await getContact(contactId);
+        if (contactData) {
+          setContact(contactData);
+        } else {
+          toast.error("Contact not found");
+        }
+      } catch (error) {
+        toast.error("Failed to fetch contact details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContact();
+  }, [contactId, getContact]);
+
+  const handleUpdateContact = useCallback(async () => {
     if (!contactId) return;
 
     try {
-      setLoading(true);
-      // This would be replaced with actual API call
-      // const response = await fetch(`/api/dashboard/contacts/${contactId}`);
-      // const data = await response.json();
-      // setContact(data);
-
-      // Mock data for now
-      setContact({
-        id: contactId,
-        name: "John Doe",
-        email: "john.doe@example.com",
-        phone: "123-456-7890",
-        service: "tax",
-        message:
-          "I need help with my tax filing for the current year. I have multiple income sources and need professional assistance.",
-        status: "pending",
-        heardFrom: "website",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
-    } catch (error) {
-      toast.error("Failed to fetch contact details");
-    } finally {
-      setLoading(false);
-    }
-  }, [contactId]);
-
-  useEffect(() => {
-    fetchContact();
-  }, [fetchContact]);
-
-  const updateContact = async () => {
-    try {
-      // This would be replaced with actual API call
-      // const response = await fetch(`/api/dashboard/contacts/${contactId}`, {
-      //   method: "PATCH",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(editData),
-      // });
-
-      toast.success("Contact updated successfully");
+      await updateContact(contactId, editData);
       setEditing(false);
       setEditData({});
-      fetchContact();
+      // Refetch the contact data after update
+      const contactData = await getContact(contactId);
+      if (contactData) {
+        setContact(contactData);
+      }
     } catch (error) {
-      toast.error("Failed to update contact");
+      // Error handling is done in the hook
     }
-  };
+  }, [contactId, editData, updateContact, getContact]);
 
   const getStatusBadge = (status: string) => {
     const variants = {
@@ -139,27 +114,6 @@ export default function ContactDetailPage({ params }: PageProps) {
       minute: "2-digit",
     });
   };
-
-  const getHeardFromLabel = (heardFrom: string) => {
-    const labels: Record<string, string> = {
-      linkedin: "LinkedIn",
-      website: "Website",
-      instagram: "Instagram",
-      facebook: "Facebook",
-      others: "Others",
-    };
-    return labels[heardFrom] || heardFrom;
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 text-2xl font-semibold">Loading...</div>
-        </div>
-      </div>
-    );
-  }
 
   if (loading) {
     return (
@@ -240,16 +194,18 @@ export default function ContactDetailPage({ params }: PageProps) {
                 Cancel
               </Button>
               <Button
-                onClick={updateContact}
+                onClick={handleUpdateContact}
+                disabled={updatingId === contactId}
                 className="flex items-center gap-2"
               >
                 <Save className="size-4" />
-                Save Changes
+                {updatingId === contactId ? "Saving..." : "Save Changes"}
               </Button>
             </>
           ) : (
             <Button
               onClick={() => setEditing(true)}
+              disabled={updatingId === contactId}
               className="flex items-center gap-2"
             >
               <Edit className="size-4" />
@@ -362,17 +318,20 @@ export default function ContactDetailPage({ params }: PageProps) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="tax">Tax Filing</SelectItem>
-                        <SelectItem value="accounting">Accounting</SelectItem>
-                        <SelectItem value="audit">Audit</SelectItem>
-                        <SelectItem value="consultation">
-                          Consultation
-                        </SelectItem>
+                        {servicesNames.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   ) : (
-                    <p className="capitalize text-gray-900">
-                      {contact.service}
+                    <p className="text-gray-900">
+                      {
+                        servicesNames.find(
+                          (option) => option.value === contact.service
+                        )?.label
+                      }
                     </p>
                   )}
                 </div>
@@ -391,16 +350,20 @@ export default function ContactDetailPage({ params }: PageProps) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="website">Website</SelectItem>
-                        <SelectItem value="linkedin">LinkedIn</SelectItem>
-                        <SelectItem value="instagram">Instagram</SelectItem>
-                        <SelectItem value="facebook">Facebook</SelectItem>
-                        <SelectItem value="others">Others</SelectItem>
+                        {heardFromOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   ) : (
                     <p className="text-gray-900">
-                      {getHeardFromLabel(contact.heardFrom)}
+                      {
+                        heardFromOptions.find(
+                          (option) => option.value === contact.heardFrom
+                        )?.label
+                      }
                     </p>
                   )}
                 </div>

@@ -121,44 +121,50 @@ export function useContacts() {
     }
   };
 
-  const updateContact = async (id: string, updates: Partial<Contact>) => {
-    try {
-      setUpdatingId(id);
-      const response = await fetch("/api/dashboard/contacts", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, ...updates }),
-      });
+  const updateContact = useCallback(
+    async (id: string, updates: Partial<Contact>) => {
+      try {
+        setUpdatingId(id);
+        const response = await fetch(`/api/dashboard/contacts/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updates),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to update contact");
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to update contact");
+        }
+
+        toast.success("Contact updated successfully");
+        fetchContacts();
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to update contact";
+        toast.error(errorMessage);
+      } finally {
+        setUpdatingId(null);
       }
+    },
+    [fetchContacts]
+  );
 
-      toast.success("Contact updated successfully");
-      fetchContacts();
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to update contact";
-      toast.error(errorMessage);
-    } finally {
-      setUpdatingId(null);
-    }
-  };
+  const getContact = useCallback(
+    async (id: string): Promise<Contact | null> => {
+      try {
+        const response = await fetch(`/api/dashboard/contacts/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch contact");
 
-  const getContact = async (id: string): Promise<Contact | null> => {
-    try {
-      const response = await fetch(`/api/dashboard/contacts/${id}`);
-      if (!response.ok) throw new Error("Failed to fetch contact");
-
-      const data = await response.json();
-      return data.contact;
-    } catch (error) {
-      toast.error("Failed to fetch contact");
-      return null;
-    }
-  };
+        const data = await response.json();
+        return data.contact;
+      } catch (error) {
+        toast.error("Failed to fetch contact");
+        return null;
+      }
+    },
+    []
+  );
 
   const setPage = (page: number) => {
     setPagination((prev) => ({ ...prev, page }));
