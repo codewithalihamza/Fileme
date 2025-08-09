@@ -4,6 +4,37 @@ export enum UserRole {
   CUSTOMER = "customer",
 }
 
+export const userRoleNames = [
+  {
+    label: "Admin",
+    value: UserRole.ADMIN,
+  },
+  {
+    label: "Employees",
+    value: UserRole.EMPLOYEES,
+  },
+  {
+    label: "Customer",
+    value: UserRole.CUSTOMER,
+  },
+];
+
+export enum UserStatus {
+  ACTIVE = "active",
+  DISABLED = "disabled",
+}
+
+export const userStatusNames = [
+  {
+    label: "Active",
+    value: UserStatus.ACTIVE,
+  },
+  {
+    label: "Disabled",
+    value: UserStatus.DISABLED,
+  },
+];
+
 export enum Service {
   TAX = "tax",
   ACCOUNTING = "accounting",

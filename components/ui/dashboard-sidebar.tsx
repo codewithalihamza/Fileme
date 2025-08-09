@@ -11,7 +11,6 @@ import {
   Home,
   LogOut,
   MessageSquare,
-  Settings,
   Users,
   Users2,
 } from "lucide-react";
@@ -74,12 +73,12 @@ export function DashboardSidebar({
     //   icon: BarChart3,
     //   description: "Detailed reports",
     // },
-    {
-      name: "Settings",
-      href: ROUTES_CONSTANT.SETTINGS,
-      icon: Settings,
-      description: "System configuration",
-    },
+    // {
+    //   name: "Settings",
+    //   href: ROUTES_CONSTANT.SETTINGS,
+    //   icon: Settings,
+    //   description: "System configuration",
+    // },
   ];
 
   const isActive = (href: string) => {

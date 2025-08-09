@@ -13,6 +13,7 @@ interface User {
   name: string;
   email: string;
   phone: string;
+  status: string;
   role: "admin" | "employees" | "customer";
   createdAt: string;
   updatedAt: string;

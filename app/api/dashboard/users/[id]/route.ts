@@ -24,6 +24,7 @@ export async function GET(
         email: users.email,
         phone: users.phone,
         role: users.role,
+        status: users.status,
         createdAt: users.createdAt,
         updatedAt: users.updatedAt,
       })
@@ -70,6 +71,7 @@ export async function PATCH(
     if (updates.email !== undefined) updateData.email = updates.email;
     if (updates.phone !== undefined) updateData.phone = updates.phone;
     if (updates.role !== undefined) updateData.role = updates.role;
+    if (updates.status !== undefined) updateData.status = updates.status;
 
     const updatedUser = await db
       .update(users)

@@ -32,6 +32,7 @@ import { useUsers, useUserStats } from "@/hooks/use-users";
 import { getRoleBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatDate } from "@/lib/utils";
+import { userRoleNames, userStatusNames } from "@/types";
 import {
   Edit,
   Eye,
@@ -40,6 +41,8 @@ import {
   RefreshCw,
   Search,
   UserCheck,
+  UserCheck2,
+  UserMinus,
   UserPlus,
   Users,
   UserX,
@@ -57,6 +60,7 @@ interface User {
   role: "admin" | "employees" | "customer";
   createdAt: string;
   updatedAt: string;
+  status: string;
 }
 
 // Skeleton component for stats cards
@@ -140,6 +144,22 @@ export default function UsersPage() {
     });
     // Refresh the data after update
     loadUsers();
+  };
+
+  const handleStatusToggle = async (userId: string, currentStatus: string) => {
+    const newStatus = currentStatus === "active" ? "disabled" : "active";
+    const action = newStatus === "disabled" ? "disable" : "enable";
+
+    if (!confirm(`Are you sure you want to ${action} this user?`)) return;
+
+    try {
+      await updateUser(userId, { status: newStatus });
+      toast.success(`User ${action}d successfully`);
+      loadUsers();
+    } catch (error) {
+      console.error(`Error ${action}ing user:`, error);
+      toast.error(`Failed to ${action} user`);
+    }
   };
 
   const handleQuickAction = (action: string, userId: string) => {
@@ -284,9 +304,11 @@ export default function UsersPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Roles</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="employees">Employees</SelectItem>
-                  <SelectItem value="customer">Customer</SelectItem>
+                  {userRoleNames.map((role) => (
+                    <SelectItem key={role.value} value={role.value}>
+                      {role.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <Button asChild>
@@ -314,6 +336,7 @@ export default function UsersPage() {
                   <TableHead>Email</TableHead>
                   <TableHead>Phone</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Created At</TableHead>
                   <TableHead className="w-[100px]">Actions</TableHead>
                 </TableRow>
@@ -343,6 +366,13 @@ export default function UsersPage() {
                       <TableCell>{user.email}</TableCell>
                       <TableCell>{user.phone}</TableCell>
                       <TableCell>{getRoleBadge(user.role)}</TableCell>
+                      <TableCell>
+                        {
+                          userStatusNames.find(
+                            (status) => status.value === user.status
+                          )?.label
+                        }
+                      </TableCell>
                       <TableCell>{formatDate(user.createdAt)}</TableCell>
                       <TableCell>
                         {updatingId === user.id ? (
@@ -414,6 +444,30 @@ export default function UsersPage() {
                                   <Edit className="mr-2 h-4 w-4" />
                                   Edit User
                                 </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                {user.status === "active" ? (
+                                  <DropdownMenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleStatusToggle(user.id, user.status);
+                                    }}
+                                    className="text-orange-600"
+                                  >
+                                    <UserMinus className="mr-2 h-4 w-4" />
+                                    Mark as Disable
+                                  </DropdownMenuItem>
+                                ) : (
+                                  <DropdownMenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleStatusToggle(user.id, user.status);
+                                    }}
+                                    className="text-green-600"
+                                  >
+                                    <UserCheck2 className="mr-2 h-4 w-4" />
+                                    Mark as Active
+                                  </DropdownMenuItem>
+                                )}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   onClick={(e) => {
