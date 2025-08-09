@@ -3,10 +3,12 @@ CREATE TYPE "public"."heard_from" AS ENUM('linkedin', 'website', 'instagram', 'f
 CREATE TYPE "public"."referral_status" AS ENUM('pending', 'in_progress', 'completed', 'paid');--> statement-breakpoint
 CREATE TYPE "public"."request_status" AS ENUM('pending', 'in_progress', 'unpaid', 'paid', 'completed');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('customer', 'admin', 'employees');--> statement-breakpoint
+CREATE TYPE "public"."user_status" AS ENUM('active', 'disabled');--> statement-breakpoint
 CREATE TABLE "contact_us" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
-	"email" text NOT NULL,
+	"email" text,
+	"phone" text NOT NULL,
 	"service" text NOT NULL,
 	"message" text NOT NULL,
 	"status" "contact_status" DEFAULT 'pending' NOT NULL,
@@ -25,8 +27,8 @@ CREATE TABLE "referrals" (
 	"referrer_phone" text NOT NULL,
 	"service" text NOT NULL,
 	"status" "referral_status" DEFAULT 'pending' NOT NULL,
-	"total_earned" numeric(10, 2) DEFAULT '0',
-	"amount_sent" numeric(10, 2) DEFAULT '0',
+	"total_earned" integer DEFAULT 0,
+	"amount_sent" integer DEFAULT 0,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -34,7 +36,7 @@ CREATE TABLE "referrals" (
 CREATE TABLE "requests" (
 	"id" text PRIMARY KEY NOT NULL,
 	"status" "request_status" DEFAULT 'pending' NOT NULL,
-	"paid_amount" numeric(10, 2) DEFAULT '0',
+	"paid_amount" integer DEFAULT 0,
 	"service" text NOT NULL,
 	"user_id" text NOT NULL,
 	"assignee_id" text,
@@ -48,6 +50,7 @@ CREATE TABLE "users" (
 	"email" text NOT NULL,
 	"phone" text NOT NULL,
 	"password" text NOT NULL,
+	"status" "user_status" DEFAULT 'active' NOT NULL,
 	"role" "user_role" DEFAULT 'customer' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
@@ -57,6 +60,7 @@ CREATE TABLE "users" (
 ALTER TABLE "requests" ADD CONSTRAINT "requests_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "requests" ADD CONSTRAINT "requests_assignee_id_users_id_fk" FOREIGN KEY ("assignee_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "contact_us_email_idx" ON "contact_us" USING btree ("email");--> statement-breakpoint
+CREATE INDEX "contact_us_phone_idx" ON "contact_us" USING btree ("phone");--> statement-breakpoint
 CREATE INDEX "contact_us_status_idx" ON "contact_us" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "referrals_referrer_email_idx" ON "referrals" USING btree ("referrer_email");--> statement-breakpoint
 CREATE INDEX "referrals_status_idx" ON "referrals" USING btree ("status");--> statement-breakpoint

@@ -1,19 +1,19 @@
 {
-  "version": "5",
+  "version": "7",
   "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
       "version": "7",
-      "when": 1754661193730,
-      "tag": "0000_glamorous_tomorrow_man",
+      "when": 1754753791161,
+      "tag": "0000_spooky_gamma_corps",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1754662000000,
-      "tag": "0001_curly_thing",
+      "when": 1754754598254,
+      "tag": "0001_glossy_hiroim",
       "breakpoints": true
     }
   ]

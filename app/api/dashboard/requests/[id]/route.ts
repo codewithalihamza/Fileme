@@ -115,7 +115,7 @@ export async function PATCH(
     // Only allow specific fields to be updated
     if (updates.status !== undefined) updateData.status = updates.status;
     if (updates.paidAmount !== undefined)
-      updateData.paidAmount = updates.paidAmount;
+      updateData.paidAmount = updates.paidAmount?.toString() || null;
     if (updates.service !== undefined) updateData.service = updates.service;
     if (updates.userId !== undefined) updateData.userId = updates.userId;
     if (updates.assigneeId !== undefined)

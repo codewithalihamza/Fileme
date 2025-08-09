@@ -6,7 +6,7 @@ import { RequestStatus } from "@/types";
 interface Request {
   id: string;
   status: RequestStatus;
-  paidAmount: number | null;
+  paidAmount: string | null;
   service: string;
   userId: string;
   assigneeId: string | null;

@@ -36,7 +36,7 @@ import { toast } from "sonner";
 interface RequestFormData {
   service: string;
   status: RequestStatus;
-  paidAmount: number | null;
+  paidAmount: string | null;
   userId: string;
   assigneeId: string | null;
 }
@@ -415,18 +415,19 @@ export function RequestForm({
                       id="paidAmount"
                       name="paidAmount"
                       type="number"
-                      step="0.01"
                       value={formData.paidAmount || ""}
                       onChange={handleInputChange}
                       placeholder="Enter amount"
                       className="transition-all duration-200 focus:border-blue-500 focus:ring-blue-200"
                     />
-                    {formData.paidAmount && formData.paidAmount > 0 && (
-                      <p className="flex items-center gap-1 text-sm text-green-600">
-                        <CheckCircle className="h-4 w-4" />
-                        Amount entered: {formatCurrency(formData.paidAmount)}
-                      </p>
-                    )}
+                    {formData.paidAmount &&
+                      parseFloat(formData.paidAmount) > 0 && (
+                        <p className="flex items-center gap-1 text-sm text-green-600">
+                          <CheckCircle className="h-4 w-4" />
+                          Amount entered:{" "}
+                          {formatCurrency(parseFloat(formData.paidAmount))}
+                        </p>
+                      )}
                   </div>
                 </div>
 

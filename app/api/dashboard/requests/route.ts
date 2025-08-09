@@ -139,12 +139,31 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Check if a request already exists for the same client, service, and non-completed status
+    const existingRequest = await db
+      .select()
+      .from(requests)
+      .where(
+        sql`${requests.userId} = ${userId} AND ${requests.service} = ${service} AND ${requests.status} != 'completed'`
+      );
+
+    if (existingRequest.length > 0) {
+      return NextResponse.json(
+        {
+          error:
+            "Request already exists for this client and service. Please complete the existing request first or create a request for a different service.",
+          existingRequest: existingRequest[0],
+        },
+        { status: 409 }
+      );
+    }
+
     // Create new request
     const newRequest = await db
       .insert(requests)
       .values({
         status: status || "pending",
-        paidAmount: paidAmount || "0",
+        paidAmount: paidAmount?.toString() || null,
         service,
         userId,
         assigneeId: assigneeId || null,
@@ -180,7 +199,8 @@ export async function PATCH(request: NextRequest) {
     };
 
     if (status) updateData.status = status;
-    if (paidAmount !== undefined) updateData.paidAmount = paidAmount;
+    if (paidAmount !== undefined)
+      updateData.paidAmount = paidAmount?.toString() || null;
     if (assigneeId !== undefined) updateData.assigneeId = assigneeId;
 
     // Check if assignee exists (if provided)

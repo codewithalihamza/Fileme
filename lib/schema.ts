@@ -1,13 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
-import {
-  decimal,
-  index,
-  pgEnum,
-  pgTable,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { index, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 // Enums
 export const userRoleEnum = pgEnum("user_role", [
@@ -40,6 +33,7 @@ export const requestStatusEnum = pgEnum("request_status", [
   "paid",
   "completed",
 ]);
+export const userStatusEnum = pgEnum("user_status", ["active", "disabled"]);
 
 // User table
 export const users = pgTable(
@@ -52,6 +46,7 @@ export const users = pgTable(
     email: text("email").notNull(),
     phone: text("phone").notNull().unique(),
     password: text("password").notNull(),
+    status: userStatusEnum("status").default("active").notNull(),
     role: userRoleEnum("role").default("customer").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -101,12 +96,8 @@ export const referrals = pgTable(
     referrerPhone: text("referrer_phone").notNull(),
     service: text("service").notNull(),
     status: referralStatusEnum("status").default("pending").notNull(),
-    totalEarned: decimal("total_earned", { precision: 10, scale: 2 }).default(
-      "0"
-    ),
-    amountSent: decimal("amount_sent", { precision: 10, scale: 2 }).default(
-      "0"
-    ),
+    totalEarned: text("total_earned"),
+    amountSent: text("amount_sent"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
@@ -126,9 +117,7 @@ export const requests = pgTable(
       .primaryKey()
       .$defaultFn(() => createId()),
     status: requestStatusEnum("status").default("pending").notNull(),
-    paidAmount: decimal("paid_amount", { precision: 10, scale: 2 }).default(
-      "0"
-    ),
+    paidAmount: text("paid_amount"),
     service: text("service").notNull(),
     userId: text("user_id")
       .notNull()

@@ -1,6 +1,6 @@
 {
-  "id": "524c523f-ea2d-498b-80e3-d2182350489c",
-  "prevId": "4e1745ca-70b0-485d-a1f1-0315c1f0cc47",
+  "id": "38751618-2530-46ce-8977-45ddd9c37002",
+  "prevId": "62f74cfb-bc59-45bd-a697-02c068454f49",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -190,17 +190,15 @@
         },
         "total_earned": {
           "name": "total_earned",
-          "type": "numeric(10, 2)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'0'"
+          "notNull": false
         },
         "amount_sent": {
           "name": "amount_sent",
-          "type": "numeric(10, 2)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'0'"
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -276,10 +274,9 @@
         },
         "paid_amount": {
           "name": "paid_amount",
-          "type": "numeric(10, 2)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'0'"
+          "notNull": false
         },
         "service": {
           "name": "service",
@@ -429,6 +426,14 @@
           "primaryKey": false,
           "notNull": true
         },
+        "status": {
+          "name": "status",
+          "type": "user_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'active'"
+        },
         "role": {
           "name": "role",
           "type": "user_role",
@@ -549,6 +554,14 @@
         "customer",
         "admin",
         "employees"
+      ]
+    },
+    "public.user_status": {
+      "name": "user_status",
+      "schema": "public",
+      "values": [
+        "active",
+        "disabled"
       ]
     }
   },

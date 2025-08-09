@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Modal } from "@/components/ui/modal";
 import { PageHeader } from "@/components/ui/page-header";
 import {
   Select,
@@ -31,9 +33,9 @@ import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useRequests } from "@/hooks/use-requests";
 import { getRequestsStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { formatCurrency } from "@/lib/utils";
 import { RequestStatus, requestStatusNames, servicesNames } from "@/types";
 import {
-  Check,
   CheckCircle,
   Clock,
   Edit,
@@ -43,7 +45,6 @@ import {
   Plus,
   RefreshCw,
   Search,
-  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -53,7 +54,7 @@ import { toast } from "sonner";
 interface Request {
   id: string;
   status: RequestStatus;
-  paidAmount: number | null;
+  paidAmount: string | null;
   service: string;
   userId: string;
   assigneeId: string | null;
@@ -62,13 +63,14 @@ interface Request {
   user: {
     id: string;
     name: string;
-    email: string;
+    email?: string;
     phone: string;
   };
   assignee: {
     id: string;
     name: string;
-    email: string;
+    email?: string;
+    phone?: string;
   } | null;
 }
 
@@ -83,11 +85,18 @@ export default function RequestsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalRequests, setTotalRequests] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [editingPaidAmount, setEditingPaidAmount] = useState<string | null>(
-    null
-  );
-  const [editingPaidAmountValue, setEditingPaidAmountValue] =
-    useState<string>("");
+  const [paidAmountModal, setPaidAmountModal] = useState<{
+    isOpen: boolean;
+    requestId: string | null;
+    currentAmount: string | null;
+    requestName: string;
+  }>({
+    isOpen: false,
+    requestId: null,
+    currentAmount: null,
+    requestName: "",
+  });
+  const [paidAmountValue, setPaidAmountValue] = useState<string>("");
 
   const router = useRouter();
 
@@ -157,36 +166,52 @@ export default function RequestsPage() {
 
   const handlePaidAmountChange = async (
     requestId: string,
-    newAmount: number | null
+    newAmount: string | null
   ) => {
     await updateRequest(requestId, {
       paidAmount: newAmount,
     });
     // Refresh the data after update
     loadRequests();
-    // Clear editing state
-    setEditingPaidAmount(null);
-    setEditingPaidAmountValue("");
+    // Close modal
+    setPaidAmountModal({
+      isOpen: false,
+      requestId: null,
+      currentAmount: null,
+      requestName: "",
+    });
+    setPaidAmountValue("");
   };
 
-  const handlePaidAmountInputChange = (requestId: string, value: string) => {
-    setEditingPaidAmount(requestId);
-    setEditingPaidAmountValue(value);
+  const openPaidAmountModal = (
+    requestId: string,
+    currentAmount: string | null,
+    requestName: string
+  ) => {
+    setPaidAmountModal({
+      isOpen: true,
+      requestId,
+      currentAmount,
+      requestName,
+    });
+    setPaidAmountValue(currentAmount || "");
+  };
+
+  const closePaidAmountModal = () => {
+    setPaidAmountModal({
+      isOpen: false,
+      requestId: null,
+      currentAmount: null,
+      requestName: "",
+    });
+    setPaidAmountValue("");
   };
 
   const handleSavePaidAmount = () => {
-    if (editingPaidAmount) {
-      const numValue =
-        editingPaidAmountValue === ""
-          ? null
-          : parseFloat(editingPaidAmountValue);
-      handlePaidAmountChange(editingPaidAmount, numValue);
+    if (paidAmountModal.requestId) {
+      const stringValue = paidAmountValue === "" ? null : paidAmountValue;
+      handlePaidAmountChange(paidAmountModal.requestId, stringValue);
     }
-  };
-
-  const handleCancelPaidAmount = () => {
-    setEditingPaidAmount(null);
-    setEditingPaidAmountValue("");
   };
 
   const handleQuickAction = (action: string, requestId: string) => {
@@ -389,7 +414,7 @@ export default function RequestsPage() {
                   <TableHead>Service</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Assignee</TableHead>
-                  <TableHead>Paid Amount</TableHead>
+                  <TableHead className="min-w-[130px]">Paid Amount</TableHead>
                   <TableHead>Created At</TableHead>
                   <TableHead className="w-[100px]">Actions</TableHead>
                 </TableRow>
@@ -417,7 +442,7 @@ export default function RequestsPage() {
                         <div>
                           <div className="font-medium">{request.user.name}</div>
                           <div className="text-sm text-gray-500">
-                            {request.user.email}
+                            {request.user.phone}
                           </div>
                         </div>
                       </TableCell>
@@ -438,7 +463,7 @@ export default function RequestsPage() {
                               {request.assignee.name}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {request.assignee.email}
+                              {request.assignee.phone}
                             </div>
                           </div>
                         ) : (
@@ -451,52 +476,23 @@ export default function RequestsPage() {
                             <Skeleton className="h-8 w-[100px] rounded-md" />
                           </div>
                         ) : (
-                          <div
-                            onClick={(e: React.MouseEvent) =>
-                              e.stopPropagation()
-                            }
-                            className="flex items-center gap-1"
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e: React.MouseEvent) => {
+                              e.stopPropagation();
+                              openPaidAmountModal(
+                                request.id,
+                                request.paidAmount?.toString() || null,
+                                request.user.name
+                              );
+                            }}
+                            className="h-8 w-[100px] text-xs"
                           >
-                            <Input
-                              type="number"
-                              placeholder="0.00"
-                              value={
-                                editingPaidAmount === request.id
-                                  ? editingPaidAmountValue
-                                  : request.paidAmount || ""
-                              }
-                              onChange={(e) => {
-                                handlePaidAmountInputChange(
-                                  request.id,
-                                  e.target.value
-                                );
-                              }}
-                              disabled={updatingId === request.id}
-                              className="h-8 w-[100px] text-xs"
-                            />
-                            {editingPaidAmount === request.id && (
-                              <div className="flex items-center gap-1">
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  onClick={handleSavePaidAmount}
-                                  disabled={updatingId === request.id}
-                                  className="h-6 w-6 p-0 hover:bg-green-100"
-                                >
-                                  <Check className="h-3 w-3 text-green-600" />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  onClick={handleCancelPaidAmount}
-                                  disabled={updatingId === request.id}
-                                  className="h-6 w-6 p-0 hover:bg-red-100"
-                                >
-                                  <X className="h-3 w-3 text-red-600" />
-                                </Button>
-                              </div>
-                            )}
-                          </div>
+                            {request.paidAmount
+                              ? `${formatCurrency(Number(request.paidAmount))}`
+                              : "Set Amount"}
+                          </Button>
                         )}
                       </TableCell>
                       <TableCell>{formatDate(request.createdAt)}</TableCell>
@@ -623,6 +619,47 @@ export default function RequestsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Paid Amount Modal */}
+      <Modal
+        isOpen={paidAmountModal.isOpen}
+        onClose={closePaidAmountModal}
+        title="Update Paid Amount"
+      >
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="paidAmount" className="text-sm font-medium">
+              Paid Amount for {paidAmountModal.requestName}
+            </Label>
+            <Input
+              id="paidAmount"
+              type="number"
+              step="0.01"
+              placeholder="0"
+              value={paidAmountValue}
+              onChange={(e) => setPaidAmountValue(e.target.value)}
+              className="mt-1"
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              Leave empty to clear the paid amount
+            </p>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={closePaidAmountModal}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSavePaidAmount}
+              disabled={updatingId === paidAmountModal.requestId}
+            >
+              {updatingId === paidAmountModal.requestId
+                ? "Saving..."
+                : "Save Amount"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
