@@ -36,7 +36,7 @@ interface UserFormData {
 
 interface UserFormProps {
   initialData?: Partial<UserFormData>;
-  onSubmit: (data: UserFormData) => Promise<void>;
+  onSubmit: (data: any) => Promise<void>;
   loading?: boolean;
   isEditing?: boolean;
   title: string;
@@ -93,7 +93,12 @@ export function UserForm({
 
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      // For editing, only include password if it's not empty
+      const submitData = isEditing
+        ? { ...formData, password: formData.password.trim() || undefined }
+        : formData;
+
+      await onSubmit(submitData);
     } finally {
       setIsSubmitting(false);
     }
@@ -172,11 +177,10 @@ export function UserForm({
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter full name"
-                        className={`transition-all duration-200 ${
-                          errors.name
-                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                            : "focus:border-blue-500 focus:ring-blue-200"
-                        }`}
+                        className={`transition-all duration-200 ${errors.name
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                          : "focus:border-blue-500 focus:ring-blue-200"
+                          }`}
                       />
                       {errors.name && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
@@ -207,11 +211,10 @@ export function UserForm({
                         }}
                       >
                         <SelectTrigger
-                          className={`transition-all duration-200 ${
-                            errors.role
-                              ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                              : "focus:border-blue-500 focus:ring-blue-200"
-                          }`}
+                          className={`transition-all duration-200 ${errors.role
+                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                            : "focus:border-blue-500 focus:ring-blue-200"
+                            }`}
                         >
                           <SelectValue />
                         </SelectTrigger>
@@ -280,11 +283,10 @@ export function UserForm({
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Enter email address (optional)"
-                        className={`transition-all duration-200 ${
-                          errors.email
-                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                            : "focus:border-blue-500 focus:ring-blue-200"
-                        }`}
+                        className={`transition-all duration-200 ${errors.email
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                          : "focus:border-blue-500 focus:ring-blue-200"
+                          }`}
                       />
                       {errors.email && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
@@ -316,11 +318,10 @@ export function UserForm({
                         onChange={handleInputChange}
                         placeholder="03XXXXXXXXX (11 digits)"
                         maxLength={11}
-                        className={`transition-all duration-200 ${
-                          errors.phone
-                            ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                            : "focus:border-blue-500 focus:ring-blue-200"
-                        }`}
+                        className={`transition-all duration-200 ${errors.phone
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                          : "focus:border-blue-500 focus:ring-blue-200"
+                          }`}
                       />
                       {errors.phone && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
@@ -366,11 +367,10 @@ export function UserForm({
                           ? "Enter new password (optional)"
                           : "Enter password (min 6 characters)"
                       }
-                      className={`transition-all duration-200 ${
-                        errors.password
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                          : "focus:border-blue-500 focus:ring-blue-200"
-                      }`}
+                      className={`transition-all duration-200 ${errors.password
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                        : "focus:border-blue-500 focus:ring-blue-200"
+                        }`}
                     />
                     {formData.password && formData.password.length >= 6 && (
                       <p className="flex items-center gap-1 text-sm text-green-600">

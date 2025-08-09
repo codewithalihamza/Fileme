@@ -48,7 +48,7 @@ export default function EditUserPage({ params }: PageProps) {
     loadUser();
   }, [loadUser]);
 
-  const handleSubmit = async (formData: Partial<User>) => {
+  const handleSubmit = async (formData: any) => {
     if (!user) return;
 
     const updatedUser = await updateUser(user.id, formData);
@@ -104,7 +104,6 @@ export default function EditUserPage({ params }: PageProps) {
       onSubmit={handleSubmit}
       loading={loading}
       isEditing={true}
-      cancelHref={`${ROUTES_CONSTANT.USERS}/${user.id}`}
       title="Edit User"
       description="Update user information and permissions"
     />

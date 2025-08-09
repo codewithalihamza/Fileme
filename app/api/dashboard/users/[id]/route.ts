@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { users } from "@/lib/schema";
+import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -72,6 +73,11 @@ export async function PATCH(
     if (updates.phone !== undefined) updateData.phone = updates.phone;
     if (updates.role !== undefined) updateData.role = updates.role;
     if (updates.status !== undefined) updateData.status = updates.status;
+
+    // Handle password update - only hash if password is provided and not empty
+    if (updates.password && updates.password.trim() !== "") {
+      updateData.password = await bcrypt.hash(updates.password, 12);
+    }
 
     const updatedUser = await db
       .update(users)
