@@ -1,8 +1,8 @@
 "use server";
 import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/constants";
 import { db } from "@/lib/db";
-import { contactUs, referrals } from "@/lib/schema";
-import { and, eq, or } from "drizzle-orm";
+import { contactUs, referrals, requests, users } from "@/lib/schema";
+import { and, eq, ne, or } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -63,13 +63,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if friend already exists in contactUs with pending or in_progress status
+    // Check if friend already has an active submission in contactUs table for the same service
     const existingContact = await db
       .select()
       .from(contactUs)
       .where(
         and(
-          eq(contactUs.email, friendEmail),
+          eq(contactUs.phone, friendPhone),
+          eq(contactUs.service, service),
           or(
             eq(contactUs.status, "pending"),
             eq(contactUs.status, "in_progress")
@@ -81,20 +82,50 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "This person already has a submission in progress. You cannot refer them at this time.",
+            "This person already has a submission in progress for this service. You cannot refer them at this time.",
         },
         { status: 400 }
       );
     }
 
-    // Check if this referral already exists
+    // Check if friend already has an active request for the same service (by matching phone with user phone)
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.phone, friendPhone));
+
+    if (existingUser.length > 0) {
+      const existingRequest = await db
+        .select()
+        .from(requests)
+        .where(
+          and(
+            eq(requests.userId, existingUser[0].id),
+            eq(requests.service, service),
+            ne(requests.status, "completed")
+          )
+        );
+
+      if (existingRequest.length > 0) {
+        return NextResponse.json(
+          {
+            error:
+              "This person already has a submission in progress for this service. You cannot refer them at this time.",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Check if this specific referral already exists (same referrer referring same friend)
     const existingReferral = await db
       .select()
       .from(referrals)
       .where(
         and(
           eq(referrals.friendPhone, friendPhone),
-          eq(referrals.referrerPhone, referrerPhone)
+          eq(referrals.service, service),
+          ne(referrals.status, "paid")
         )
       );
 

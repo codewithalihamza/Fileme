@@ -41,6 +41,7 @@ interface RequestResponse {
 
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   // Fetch all requests with pagination and filters
   const fetchRequests = useCallback(
@@ -152,16 +153,13 @@ export const useRequests = () => {
       requestData: Partial<Request>
     ): Promise<Request | null> => {
       try {
-        setLoading(true);
-        const response = await fetch("/api/dashboard/requests", {
+        setUpdatingId(id);
+        const response = await fetch(`/api/dashboard/requests/${id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            id,
-            ...requestData,
-          }),
+          body: JSON.stringify(requestData),
         });
 
         const data = await response.json();
@@ -178,7 +176,7 @@ export const useRequests = () => {
         toast.error("Failed to update request");
         return null;
       } finally {
-        setLoading(false);
+        setUpdatingId(null);
       }
     },
     []
@@ -215,6 +213,7 @@ export const useRequests = () => {
 
   return {
     loading,
+    updatingId,
     fetchRequests,
     fetchRequest,
     createRequest,

@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -26,10 +28,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useUsers } from "@/hooks/use-users";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import {
+  Edit,
+  Eye,
   MoreHorizontal,
   Plus,
+  RefreshCw,
   Search,
   UserCheck,
   UserPlus,
@@ -37,7 +44,8 @@ import {
   UserX,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface User {
@@ -51,45 +59,39 @@ interface User {
 }
 
 export default function UsersPage() {
+  const {
+    loading,
+    updatingId,
+    fetchUsers,
+    updateUser,
+  } = useUsers();
+
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const fetchUsers = async () => {
+  const router = useRouter();
+
+  const loadUsers = useCallback(async () => {
     try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: "10",
-        ...(search && { search }),
-        ...(roleFilter && roleFilter !== "all" && { role: roleFilter }),
-      });
-
-      const response = await fetch(`/api/dashboard/users?${params}`);
-      const data = await response.json();
-
-      if (response.ok) {
+      const data = await fetchUsers(page, 10, search, roleFilter);
+      if (data) {
         setUsers(data.data);
         setTotalPages(data.pagination.totalPages);
         setTotalUsers(data.pagination.total);
-      } else {
-        toast.error("Failed to fetch users");
       }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error("Failed to fetch users");
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [fetchUsers, page, search, roleFilter]);
 
   useEffect(() => {
-    fetchUsers();
-  }, [page, search, roleFilter]);
+    loadUsers();
+  }, [loadUsers]);
 
   const handleDeleteUser = async (userId: string) => {
     if (!confirm("Are you sure you want to delete this user?")) return;
@@ -105,7 +107,7 @@ export default function UsersPage() {
 
       if (response.ok) {
         toast.success("User deleted successfully");
-        fetchUsers();
+        loadUsers();
       } else {
         const data = await response.json();
         toast.error(data.error || "Failed to delete user");
@@ -113,6 +115,44 @@ export default function UsersPage() {
     } catch (error) {
       console.error("Error deleting user:", error);
       toast.error("Failed to delete user");
+    }
+  };
+
+  const handleRowClick = (userId: string) => {
+    router.push(`${ROUTES_CONSTANT.USERS}/${userId}`);
+  };
+
+  const handleRoleChange = async (
+    userId: string,
+    newRole: string,
+    userName: string
+  ) => {
+    await updateUser(userId, {
+      role: newRole as "admin" | "employees" | "customer",
+    });
+    // Refresh the data after update
+    loadUsers();
+  };
+
+  const handleQuickAction = (action: string, userId: string) => {
+    switch (action) {
+      case "view":
+        router.push(`${ROUTES_CONSTANT.USERS}/${userId}`);
+        break;
+      case "edit":
+        router.push(`${ROUTES_CONSTANT.USERS}/${userId}/edit`);
+        break;
+    }
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await loadUsers();
+    } catch (error) {
+      toast.error("Failed to refresh users");
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -205,22 +245,34 @@ export default function UsersPage() {
       {/* Search and Filters */}
       <Card className="mb-6 border-0 bg-white shadow-lg">
         <CardContent className="p-6">
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex max-w-sm flex-1 items-center space-x-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Search by name or email..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10"
+                  className="pl-8"
                 />
               </div>
             </div>
-            <div className="w-full sm:w-48">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={isRefreshing || loading}
+                className="flex items-center gap-2"
+              >
+                <RefreshCw
+                  className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+                />
+                Refresh
+              </Button>
               <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Roles" />
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Filter by role" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Roles</SelectItem>
@@ -229,13 +281,13 @@ export default function UsersPage() {
                   <SelectItem value="customer">Customer</SelectItem>
                 </SelectContent>
               </Select>
+              <Button asChild>
+                <Link href={ROUTES_CONSTANT.NEW_USER}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add User
+                </Link>
+              </Button>
             </div>
-            <Button asChild>
-              <Link href={ROUTES_CONSTANT.NEW_USER}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add User
-              </Link>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -260,14 +312,7 @@ export default function UsersPage() {
               </TableHeader>
               <TableBody>
                 {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="py-8 text-center">
-                      <div className="flex items-center justify-center">
-                        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
-                        <span className="ml-2">Loading users...</span>
-                      </div>
-                    </TableCell>
-                  </TableRow>
+                  <TableSkeleton rows={5} columns={6} />
                 ) : users.length === 0 ? (
                   <TableRow>
                     <TableCell
@@ -279,7 +324,11 @@ export default function UsersPage() {
                   </TableRow>
                 ) : (
                   users.map((user) => (
-                    <TableRow key={user.id}>
+                    <TableRow
+                      key={user.id}
+                      className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleRowClick(user.id)}
+                    >
                       <TableCell>
                         <div className="font-medium">{user.name}</div>
                       </TableCell>
@@ -288,35 +337,81 @@ export default function UsersPage() {
                       <TableCell>{getRoleBadge(user.role)}</TableCell>
                       <TableCell>{formatDate(user.createdAt)}</TableCell>
                       <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`${ROUTES_CONSTANT.USERS}/${user.id}`}
-                              >
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`${ROUTES_CONSTANT.USERS}/${user.id}/edit`}
-                              >
-                                Edit User
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDeleteUser(user.id)}
-                              className="text-red-600"
+                        {updatingId === user.id ? (
+                          <div className="flex items-center justify-center">
+                            <Skeleton className="h-8 w-8 rounded-md" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            {/* Quick Role Update */}
+                            <div
+                              onClick={(e: React.MouseEvent) => e.stopPropagation()}
                             >
-                              Delete User
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                              <Select
+                                value={user.role}
+                                onValueChange={(value) =>
+                                  handleRoleChange(user.id, value, user.name)
+                                }
+                                disabled={updatingId === user.id}
+                              >
+                                <SelectTrigger className="h-8 w-[120px] text-xs">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="admin">Admin</SelectItem>
+                                  <SelectItem value="employees">Employees</SelectItem>
+                                  <SelectItem value="customer">Customer</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            {/* Actions Dropdown */}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger
+                                asChild
+                                onClick={(e: React.MouseEvent) =>
+                                  e.stopPropagation()
+                                }
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-48">
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleQuickAction("view", user.id)
+                                  }
+                                >
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Details
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleQuickAction("edit", user.id)
+                                  }
+                                >
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit User
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteUser(user.id);
+                                  }}
+                                  className="text-red-600"
+                                >
+                                  Delete User
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))

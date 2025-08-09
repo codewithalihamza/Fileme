@@ -1,6 +1,6 @@
 "use client";
 
-import { ReferralsTable } from "@/components/admin/referrals-table";
+import { ReferralsTable } from "@/components/dashboard/referrals-table";
 import { Button } from "@/components/ui/button";
 import {
   Card,

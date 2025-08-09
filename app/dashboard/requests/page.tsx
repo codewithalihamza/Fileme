@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -26,20 +28,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useRequests } from "@/hooks/use-requests";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { formatCurrency } from "@/lib/utils";
 import { RequestStatus, requestStatusNames, servicesNames } from "@/types";
 import {
+  Check,
   CheckCircle,
   Clock,
-  DollarSign,
+  Edit,
+  Eye,
   FileText,
   MoreHorizontal,
   Plus,
+  RefreshCw,
   Search,
+  X
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface Request {
@@ -65,48 +73,42 @@ interface Request {
 }
 
 export default function RequestsPage() {
+  const {
+    loading,
+    updatingId,
+    fetchRequests,
+    updateRequest,
+  } = useRequests();
+
   const [requests, setRequests] = useState<Request[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [serviceFilter, setServiceFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalRequests, setTotalRequests] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [editingPaidAmount, setEditingPaidAmount] = useState<string | null>(null);
+  const [editingPaidAmountValue, setEditingPaidAmountValue] = useState<string>("");
 
-  const fetchRequests = async () => {
+  const router = useRouter();
+
+  const loadRequests = useCallback(async () => {
     try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: "10",
-        ...(search && { search }),
-        ...(statusFilter && statusFilter !== "all" && { status: statusFilter }),
-        ...(serviceFilter &&
-          serviceFilter !== "all" && { service: serviceFilter }),
-      });
-
-      const response = await fetch(`/api/dashboard/requests?${params}`);
-      const data = await response.json();
-
-      if (response.ok) {
+      const data = await fetchRequests(page, 10, search, statusFilter, serviceFilter);
+      if (data) {
         setRequests(data.data);
         setTotalPages(data.pagination.totalPages);
         setTotalRequests(data.pagination.total);
-      } else {
-        toast.error("Failed to fetch requests");
       }
     } catch (error) {
       console.error("Error fetching requests:", error);
-      toast.error("Failed to fetch requests");
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [fetchRequests, page, search, statusFilter, serviceFilter]);
 
   useEffect(() => {
-    fetchRequests();
-  }, [page, search, statusFilter, serviceFilter]);
+    loadRequests();
+  }, [loadRequests]);
 
   const handleDeleteRequest = async (requestId: string) => {
     if (!confirm("Are you sure you want to delete this request?")) return;
@@ -122,7 +124,7 @@ export default function RequestsPage() {
 
       if (response.ok) {
         toast.success("Request deleted successfully");
-        fetchRequests();
+        loadRequests();
       } else {
         const data = await response.json();
         toast.error(data.error || "Failed to delete request");
@@ -146,6 +148,78 @@ export default function RequestsPage() {
           status.replace("_", " ").slice(1)}
       </Badge>
     );
+  };
+
+  const handleRowClick = (requestId: string) => {
+    router.push(`${ROUTES_CONSTANT.REQUESTS}/${requestId}`);
+  };
+
+  const handleStatusChange = async (
+    requestId: string,
+    newStatus: string,
+    requestName: string
+  ) => {
+    await updateRequest(requestId, {
+      status: newStatus as RequestStatus,
+    });
+    // Refresh the data after update
+    loadRequests();
+  };
+
+  const handlePaidAmountChange = async (
+    requestId: string,
+    newAmount: number | null
+  ) => {
+    await updateRequest(requestId, {
+      paidAmount: newAmount,
+    });
+    // Refresh the data after update
+    loadRequests();
+    // Clear editing state
+    setEditingPaidAmount(null);
+    setEditingPaidAmountValue("");
+  };
+
+  const handlePaidAmountInputChange = (
+    requestId: string,
+    value: string
+  ) => {
+    setEditingPaidAmount(requestId);
+    setEditingPaidAmountValue(value);
+  };
+
+  const handleSavePaidAmount = () => {
+    if (editingPaidAmount) {
+      const numValue = editingPaidAmountValue === "" ? null : parseFloat(editingPaidAmountValue);
+      handlePaidAmountChange(editingPaidAmount, numValue);
+    }
+  };
+
+  const handleCancelPaidAmount = () => {
+    setEditingPaidAmount(null);
+    setEditingPaidAmountValue("");
+  };
+
+  const handleQuickAction = (action: string, requestId: string) => {
+    switch (action) {
+      case "view":
+        router.push(`${ROUTES_CONSTANT.REQUESTS}/${requestId}`);
+        break;
+      case "edit":
+        router.push(`${ROUTES_CONSTANT.REQUESTS}/${requestId}/edit`);
+        break;
+    }
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await loadRequests();
+    } catch (error) {
+      toast.error("Failed to refresh requests");
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const getServiceLabel = (service: string) => {
@@ -251,12 +325,9 @@ export default function RequestsPage() {
                   Total Revenue
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {formatCurrency(
-                    requests.reduce((sum, r) => sum + (r.paidAmount || 0), 0)
-                  )}
+                  0
                 </p>
               </div>
-              <DollarSign className="h-8 w-8 text-green-600" />
             </div>
           </CardContent>
         </Card>
@@ -265,36 +336,34 @@ export default function RequestsPage() {
       {/* Search and Filters */}
       <Card className="mb-6 border-0 bg-white shadow-lg">
         <CardContent className="p-6">
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex max-w-sm flex-1 items-center space-x-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Search by service..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10"
+                  className="pl-8"
                 />
               </div>
             </div>
-            <div className="w-full sm:w-48">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Statuses" />
-                </SelectTrigger>
-                <SelectContent>
-                  {requestStatusNames.map((status) => (
-                    <SelectItem key={status.value} value={status.value}>
-                      {status.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="w-full sm:w-48">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={isRefreshing || loading}
+                className="flex items-center gap-2"
+              >
+                <RefreshCw
+                  className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+                />
+                Refresh
+              </Button>
               <Select value={serviceFilter} onValueChange={setServiceFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Services" />
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Filter by service" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Services</SelectItem>
@@ -305,13 +374,26 @@ export default function RequestsPage() {
                   ))}
                 </SelectContent>
               </Select>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  {requestStatusNames.map((status) => (
+                    <SelectItem key={status.value} value={status.value}>
+                      {status.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button asChild>
+                <Link href={ROUTES_CONSTANT.NEW_REQUEST}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Request
+                </Link>
+              </Button>
             </div>
-            <Button asChild>
-              <Link href={ROUTES_CONSTANT.NEW_REQUEST}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Request
-              </Link>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -337,14 +419,7 @@ export default function RequestsPage() {
               </TableHeader>
               <TableBody>
                 {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="py-8 text-center">
-                      <div className="flex items-center justify-center">
-                        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
-                        <span className="ml-2">Loading requests...</span>
-                      </div>
-                    </TableCell>
-                  </TableRow>
+                  <TableSkeleton rows={5} columns={7} />
                 ) : requests.length === 0 ? (
                   <TableRow>
                     <TableCell
@@ -356,7 +431,11 @@ export default function RequestsPage() {
                   </TableRow>
                 ) : (
                   requests.map((request) => (
-                    <TableRow key={request.id}>
+                    <TableRow
+                      key={request.id}
+                      className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleRowClick(request.id)}
+                    >
                       <TableCell>
                         <div>
                           <div className="font-medium">{request.user.name}</div>
@@ -382,41 +461,132 @@ export default function RequestsPage() {
                         )}
                       </TableCell>
                       <TableCell>
-                        {request.paidAmount
-                          ? formatCurrency(request.paidAmount)
-                          : "Not paid"}
+                        {updatingId === request.id ? (
+                          <div className="flex items-center justify-center">
+                            <Skeleton className="h-8 w-[100px] rounded-md" />
+                          </div>
+                        ) : (
+                          <div
+                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                            className="flex items-center gap-1"
+                          >
+                            <Input
+                              type="number"
+                              placeholder="0.00"
+                              value={editingPaidAmount === request.id ? editingPaidAmountValue : (request.paidAmount || "")}
+                              onChange={(e) => {
+                                handlePaidAmountInputChange(request.id, e.target.value);
+                              }}
+                              disabled={updatingId === request.id}
+                              className="h-8 w-[100px] text-xs"
+                            />
+                            {editingPaidAmount === request.id && (
+                              <div className="flex items-center gap-1">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={handleSavePaidAmount}
+                                  disabled={updatingId === request.id}
+                                  className="h-6 w-6 p-0 hover:bg-green-100"
+                                >
+                                  <Check className="h-3 w-3 text-green-600" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={handleCancelPaidAmount}
+                                  disabled={updatingId === request.id}
+                                  className="h-6 w-6 p-0 hover:bg-red-100"
+                                >
+                                  <X className="h-3 w-3 text-red-600" />
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell>{formatDate(request.createdAt)}</TableCell>
                       <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`${ROUTES_CONSTANT.REQUESTS}/${request.id}`}
-                              >
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`${ROUTES_CONSTANT.REQUESTS}/${request.id}/edit`}
-                              >
-                                Edit Request
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDeleteRequest(request.id)}
-                              className="text-red-600"
+                        {updatingId === request.id ? (
+                          <div className="flex items-center justify-center">
+                            <Skeleton className="h-8 w-8 rounded-md" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            {/* Quick Status Update */}
+                            <div
+                              onClick={(e: React.MouseEvent) => e.stopPropagation()}
                             >
-                              Delete Request
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                              <Select
+                                value={request.status}
+                                onValueChange={(value) =>
+                                  handleStatusChange(request.id, value, request.user.name)
+                                }
+                                disabled={updatingId === request.id}
+                              >
+                                <SelectTrigger className="h-8 w-[120px] text-xs">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {requestStatusNames.map((status) => (
+                                    <SelectItem
+                                      key={status.value}
+                                      value={status.value}
+                                    >
+                                      {status.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            {/* Actions Dropdown */}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger
+                                asChild
+                                onClick={(e: React.MouseEvent) =>
+                                  e.stopPropagation()
+                                }
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-48">
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleQuickAction("view", request.id)
+                                  }
+                                >
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Details
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleQuickAction("edit", request.id)
+                                  }
+                                >
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit Request
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteRequest(request.id);
+                                  }}
+                                  className="text-red-600"
+                                >
+                                  Delete Request
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))

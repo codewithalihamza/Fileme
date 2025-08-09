@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactsTable } from "@/components/admin/contacts-table";
+import { ContactsTable } from "@/components/dashboard/contacts-table";
 import { Button } from "@/components/ui/button";
 import {
   Card,

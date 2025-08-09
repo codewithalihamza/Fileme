@@ -73,3 +73,54 @@ export async function GET(
     );
   }
 }
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const updates = await request.json();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Request ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const updateData: any = {
+      updatedAt: new Date(),
+    };
+
+    // Only allow specific fields to be updated
+    if (updates.status !== undefined) updateData.status = updates.status;
+    if (updates.paidAmount !== undefined)
+      updateData.paidAmount = updates.paidAmount;
+    if (updates.service !== undefined) updateData.service = updates.service;
+    if (updates.userId !== undefined) updateData.userId = updates.userId;
+    if (updates.assigneeId !== undefined)
+      updateData.assigneeId = updates.assigneeId;
+
+    const updatedRequest = await db
+      .update(requests)
+      .set(updateData)
+      .where(eq(requests.id, id))
+      .returning();
+
+    if (updatedRequest.length === 0) {
+      return NextResponse.json({ error: "Request not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      message: "Request updated successfully",
+      data: updatedRequest[0],
+    });
+  } catch (error) {
+    console.error("Error updating request:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

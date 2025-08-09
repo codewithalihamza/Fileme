@@ -1,6 +1,7 @@
 import { createToken } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { users } from "@/lib/schema";
+import { UserRole } from "@/types";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -32,8 +33,8 @@ export async function POST(request: NextRequest) {
 
     const foundUser = user[0];
 
-    // Check if user is admin or employee
-    if (foundUser.role !== "admin" && foundUser.role !== "employees") {
+    // Check if user is admin
+    if (foundUser.role !== UserRole.ADMIN) {
       return NextResponse.json(
         { error: "Access denied. Admin privileges required." },
         { status: 403 }

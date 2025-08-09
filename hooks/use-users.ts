@@ -27,6 +27,7 @@ interface UserResponse {
 
 export const useUsers = () => {
   const [loading, setLoading] = useState(false);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   // Fetch all users with pagination and filters
   const fetchUsers = useCallback(
@@ -130,16 +131,13 @@ export const useUsers = () => {
   const updateUser = useCallback(
     async (id: string, userData: Partial<User>): Promise<User | null> => {
       try {
-        setLoading(true);
-        const response = await fetch("/api/dashboard/users", {
+        setUpdatingId(id);
+        const response = await fetch(`/api/dashboard/users/${id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            id,
-            ...userData,
-          }),
+          body: JSON.stringify(userData),
         });
 
         const data = await response.json();
@@ -156,7 +154,7 @@ export const useUsers = () => {
         toast.error("Failed to update user");
         return null;
       } finally {
-        setLoading(false);
+        setUpdatingId(null);
       }
     },
     []
@@ -193,6 +191,7 @@ export const useUsers = () => {
 
   return {
     loading,
+    updatingId,
     fetchUsers,
     fetchUser,
     createUser,
