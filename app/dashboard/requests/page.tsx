@@ -197,7 +197,10 @@ export default function RequestsPage() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Pending</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {requests.filter((r) => r.status === RequestStatus.PENDING).length}
+                  {
+                    requests.filter((r) => r.status === RequestStatus.PENDING)
+                      .length
+                  }
                 </p>
               </div>
               <Clock className="h-8 w-8 text-yellow-600" />
@@ -211,7 +214,11 @@ export default function RequestsPage() {
               <div>
                 <p className="text-sm font-medium text-gray-600">In Progress</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {requests.filter((r) => r.status === RequestStatus.IN_PROGRESS).length}
+                  {
+                    requests.filter(
+                      (r) => r.status === RequestStatus.IN_PROGRESS
+                    ).length
+                  }
                 </p>
               </div>
               <FileText className="h-8 w-8 text-blue-600" />
@@ -225,7 +232,10 @@ export default function RequestsPage() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Completed</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {requests.filter((r) => r.status === RequestStatus.COMPLETED).length}
+                  {
+                    requests.filter((r) => r.status === RequestStatus.COMPLETED)
+                      .length
+                  }
                 </p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />

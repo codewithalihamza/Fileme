@@ -228,8 +228,9 @@ export default function ContactPage() {
                     name="heardFrom"
                     value={formData.heardFrom}
                     onChange={handleInputChange}
-                    className={`w-full rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.heardFrom ? "border-red-500" : "border-gray-300"
-                      }`}
+                    className={`w-full rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.heardFrom ? "border-red-500" : "border-gray-300"
+                    }`}
                   >
                     {heardFromNames.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -258,8 +259,9 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     placeholder="Tell us about your professional services needs..."
                     rows={6}
-                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.message ? "border-red-500" : "border-gray-300"
-                      }`}
+                    className={`w-full resize-none rounded-md border px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.message ? "border-red-500" : "border-gray-300"
+                    }`}
                   />
                   {errors.message && (
                     <p className="mt-1 text-sm text-red-500">

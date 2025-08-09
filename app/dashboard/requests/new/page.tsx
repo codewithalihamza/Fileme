@@ -14,7 +14,12 @@ import {
 import { UserSearchDropdown } from "@/components/ui/user-search-dropdown";
 import { useUserSearch } from "@/hooks/use-user-search";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { RequestStatus, requestStatusNames, servicesNames, UserRole } from "@/types";
+import {
+  RequestStatus,
+  requestStatusNames,
+  servicesNames,
+  UserRole,
+} from "@/types";
 import { ArrowLeft, FileText, Save } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -53,14 +58,16 @@ export default function NewRequestPage() {
     setLoadingContact(true);
     try {
       // Fetch contact data
-      const contactResponse = await fetch(`/api/dashboard/contacts/${contactId}`);
+      const contactResponse = await fetch(
+        `/api/dashboard/contacts/${contactId}`
+      );
       if (contactResponse.ok) {
         const response = await contactResponse.json();
         const contact = response.contact;
         setContactData(contact);
 
         // Pre-fill service
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           service: contact.service,
         }));
@@ -73,11 +80,13 @@ export default function NewRequestPage() {
         );
 
         if (userResult) {
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             userId: userResult.user.id,
           }));
-          toast.success(`Client ${userResult.isNew ? 'created and ' : ''}selected: ${userResult.user.name}`);
+          toast.success(
+            `Client ${userResult.isNew ? "created and " : ""}selected: ${userResult.user.name}`
+          );
         }
       }
     } catch (error) {
@@ -170,8 +179,7 @@ export default function NewRequestPage() {
             <p className="mt-1 text-gray-600">
               {contactData
                 ? `Creating request from contact: ${contactData.name}`
-                : "Add a new service request"
-              }
+                : "Add a new service request"}
             </p>
           </div>
         </div>

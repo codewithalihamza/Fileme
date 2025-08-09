@@ -13,11 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Contact, useContacts } from "@/hooks/use-contacts";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import {
-  contactStatusNames,
-  heardFromNames,
-  servicesNames
-} from "@/types";
+import { contactStatusNames, heardFromNames, servicesNames } from "@/types";
 import {
   ArrowLeft,
   Calendar,

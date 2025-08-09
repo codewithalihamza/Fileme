@@ -238,7 +238,10 @@ export function ContactsTable() {
                             </SelectTrigger>
                             <SelectContent>
                               {contactStatusNames.map((status) => (
-                                <SelectItem key={status.value} value={status.value}>
+                                <SelectItem
+                                  key={status.value}
+                                  value={status.value}
+                                >
                                   {status.label}
                                 </SelectItem>
                               ))}
