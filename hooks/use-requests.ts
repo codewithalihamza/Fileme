@@ -1,9 +1,11 @@
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
+import { RequestStatus } from "@/types";
+
 interface Request {
   id: string;
-  status: "pending" | "in_progress" | "completed" | "cancelled";
+  status: RequestStatus;
   paidAmount: number | null;
   service: string;
   userId: string;

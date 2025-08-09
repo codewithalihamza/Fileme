@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { contactUs } from "@/lib/schema";
-import { desc, eq, like, or, sql } from "drizzle-orm";
+import { desc, eq, ilike, or, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
     if (search) {
       whereConditions.push(
         or(
-          like(contactUs.name, `%${search}%`),
-          like(contactUs.phone, `%${search}%`)
+          ilike(contactUs.name, `%${search}%`),
+          ilike(contactUs.phone, `%${search}%`)
         )
       );
     }

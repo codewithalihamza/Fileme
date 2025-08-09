@@ -12,9 +12,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Contact, useContacts } from "@/hooks/use-contacts";
-import { heardFromOptions } from "@/lib/constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { servicesNames } from "@/lib/services";
+import {
+  contactStatusNames,
+  heardFromNames,
+  servicesNames
+} from "@/types";
 import {
   ArrowLeft,
   Calendar,
@@ -203,14 +206,27 @@ export default function ContactDetailPage({ params }: PageProps) {
               </Button>
             </>
           ) : (
-            <Button
-              onClick={() => setEditing(true)}
-              disabled={updatingId === contactId}
-              className="flex items-center gap-2"
-            >
-              <Edit className="size-4" />
-              Edit Contact
-            </Button>
+            <>
+              <Button
+                variant="outline"
+                onClick={() => setEditing(true)}
+                disabled={updatingId === contactId}
+                className="flex items-center gap-2"
+              >
+                <Edit className="size-4" />
+                Edit Contact
+              </Button>
+              <Button
+                onClick={() => {
+                  const url = `${ROUTES_CONSTANT.REQUESTS}/new?contactId=${contactId}`;
+                  window.location.href = url;
+                }}
+                className="flex items-center gap-2"
+              >
+                <FileText className="size-4" />
+                Create Request
+              </Button>
+            </>
           )}
         </div>
       </div>
@@ -350,7 +366,7 @@ export default function ContactDetailPage({ params }: PageProps) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {heardFromOptions.map((option) => (
+                        {heardFromNames.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -360,7 +376,7 @@ export default function ContactDetailPage({ params }: PageProps) {
                   ) : (
                     <p className="text-gray-900">
                       {
-                        heardFromOptions.find(
+                        heardFromNames.find(
                           (option) => option.value === contact.heardFrom
                         )?.label
                       }
@@ -420,9 +436,11 @@ export default function ContactDetailPage({ params }: PageProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="in_progress">In Progress</SelectItem>
-                    <SelectItem value="contacted">Contacted</SelectItem>
+                    {contactStatusNames.map((status) => (
+                      <SelectItem key={status.value} value={status.value}>
+                        {status.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               ) : (

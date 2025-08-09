@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { requests, users } from "@/lib/schema";
-import { desc, eq, like, or, sql } from "drizzle-orm";
+import { desc, eq, ilike, or, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     let whereConditions = [];
 
     if (search) {
-      whereConditions.push(or(like(requests.service, `%${search}%`)));
+      whereConditions.push(or(ilike(requests.service, `%${search}%`)));
     }
 
     if (status) {

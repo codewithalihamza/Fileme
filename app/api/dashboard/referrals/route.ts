@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { referrals } from "@/lib/schema";
-import { desc, eq, like, or, sql } from "drizzle-orm";
+import { desc, eq, ilike, or, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -19,10 +19,10 @@ export async function GET(request: NextRequest) {
     if (search) {
       whereConditions.push(
         or(
-          like(referrals.friendName, `%${search}%`),
-          like(referrals.friendPhone, `%${search}%`),
-          like(referrals.referrerName, `%${search}%`),
-          like(referrals.referrerPhone, `%${search}%`)
+          ilike(referrals.friendName, `%${search}%`),
+          ilike(referrals.friendPhone, `%${search}%`),
+          ilike(referrals.referrerName, `%${search}%`),
+          ilike(referrals.referrerPhone, `%${search}%`)
         )
       );
     }

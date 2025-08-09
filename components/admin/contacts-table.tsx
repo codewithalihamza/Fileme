@@ -29,12 +29,13 @@ import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useContacts } from "@/hooks/use-contacts";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { servicesNames } from "@/lib/services";
 import { formatDate } from "@/lib/utils";
+import { ContactStatus, contactStatusNames, servicesNames } from "@/types";
 import {
   ChevronLeft,
   ChevronRight,
   Eye,
+  FileText,
   MoreHorizontal,
   RefreshCw,
   Search,
@@ -70,7 +71,7 @@ export function ContactsTable() {
 
   const handleStatusChange = async (contactId: string, newStatus: string) => {
     await updateContact(contactId, {
-      status: newStatus as "pending" | "in_progress" | "contacted",
+      status: newStatus as ContactStatus,
     });
   };
 
@@ -81,6 +82,9 @@ export function ContactsTable() {
         break;
       case "edit":
         router.push(`${ROUTES_CONSTANT.CONTACTS}/${contactId}`);
+        break;
+      case "create-request":
+        router.push(`${ROUTES_CONSTANT.REQUESTS}/new?contactId=${contactId}`);
         break;
     }
   };
@@ -154,9 +158,11 @@ export function ContactsTable() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="in_progress">In Progress</SelectItem>
-              <SelectItem value="contacted">Contacted</SelectItem>
+              {contactStatusNames.map((status) => (
+                <SelectItem key={status.value} value={status.value}>
+                  {status.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -231,13 +237,11 @@ export function ContactsTable() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="pending">Pending</SelectItem>
-                              <SelectItem value="in_progress">
-                                In Progress
-                              </SelectItem>
-                              <SelectItem value="contacted">
-                                Contacted
-                              </SelectItem>
+                              {contactStatusNames.map((status) => (
+                                <SelectItem key={status.value} value={status.value}>
+                                  {status.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
@@ -266,6 +270,14 @@ export function ContactsTable() {
                             >
                               <Eye className="mr-2 h-4 w-4" />
                               View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleQuickAction("create-request", contact.id)
+                              }
+                            >
+                              <FileText className="mr-2 h-4 w-4" />
+                              Create Request
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

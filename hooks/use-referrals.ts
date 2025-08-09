@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { ReferralStatus } from "@/types";
+
 interface Referral {
   id: string;
   friendName: string;
@@ -11,7 +13,7 @@ interface Referral {
   referrerPhone: string;
   service: string;
   accountDetails: string;
-  status: "pending" | "in-progress" | "completed" | "paid";
+  status: ReferralStatus;
   totalEarned: string;
   amountSent: string;
   createdAt: string;

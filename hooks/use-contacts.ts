@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { ContactStatus, HeardFrom } from "@/types";
+
 export interface Contact {
   id: string;
   name: string;
@@ -8,8 +10,8 @@ export interface Contact {
   phone: string;
   service: string;
   message: string;
-  status: "pending" | "in_progress" | "contacted";
-  heardFrom: "linkedin" | "website" | "instagram" | "facebook" | "others";
+  status: ContactStatus;
+  heardFrom: HeardFrom;
   createdAt: string;
   updatedAt: string;
 }

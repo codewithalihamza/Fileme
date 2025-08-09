@@ -152,30 +152,3 @@ export function getServices(): Service[] {
     },
   ];
 }
-
-export const servicesNames = [
-  {
-    label: "Tax Services",
-    value: "tax",
-  },
-  {
-    label: "Accounting & Financial Reporting",
-    value: "accounting",
-  },
-  {
-    label: "Business Valuation Services",
-    value: "business-valuation",
-  },
-  {
-    label: "Financial Analysis & Decision Support",
-    value: "financial-analysis",
-  },
-  {
-    label: "Internal Controls Advisory",
-    value: "internal-controls",
-  },
-  {
-    label: "Risk Advisory Services",
-    value: "risk-advisory",
-  },
-];

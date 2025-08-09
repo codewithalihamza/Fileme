@@ -27,8 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
-import { servicesNames } from "@/lib/services";
 import { formatCurrency } from "@/lib/utils";
+import { RequestStatus, requestStatusNames, servicesNames } from "@/types";
 import {
   CheckCircle,
   Clock,
@@ -44,7 +44,7 @@ import { toast } from "sonner";
 
 interface Request {
   id: string;
-  status: "pending" | "in_progress" | "completed" | "cancelled";
+  status: RequestStatus;
   paidAmount: number | null;
   service: string;
   userId: string;
@@ -197,7 +197,7 @@ export default function RequestsPage() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Pending</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {requests.filter((r) => r.status === "pending").length}
+                  {requests.filter((r) => r.status === RequestStatus.PENDING).length}
                 </p>
               </div>
               <Clock className="h-8 w-8 text-yellow-600" />
@@ -211,7 +211,7 @@ export default function RequestsPage() {
               <div>
                 <p className="text-sm font-medium text-gray-600">In Progress</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {requests.filter((r) => r.status === "in_progress").length}
+                  {requests.filter((r) => r.status === RequestStatus.IN_PROGRESS).length}
                 </p>
               </div>
               <FileText className="h-8 w-8 text-blue-600" />
@@ -225,7 +225,7 @@ export default function RequestsPage() {
               <div>
                 <p className="text-sm font-medium text-gray-600">Completed</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {requests.filter((r) => r.status === "completed").length}
+                  {requests.filter((r) => r.status === RequestStatus.COMPLETED).length}
                 </p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -273,11 +273,11 @@ export default function RequestsPage() {
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                  {requestStatusNames.map((status) => (
+                    <SelectItem key={status.value} value={status.value}>
+                      {status.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

@@ -11,30 +11,89 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UserSearchDropdown } from "@/components/ui/user-search-dropdown";
+import { useUserSearch } from "@/hooks/use-user-search";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
+import { RequestStatus, requestStatusNames, servicesNames, UserRole } from "@/types";
 import { ArrowLeft, FileText, Save } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface NewRequestData {
   service: string;
-  status: "pending" | "in_progress" | "completed" | "cancelled";
+  status: RequestStatus;
   paidAmount: number | null;
   userId: string;
   assigneeId: string | null;
 }
 
 export default function NewRequestPage() {
+  const searchParams = useSearchParams();
+  const contactId = searchParams.get("contactId");
+
   const [formData, setFormData] = useState<NewRequestData>({
     service: "tax",
-    status: "pending",
+    status: RequestStatus.PENDING,
     paidAmount: null,
     userId: "",
     assigneeId: null,
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<NewRequestData>>({});
+  const { checkOrCreateUser } = useUserSearch();
+  const [contactData, setContactData] = useState<any>(null);
+  const [loadingContact, setLoadingContact] = useState(false);
+
+  // Memoize the fetch function to prevent infinite re-renders
+  const fetchContactAndCreateUser = useCallback(async () => {
+    if (!contactId) return;
+
+    setLoadingContact(true);
+    try {
+      // Fetch contact data
+      const contactResponse = await fetch(`/api/dashboard/contacts/${contactId}`);
+      if (contactResponse.ok) {
+        const response = await contactResponse.json();
+        const contact = response.contact;
+        setContactData(contact);
+
+        // Pre-fill service
+        setFormData(prev => ({
+          ...prev,
+          service: contact.service,
+        }));
+
+        // Check if user exists or create new user
+        const userResult = await checkOrCreateUser(
+          contact.name,
+          contact.phone,
+          contact.email
+        );
+
+        if (userResult) {
+          setFormData(prev => ({
+            ...prev,
+            userId: userResult.user.id,
+          }));
+          toast.success(`Client ${userResult.isNew ? 'created and ' : ''}selected: ${userResult.user.name}`);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching contact data:", error);
+      toast.error("Failed to load contact data");
+    } finally {
+      setLoadingContact(false);
+    }
+  }, [contactId, checkOrCreateUser]);
+
+  // Fetch contact data and pre-fill form if contactId is provided
+  useEffect(() => {
+    if (contactId) {
+      fetchContactAndCreateUser();
+    }
+  }, [fetchContactAndCreateUser]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<NewRequestData> = {};
@@ -76,7 +135,7 @@ export default function NewRequestPage() {
         // Reset form
         setFormData({
           service: "tax",
-          status: "pending",
+          status: RequestStatus.PENDING,
           paidAmount: null,
           userId: "",
           assigneeId: null,
@@ -108,7 +167,12 @@ export default function NewRequestPage() {
             <h1 className="text-3xl font-bold text-gray-900">
               Create New Request
             </h1>
-            <p className="mt-1 text-gray-600">Add a new service request</p>
+            <p className="mt-1 text-gray-600">
+              {contactData
+                ? `Creating request from contact: ${contactData.name}`
+                : "Add a new service request"
+              }
+            </p>
           </div>
         </div>
       </div>
@@ -123,6 +187,20 @@ export default function NewRequestPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {loadingContact && (
+                <div className="rounded-md bg-blue-50 p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-blue-600"></div>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm text-blue-700">
+                        Loading contact data and creating user...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <Label
@@ -146,10 +224,11 @@ export default function NewRequestPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="tax">Tax Filing</SelectItem>
-                      <SelectItem value="accounting">Accounting</SelectItem>
-                      <SelectItem value="audit">Audit</SelectItem>
-                      <SelectItem value="consultation">Consultation</SelectItem>
+                      {servicesNames.map((service) => (
+                        <SelectItem key={service.value} value={service.value}>
+                          {service.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   {errors.service && (
@@ -179,68 +258,37 @@ export default function NewRequestPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="in_progress">In Progress</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                      {requestStatusNames.map((status) => (
+                        <SelectItem key={status.value} value={status.value}>
+                          {status.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <Label
-                    htmlFor="userId"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Client <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="userId"
-                    name="userId"
-                    type="text"
-                    value={formData.userId}
-                    onChange={(e) => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        userId: e.target.value,
-                      }));
-                      if (errors.userId) {
-                        setErrors((prev) => ({ ...prev, userId: "" }));
-                      }
-                    }}
-                    placeholder="Enter client ID"
-                    className={errors.userId ? "border-red-500" : ""}
-                  />
-                  {errors.userId && (
-                    <p className="mt-1 text-sm text-red-500">{errors.userId}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label
-                    htmlFor="paidAmount"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Paid Amount
-                  </Label>
-                  <Input
-                    id="paidAmount"
-                    name="paidAmount"
-                    type="number"
-                    value={formData.paidAmount || ""}
-                    onChange={(e) => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        paidAmount: e.target.value
-                          ? parseFloat(e.target.value)
-                          : null,
-                      }));
-                    }}
-                    placeholder="Enter amount"
-                  />
-                </div>
+              <div>
+                <Label
+                  htmlFor="userId"
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
+                  Client <span className="text-red-500">*</span>
+                </Label>
+                <UserSearchDropdown
+                  value={formData.userId}
+                  onValueChange={(value) => {
+                    setFormData((prev) => ({ ...prev, userId: value }));
+                    if (errors.userId) {
+                      setErrors((prev) => ({ ...prev, userId: "" }));
+                    }
+                  }}
+                  placeholder="Search and select client"
+                  className={errors.userId ? "border-red-500" : ""}
+                />
+                {errors.userId && (
+                  <p className="mt-1 text-sm text-red-500">{errors.userId}</p>
+                )}
               </div>
 
               <div>
@@ -250,27 +298,42 @@ export default function NewRequestPage() {
                 >
                   Assignee
                 </Label>
-                <Select
-                  value={formData.assigneeId || "unassigned"}
+                <UserSearchDropdown
+                  value={formData.assigneeId || ""}
                   onValueChange={(value) => {
                     setFormData((prev) => ({
                       ...prev,
-                      assigneeId: value === "unassigned" ? null : value,
+                      assigneeId: value || null,
                     }));
                   }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select assignee" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="unassigned">Unassigned</SelectItem>
-                    {/* This would need to be populated with available employees */}
-                    <SelectItem value="employee1">Employee 1</SelectItem>
-                    <SelectItem value="employee2">Employee 2</SelectItem>
-                  </SelectContent>
-                </Select>
+                  placeholder="Search and select assignee (optional)"
+                  role={[UserRole.EMPLOYEES, UserRole.ADMIN]}
+                />
               </div>
 
+              <div>
+                <Label
+                  htmlFor="paidAmount"
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
+                  Paid Amount
+                </Label>
+                <Input
+                  id="paidAmount"
+                  name="paidAmount"
+                  type="number"
+                  value={formData.paidAmount || ""}
+                  onChange={(e) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      paidAmount: e.target.value
+                        ? parseFloat(e.target.value)
+                        : null,
+                    }));
+                  }}
+                  placeholder="Enter amount"
+                />
+              </div>
               <div className="flex gap-4 pt-4">
                 <Button type="submit" disabled={loading} className="flex-1">
                   {loading ? (

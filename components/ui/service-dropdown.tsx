@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { servicesNames } from "@/lib/services";
+import { servicesNames } from "@/types";
 
 interface ServiceDropdownProps {
   value: string;

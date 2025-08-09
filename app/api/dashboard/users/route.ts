@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { users } from "@/lib/schema";
 import bcrypt from "bcryptjs";
-import { desc, eq, like, or, sql } from "drizzle-orm";
+import { desc, eq, ilike, or, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -20,9 +20,9 @@ export async function GET(request: NextRequest) {
     if (search) {
       whereConditions.push(
         or(
-          like(users.name, `%${search}%`),
-          like(users.email, `%${search}%`),
-          like(users.phone, `%${search}%`)
+          ilike(users.name, `%${search}%`),
+          ilike(users.email, `%${search}%`),
+          ilike(users.phone, `%${search}%`)
         )
       );
     }
