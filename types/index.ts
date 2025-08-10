@@ -38,7 +38,7 @@ export const userStatusNames = [
 export enum Service {
   TAX = "tax",
   ACCOUNTING = "accounting",
-  BUSINESS_VALUATION = "business-valuation",
+  BUSINESS_PROCESS_OUTSOURCING = "business-process-outsourcing",
   FINANCIAL_ANALYSIS = "financial-analysis",
   INTERNAL_CONTROLS = "internal-controls",
   RISK_ADVISORY = "risk-advisory",
@@ -54,8 +54,8 @@ export const servicesNames = [
     value: Service.ACCOUNTING,
   },
   {
-    label: "Business Valuation Services",
-    value: Service.BUSINESS_VALUATION,
+    label: "Business Process Outsourcing",
+    value: Service.BUSINESS_PROCESS_OUTSOURCING,
   },
   {
     label: "Financial Analysis & Decision Support",

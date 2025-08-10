@@ -50,7 +50,6 @@ export function getServices(): Service[] {
       description:
         "Professional accounting and financial reporting services ensuring compliance with IFRS/GAAP standards and statutory requirements.",
       features: [
-        "Bookkeeping & General Ledger",
         "Financial Statements Preparation",
         "Group Accounts & Consolidation",
         "IFRS/GAAP Advisory",
@@ -68,18 +67,17 @@ export function getServices(): Service[] {
     },
     {
       icon: <Building2 className="size-8" />,
-      title: "Business Valuation Services",
+      title: "Business Process Outsourcing",
       description:
-        "Expert business valuation services for mergers, acquisitions, investments, and fair value measurements in compliance with IFRS 13.",
+        "We offer a wide range of business process outsourcing services to help your business operate more efficiently and effectively.",
       features: [
-        "Business Valuation for Mergers & Acquisitions",
-        "Fair Value Measurement (IFRS 13)",
-        "Share & Intangible Asset Valuation",
-        "Purchase Price Allocation (PPA)",
-        "Transaction Valuation Services",
-        "Financial Asset Valuation",
-        "Mergers & Acquisitions Valuation Advisory",
-        "Goodwill Impairment Testing",
+        "Bookkeeping",
+        "Accounts Payable (AP) & Receivable (AR)",
+        "Tax Preparation",
+        "General Ledger Maintenance",
+        "Payroll Processing",
+        "Financial Analysis & Reporting",
+        "Budgeting & Forecasting",
       ],
       image: "/hero-section/consultant-with-client.jpg",
       color: "purple",

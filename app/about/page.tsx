@@ -34,9 +34,9 @@ export default function AboutPage() {
             <p className="mx-auto mb-8 max-w-3xl text-xl text-blue-100 lg:text-2xl">
               We are your trusted partner in comprehensive financial services
               including tax services, accounting & financial reporting, business
-              valuation, financial analysis, internal controls, and risk
-              advisory. With over 7+ years of experience, we help individuals
-              and businesses achieve financial success.
+              process outsourcing, financial analysis, internal controls, and
+              risk advisory. With over 7+ years of experience, we help
+              individuals and businesses achieve financial success.
             </p>
           </motion.div>
         </div>

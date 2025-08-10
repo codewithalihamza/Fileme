@@ -99,7 +99,6 @@ export default function RequestsPage() {
   const [serviceFilter, setServiceFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalRequests, setTotalRequests] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [paidAmountModal, setPaidAmountModal] = useState<{
     isOpen: boolean;
@@ -128,7 +127,6 @@ export default function RequestsPage() {
       if (data) {
         setRequests(data.data);
         setTotalPages(data.pagination.totalPages);
-        setTotalRequests(data.pagination.total);
       }
     } catch (error) {
       console.error("Error fetching requests:", error);
@@ -168,11 +166,7 @@ export default function RequestsPage() {
     router.push(`${ROUTES_CONSTANT.REQUESTS}/${requestId}`);
   };
 
-  const handleStatusChange = async (
-    requestId: string,
-    newStatus: string,
-    requestName: string
-  ) => {
+  const handleStatusChange = async (requestId: string, newStatus: string) => {
     await updateRequest(requestId, {
       status: newStatus as RequestStatus,
     });
@@ -358,7 +352,7 @@ export default function RequestsPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex max-w-sm flex-1 items-center space-x-2">
               <div className="relative flex-1">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-2 top-2.5 size-4 text-gray-400" />
                 <Input
                   placeholder="Search by service..."
                   value={search}
@@ -516,7 +510,7 @@ export default function RequestsPage() {
                       <TableCell>
                         {updatingId === request.id ? (
                           <div className="flex items-center justify-center">
-                            <Skeleton className="h-8 w-8 rounded-md" />
+                            <Skeleton className="size-8 rounded-md" />
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
@@ -529,11 +523,7 @@ export default function RequestsPage() {
                               <Select
                                 value={request.status}
                                 onValueChange={(value) =>
-                                  handleStatusChange(
-                                    request.id,
-                                    value,
-                                    request.user.name
-                                  )
+                                  handleStatusChange(request.id, value)
                                 }
                                 disabled={updatingId === request.id}
                               >
@@ -564,7 +554,7 @@ export default function RequestsPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                                  className="size-8 p-0 hover:bg-gray-100"
                                 >
                                   <MoreHorizontal className="size-4" />
                                 </Button>

@@ -47,8 +47,8 @@ export function Footer() {
               viewport={{ once: true }}
             >
               Comprehensive professional services including tax services,
-              accounting & financial reporting, business valuation, financial
-              analysis, internal controls, and risk advisory.
+              accounting & financial reporting, business process outsourcing,
+              financial analysis, internal controls, and risk advisory.
             </motion.p>
           </motion.div>
 
@@ -68,7 +68,7 @@ export function Footer() {
               {[
                 "Tax Services",
                 "Accounting & Financial Reporting",
-                "Business Valuation Services",
+                "Business Process Outsourcing",
                 "Financial Analysis & Decision Support",
                 "Internal Controls Advisory",
                 "Risk Advisory Services",

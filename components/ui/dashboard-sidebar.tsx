@@ -145,7 +145,7 @@ export function DashboardSidebar({
                 }`}
               >
                 <Icon
-                  className={`mr-3 size-5 flex-shrink-0 ${
+                  className={`mr-3 size-5 shrink-0 ${
                     active
                       ? "text-blue-600"
                       : "text-gray-400 group-hover:text-gray-600"
