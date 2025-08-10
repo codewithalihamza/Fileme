@@ -35,8 +35,8 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const contactInfo = {
-  Email: "info@fileme.com",
-  Phone: "+92 348 6512212",
+  Email: "filemetoday@gmail.com",
+  Phone: "+92 347 6713425",
   Hours: "Mon-Fri 9AM-6PM",
   Address: "Modal Town, Lahore",
 };

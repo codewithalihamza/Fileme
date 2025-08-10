@@ -81,7 +81,7 @@ const experts: Expert[] = [
   },
   {
     id: 7,
-    name: "Kashan",
+    name: "Muhammad Kashan Raza",
     role: "Estate Tax Specialist",
     image: "",
     linkedin: "#",
