@@ -50,10 +50,10 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
     <nav className="flex items-center overflow-hidden" aria-label="Breadcrumb">
       <ol className="flex items-center space-x-1 sm:space-x-2">
         {/* Home icon */}
-        <li className="flex-shrink-0">
+        <li className="shrink-0">
           <Link
             href="/dashboard"
-            className="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 sm:h-8 sm:w-8"
+            className="flex size-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-200 hover:text-gray-900 sm:size-8"
             aria-label="Go to Dashboard"
           >
             <Home className="size-3.5 sm:size-4" />

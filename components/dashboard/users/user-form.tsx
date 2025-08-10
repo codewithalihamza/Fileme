@@ -329,7 +329,7 @@ export function UserForm({
                       />
                       {errors.phone && (
                         <p className="flex items-center gap-1 text-sm text-red-500">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="size-4" />
                           {errors.phone}
                         </p>
                       )}
@@ -340,7 +340,7 @@ export function UserForm({
                 {/* Security Section */}
                 <div className="space-y-4 sm:space-y-6">
                   <div className="mb-3 flex items-center gap-2 sm:mb-4">
-                    <Lock className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                    <Lock className="size-4 text-blue-600 sm:size-5" />
                     <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
                       Security
                     </h3>
@@ -351,7 +351,7 @@ export function UserForm({
                       htmlFor="password"
                       className="flex items-center gap-2 text-sm font-medium text-gray-700"
                     >
-                      <Lock className="h-4 w-4 text-gray-500" />
+                      <Lock className="size-4 text-gray-500" />
                       Password{" "}
                       {!isEditing && <span className="text-red-500">*</span>}
                       {isEditing && (
@@ -379,13 +379,13 @@ export function UserForm({
                     />
                     {formData.password && formData.password.length >= 6 && (
                       <p className="flex items-center gap-1 text-sm text-green-600">
-                        <CheckCircle className="h-4 w-4" />
+                        <CheckCircle className="size-4" />
                         Password meets requirements
                       </p>
                     )}
                     {errors.password && (
                       <p className="flex items-center gap-1 text-sm text-red-500">
-                        <AlertCircle className="h-4 w-4" />
+                        <AlertCircle className="size-4" />
                         {errors.password}
                       </p>
                     )}
@@ -401,12 +401,12 @@ export function UserForm({
                   >
                     {loading || isSubmitting ? (
                       <div className="flex items-center justify-center">
-                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-white"></div>
+                        <div className="mr-2 size-4 animate-spin rounded-full border-b-2 border-white"></div>
                         <span>{isEditing ? "Updating..." : "Creating..."}</span>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center">
-                        <Save className="mr-2 h-4 w-4" />
+                        <Save className="mr-2 size-4" />
                         <span>{isEditing ? "Update" : "Create"}</span>
                       </div>
                     )}

@@ -517,7 +517,7 @@ export const TaxCalculator = () => {
                           key={index}
                           className="flex items-start gap-3 border-b border-gray-100 py-2 last:border-b-0"
                         >
-                          <div className="mt-2 size-2 flex-shrink-0 rounded-full bg-blue-500"></div>
+                          <div className="mt-2 size-2 shrink-0 rounded-full bg-blue-500"></div>
                           <span className="text-sm text-gray-700">
                             {line.trim().substring(1).trim()}
                           </span>

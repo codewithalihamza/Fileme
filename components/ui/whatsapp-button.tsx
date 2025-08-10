@@ -41,7 +41,7 @@ export function WhatsAppButton({
     >
       <button
         onClick={handleClick}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-green-500 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-green-600 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300"
+        className="group relative flex size-14 items-center justify-center rounded-full bg-green-500 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-green-600 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300"
         aria-label="Chat with us on WhatsApp"
       >
         {/* WhatsApp Icon */}

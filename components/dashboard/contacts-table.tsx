@@ -219,7 +219,7 @@ export function ContactsTable() {
                   <TableCell>
                     {updatingId === contact.id ? (
                       <div className="flex items-center justify-center">
-                        <Skeleton className="h-8 w-8 rounded-md" />
+                        <Skeleton className="size-8 rounded-md" />
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export function ContactsTable() {
                             }
                             disabled={updatingId === contact.id}
                           >
-                            <SelectTrigger className="h-8 w-[120px] text-xs">
+                            <SelectTrigger className="size-8 w-[120px] text-xs">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>

@@ -352,7 +352,7 @@ export default function RequestsPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex max-w-sm flex-1 items-center space-x-2">
               <div className="relative flex-1">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-2 top-2.5 size-4 text-gray-400" />
                 <Input
                   placeholder="Search by service..."
                   value={search}
@@ -510,7 +510,7 @@ export default function RequestsPage() {
                       <TableCell>
                         {updatingId === request.id ? (
                           <div className="flex items-center justify-center">
-                            <Skeleton className="h-8 w-8 rounded-md" />
+                            <Skeleton className="size-8 rounded-md" />
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
@@ -554,7 +554,7 @@ export default function RequestsPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                                  className="size-8 p-0 hover:bg-gray-100"
                                 >
                                   <MoreHorizontal className="size-4" />
                                 </Button>
