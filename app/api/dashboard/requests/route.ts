@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { requests, users } from "@/lib/schema";
-import { desc, eq, ilike, or, sql } from "drizzle-orm";
+import { desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -29,11 +29,21 @@ export async function GET(request: NextRequest) {
       whereConditions.push(eq(requests.service, service));
     }
 
+    // Combine all conditions with AND
+    let combinedWhere: any = undefined;
+    if (whereConditions.length === 1) {
+      combinedWhere = whereConditions[0];
+    } else if (whereConditions.length > 1) {
+      combinedWhere = whereConditions.reduce(
+        (acc, condition) => sql`${acc} AND ${condition}`
+      );
+    }
+
     // Get total count
     const totalCount = await db
       .select({ count: sql<number>`count(*)` })
       .from(requests)
-      .where(whereConditions.length > 0 ? whereConditions[0] : undefined);
+      .where(combinedWhere);
 
     // Get paginated results with user info only
     const results = await db
@@ -55,7 +65,7 @@ export async function GET(request: NextRequest) {
       })
       .from(requests)
       .leftJoin(users, eq(requests.userId, users.id))
-      .where(whereConditions.length > 0 ? whereConditions[0] : undefined)
+      .where(combinedWhere)
       .orderBy(desc(requests.createdAt))
       .limit(limit)
       .offset(offset);
@@ -65,27 +75,58 @@ export async function GET(request: NextRequest) {
       .map((result) => result.assigneeId)
       .filter((id) => id !== null) as string[];
 
+    console.log(
+      "Debug - Results:",
+      results.map((r) => ({ id: r.id, assigneeId: r.assigneeId }))
+    );
+    console.log("Debug - Assignee IDs:", assigneeIds);
+
     let assignees: any[] = [];
     if (assigneeIds.length > 0) {
-      assignees = await db
-        .select({
-          id: users.id,
-          name: users.name,
-          email: users.email,
-          phone: users.phone,
-        })
-        .from(users)
-        .where(sql`${users.id} IN (${assigneeIds.join(",")})`);
+      // Use proper IN clause with array - handle single vs multiple IDs
+      if (assigneeIds.length === 1) {
+        const assigneeData = await db
+          .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            phone: users.phone,
+          })
+          .from(users)
+          .where(eq(users.id, assigneeIds[0]));
+        assignees = assigneeData;
+      } else {
+        assignees = await db
+          .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            phone: users.phone,
+          })
+          .from(users)
+          .where(inArray(users.id, assigneeIds));
+      }
+
+      console.log("Debug - Assignees fetched:", assignees);
     }
 
     // Combine results with assignee info
-    const resultsWithAssignees = results.map((result) => ({
-      ...result,
-      assignee: result.assigneeId
+    const resultsWithAssignees = results.map((result) => {
+      const assignee = result.assigneeId
         ? assignees.find((assignee) => assignee.id === result.assigneeId) ||
           null
-        : null,
-    }));
+        : null;
+
+      console.log(
+        `Debug - Request ${result.id}: assigneeId=${result.assigneeId}, assignee=`,
+        assignee
+      );
+
+      return {
+        ...result,
+        assignee,
+      };
+    });
 
     return NextResponse.json({
       data: resultsWithAssignees,

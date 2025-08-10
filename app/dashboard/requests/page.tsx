@@ -99,7 +99,6 @@ export default function RequestsPage() {
   const [serviceFilter, setServiceFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalRequests, setTotalRequests] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [paidAmountModal, setPaidAmountModal] = useState<{
     isOpen: boolean;
@@ -128,7 +127,6 @@ export default function RequestsPage() {
       if (data) {
         setRequests(data.data);
         setTotalPages(data.pagination.totalPages);
-        setTotalRequests(data.pagination.total);
       }
     } catch (error) {
       console.error("Error fetching requests:", error);
@@ -168,11 +166,7 @@ export default function RequestsPage() {
     router.push(`${ROUTES_CONSTANT.REQUESTS}/${requestId}`);
   };
 
-  const handleStatusChange = async (
-    requestId: string,
-    newStatus: string,
-    requestName: string
-  ) => {
+  const handleStatusChange = async (requestId: string, newStatus: string) => {
     await updateRequest(requestId, {
       status: newStatus as RequestStatus,
     });
@@ -529,11 +523,7 @@ export default function RequestsPage() {
                               <Select
                                 value={request.status}
                                 onValueChange={(value) =>
-                                  handleStatusChange(
-                                    request.id,
-                                    value,
-                                    request.user.name
-                                  )
+                                  handleStatusChange(request.id, value)
                                 }
                                 disabled={updatingId === request.id}
                               >
