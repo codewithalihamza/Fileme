@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     template: "%s | Fileme",
   },
   description:
-    "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory. Expert financial solutions for your business.",
+    "Comprehensive professional services including tax services, accounting & financial reporting, business process outsourcing, financial analysis, internal controls, and risk advisory. Expert financial solutions for your business.",
   keywords: [
     "tax services",
     "accounting services",
     "financial reporting",
-    "business valuation",
+    "business process outsourcing",
     "financial analysis",
     "internal controls",
     "risk advisory",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     siteName: "Fileme",
     title: "Fileme - Professional Financial Services & Advisory",
     description:
-      "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory.",
+      "Comprehensive professional services including tax services, accounting & financial reporting, business process outsourcing, financial analysis, internal controls, and risk advisory.",
     images: [
       {
         url: "/logo.png",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Fileme - Professional Financial Services & Advisory",
     description:
-      "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory.",
+      "Comprehensive professional services including tax services, accounting & financial reporting, business process outsourcing, financial analysis, internal controls, and risk advisory.",
     images: ["/logo.png"],
     creator: "@fileme",
   },
@@ -110,13 +110,13 @@ export default function RootLayout({
               "@type": "AccountingService",
               name: "Fileme",
               description:
-                "Professional financial services and advisory including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory",
+                "Professional financial services and advisory including tax services, accounting & financial reporting, business process outsourcing, financial analysis, internal controls, and risk advisory",
               url: "https://www.fileme.today",
               logo: "https://www.fileme.today/logo.png",
               serviceType: [
                 "Tax Services",
                 "Accounting & Financial Reporting",
-                "Business Valuation Services",
+                "Business Process Outsourcing",
                 "Financial Analysis & Decision Support",
                 "Internal Controls Advisory",
                 "Risk Advisory Services",

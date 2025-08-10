@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Fileme - Professional Financial Services & Advisory",
     short_name: "Fileme",
     description:
-      "Comprehensive professional services including tax services, accounting & financial reporting, business valuation, financial analysis, internal controls, and risk advisory.",
+      "Comprehensive professional services including tax services, accounting & financial reporting, business process outsourcing, financial analysis, internal controls, and risk advisory.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

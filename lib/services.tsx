@@ -50,7 +50,6 @@ export function getServices(): Service[] {
       description:
         "Professional accounting and financial reporting services ensuring compliance with IFRS/GAAP standards and statutory requirements.",
       features: [
-        "Bookkeeping & General Ledger",
         "Financial Statements Preparation",
         "Group Accounts & Consolidation",
         "IFRS/GAAP Advisory",
