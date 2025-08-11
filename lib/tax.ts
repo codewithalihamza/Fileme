@@ -1,4 +1,5 @@
 // Pakistan Tax Slabs for different years (Salaried Persons)
+import { TaxYear } from "@/lib/tax-slabs";
 
 export interface TaxSlab {
   maxIncome: number;
@@ -6,14 +7,14 @@ export interface TaxSlab {
   fixedTax: number;
 }
 
-export interface TaxYear {
-  year: string;
+export interface TaxYearData {
+  year: TaxYear;
   slabs: TaxSlab[];
 }
 
-export const taxYears: TaxYear[] = [
+export const taxYears: TaxYearData[] = [
   {
-    year: "2024",
+    year: TaxYear.TWO_THOUSAND_TWENTY_FOUR,
     slabs: [
       { maxIncome: 600000, rate: 0, fixedTax: 0 },
       { maxIncome: 1200000, rate: 0.025, fixedTax: 0 },
@@ -24,7 +25,7 @@ export const taxYears: TaxYear[] = [
     ],
   },
   {
-    year: "2025",
+    year: TaxYear.TWO_THOUSAND_TWENTY_FIVE,
     slabs: [
       { maxIncome: 600000, rate: 0, fixedTax: 0 },
       { maxIncome: 1200000, rate: 0.05, fixedTax: 0 },
@@ -35,7 +36,7 @@ export const taxYears: TaxYear[] = [
     ],
   },
   {
-    year: "2026",
+    year: TaxYear.TWO_THOUSAND_TWENTY_SIX,
     slabs: [
       { maxIncome: 600000, rate: 0, fixedTax: 0 },
       { maxIncome: 1200000, rate: 0.01, fixedTax: 0 },
@@ -49,7 +50,7 @@ export const taxYears: TaxYear[] = [
 
 export const calculateTax = (
   yearlyIncome: number,
-  taxYear: string = "2026"
+  taxYear: TaxYear = TaxYear.TWO_THOUSAND_TWENTY_SIX
 ): number => {
   const year = taxYears.find((y) => y.year === taxYear);
   if (!year) {
@@ -82,8 +83,8 @@ export const calculateTax = (
     baseTax = previousSlab.fixedTax + taxableIncome * lastSlab.rate;
   }
 
-  // Apply surcharge for 2025-2026 if income exceeds 10 million
-  if (taxYear === "2026" && yearlyIncome > 10000000) {
+  // Apply surcharge for 2026 if income exceeds 10 million
+  if (taxYear === TaxYear.TWO_THOUSAND_TWENTY_SIX && yearlyIncome > 10000000) {
     const surcharge = baseTax * 0.09; // 9% surcharge
     return baseTax + surcharge;
   }
@@ -94,7 +95,7 @@ export const calculateTax = (
 // Reverse calculation: Find required yearly income for a given monthly tax
 export const calculateRequiredIncome = (
   monthlyTax: number,
-  taxYear: string = "2026"
+  taxYear: TaxYear = TaxYear.TWO_THOUSAND_TWENTY_SIX
 ): number => {
   const yearlyTax = monthlyTax * 12;
   const year = taxYears.find((y) => y.year === taxYear);
@@ -130,7 +131,7 @@ export const calculateRequiredIncome = (
   }
 
   // Handle surcharge for 2026: 9% on income tax if income > 10,000,000
-  if (taxYear === "2026") {
+  if (taxYear === TaxYear.TWO_THOUSAND_TWENTY_SIX) {
     const thresholdIncome = 10_000_000;
     const taxAtThreshold = calculateTax(thresholdIncome, taxYear); // no surcharge at exactly threshold
 

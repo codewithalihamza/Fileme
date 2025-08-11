@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { calculateRequiredIncome, calculateTax, taxYears } from "@/lib/tax";
-import { getTaxSlabInfo } from "@/lib/tax-slabs";
+import { TaxYear, getTaxSlabInfo } from "@/lib/tax-slabs";
 import { formatCurrency, formatNumberWithCommas } from "@/lib/utils";
 import {
   ArrowLeftRight,
@@ -78,18 +78,6 @@ export const TaxCalculator = () => {
     // Close results when input changes
     setCalculation(null);
     setReverseCalculation(null);
-  };
-
-  // Use the dedicated reverse calculation function
-  const findRequiredSalary = (
-    expectedMonthlyTax: number,
-    taxYear: string
-  ): number => {
-    const requiredYearlyIncome = calculateRequiredIncome(
-      expectedMonthlyTax,
-      taxYear
-    );
-    return requiredYearlyIncome / 12;
   };
 
   const handleCalculate = async () => {
@@ -351,10 +339,10 @@ export const TaxCalculator = () => {
                   <Select
                     value={selectedTaxYear.year}
                     onValueChange={(value) => {
-                      const year = taxYears.find((y) => y.year === value);
+                      const yearEnum = value as TaxYear;
+                      const year = taxYears.find((y) => y.year === yearEnum);
                       if (year) {
                         setSelectedTaxYear(year);
-                        // Close results when tax year changes
                         setCalculation(null);
                         setReverseCalculation(null);
                       }
