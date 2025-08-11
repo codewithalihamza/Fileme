@@ -90,3 +90,65 @@ export const calculateTax = (
 
   return baseTax;
 };
+
+// Reverse calculation: Find required yearly income for a given monthly tax
+export const calculateRequiredIncome = (
+  monthlyTax: number,
+  taxYear: string = "2026"
+): number => {
+  const yearlyTax = monthlyTax * 12;
+  const year = taxYears.find((y) => y.year === taxYear);
+  if (!year) {
+    throw new Error(`Tax year ${taxYear} not found`);
+  }
+
+  if (monthlyTax <= 0) return 0;
+
+  const EPS = 1e-6;
+  const slabs = year.slabs;
+
+  function invertBaseTax(targetBaseTax: number, allSlabs: TaxSlab[]): number {
+    // Find the slab in which this base tax falls, then invert analytically
+    for (let i = 1; i < allSlabs.length; i++) {
+      const slab = allSlabs[i];
+      const prevSlab = allSlabs[i - 1];
+      const minTax = slab.fixedTax; // at prevSlab.maxIncome boundary
+      const maxTax = Number.isFinite(slab.maxIncome)
+        ? slab.fixedTax + (slab.maxIncome - prevSlab.maxIncome) * slab.rate
+        : Infinity;
+
+      if (targetBaseTax + EPS >= minTax && targetBaseTax <= maxTax + EPS) {
+        // tax = slab.fixedTax + slab.rate * (income - prevSlab.maxIncome)
+        // => income = prevSlab.maxIncome + (tax - slab.fixedTax)/slab.rate
+        const income =
+          prevSlab.maxIncome + (targetBaseTax - slab.fixedTax) / slab.rate;
+        return Math.max(0, Math.round(income));
+      }
+    }
+    // If not found (very small target), it must be in the first slab (0% tax)
+    return 0;
+  }
+
+  // Handle surcharge for 2026: 9% on income tax if income > 10,000,000
+  if (taxYear === "2026") {
+    const thresholdIncome = 10_000_000;
+    const taxAtThreshold = calculateTax(thresholdIncome, taxYear); // no surcharge at exactly threshold
+
+    if (yearlyTax <= taxAtThreshold + EPS) {
+      // Below or at the surcharge threshold – invert directly
+      return invertBaseTax(yearlyTax, slabs);
+    }
+
+    // Above threshold – remove surcharge, invert base tax, then ensure > threshold
+    const baseTaxTarget = yearlyTax / 1.09;
+    const income = invertBaseTax(baseTaxTarget, slabs);
+    if (income <= thresholdIncome) {
+      // No exact solution above threshold (gap due to surcharge); choose minimal value above threshold
+      return thresholdIncome + 1;
+    }
+    return income;
+  }
+
+  // Years without surcharge: invert directly
+  return invertBaseTax(yearlyTax, slabs);
+};
