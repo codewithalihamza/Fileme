@@ -1,20 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "./lib/auth";
+import { ROUTES_CONSTANT } from "./lib/routes.constant";
+import { UserRole } from "./types";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Handle login page redirect for authenticated users
-  if (pathname === "/login") {
+  if (pathname === ROUTES_CONSTANT.LOGIN) {
     const token = request.cookies.get("admin-token")?.value;
 
     if (token) {
-      // Verify the token
+      // Verify the tokens
       const user = await verifyToken(token);
 
-      if (user && user.role === "admin") {
+      if (user && user.role === UserRole.ADMIN) {
         // User is already logged in, redirect to dashboard
-        return NextResponse.redirect(new URL("/dashboard", request.url));
+        return NextResponse.redirect(
+          new URL(ROUTES_CONSTANT.DASHBOARD, request.url)
+        );
       }
     }
 
@@ -23,20 +27,22 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protect other admin routes
-  if (pathname.startsWith("/dashboard")) {
+  if (pathname.startsWith(ROUTES_CONSTANT.DASHBOARD)) {
     const token = request.cookies.get("admin-token")?.value;
 
     if (!token) {
       // No token found, redirect to login
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL(ROUTES_CONSTANT.LOGIN, request.url));
     }
 
     // Verify the token
     const user = await verifyToken(token);
 
-    if (!user || user.role !== "admin") {
+    if (!user || user.role !== UserRole.ADMIN) {
       // Invalid token, redirect to login
-      const response = NextResponse.redirect(new URL("/login", request.url));
+      const response = NextResponse.redirect(
+        new URL(ROUTES_CONSTANT.LOGIN, request.url)
+      );
       response.cookies.delete("admin-token");
       return response;
     }
