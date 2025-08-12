@@ -13,6 +13,10 @@ const HeaderPage = [
     label: "Home",
   },
   {
+    href: "/tax-calculator",
+    label: "Tax Calculator",
+  },
+  {
     href: "/contact",
     label: "Contact",
   },
