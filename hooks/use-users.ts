@@ -1,3 +1,4 @@
+import { cachedGet, invalidateCacheByPrefix } from "@/lib/cache";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -43,7 +44,8 @@ export const useUsers = () => {
       page: number = 1,
       limit: number = 10,
       search?: string,
-      role?: string
+      role?: string,
+      force?: boolean
     ): Promise<UsersResponse | null> => {
       try {
         setLoading(true);
@@ -54,15 +56,11 @@ export const useUsers = () => {
           ...(role && role !== "all" && { role }),
         });
 
-        const response = await fetch(`/api/dashboard/users?${params}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          return data;
-        } else {
-          toast.error("Failed to fetch users");
-          return null;
-        }
+        const { data } = await cachedGet<UsersResponse>(
+          `/api/dashboard/users?${params}`,
+          { revalidate: force ? "force" : undefined }
+        );
+        return data;
       } catch (error) {
         console.error("Error fetching users:", error);
         toast.error("Failed to fetch users");
@@ -75,26 +73,25 @@ export const useUsers = () => {
   );
 
   // Fetch single user by ID
-  const fetchUser = useCallback(async (id: string): Promise<User | null> => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/dashboard/users/${id}`);
-      const data: UserResponse = await response.json();
-
-      if (response.ok) {
+  const fetchUser = useCallback(
+    async (id: string, force?: boolean): Promise<User | null> => {
+      try {
+        setLoading(true);
+        const { data } = await cachedGet<UserResponse>(
+          `/api/dashboard/users/${id}`,
+          { revalidate: force ? "force" : undefined }
+        );
         return data.data;
-      } else {
+      } catch (error) {
+        console.error("Error fetching user:", error);
         toast.error("Failed to fetch user");
         return null;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      toast.error("Failed to fetch user");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   // Create new user
   const createUser = useCallback(
@@ -119,6 +116,9 @@ export const useUsers = () => {
 
         if (response.ok) {
           toast.success("User created successfully!");
+          invalidateCacheByPrefix("/api/dashboard/users");
+          invalidateCacheByPrefix("/api/dashboard/users/stats");
+          invalidateCacheByPrefix("/api/dashboard/stats");
           return data.data;
         } else {
           toast.error(data.error || "Failed to create user");
@@ -152,6 +152,9 @@ export const useUsers = () => {
 
         if (response.ok) {
           toast.success("User updated successfully!");
+          invalidateCacheByPrefix("/api/dashboard/users");
+          invalidateCacheByPrefix("/api/dashboard/users/stats");
+          invalidateCacheByPrefix("/api/dashboard/stats");
           return data.data;
         } else {
           toast.error(data.error || "Failed to update user");
@@ -182,6 +185,9 @@ export const useUsers = () => {
 
       if (response.ok) {
         toast.success("User deleted successfully");
+        invalidateCacheByPrefix("/api/dashboard/users");
+        invalidateCacheByPrefix("/api/dashboard/users/stats");
+        invalidateCacheByPrefix("/api/dashboard/stats");
         return true;
       } else {
         const data = await response.json();
@@ -218,19 +224,15 @@ export function useUserStats() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = useCallback(async () => {
+  const fetchStats = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/dashboard/users/stats");
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch user stats");
-      }
-
-      const data = await response.json();
+      const { data } = await cachedGet<{ data: UserStats }>(
+        "/api/dashboard/users/stats",
+        { revalidate: force ? "force" : undefined }
+      );
       setStats(data.data);
     } catch (error) {
       const errorMessage =
@@ -250,6 +252,6 @@ export function useUserStats() {
     stats,
     loading,
     error,
-    refetch: fetchStats,
+    refetch: () => fetchStats(true),
   };
 }

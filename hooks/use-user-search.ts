@@ -1,3 +1,4 @@
+import { cachedGet, invalidateCacheByPrefix } from "@/lib/cache";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -36,15 +37,10 @@ export function useUserSearch() {
         params.append("role", role);
       }
 
-      const response = await fetch(`/api/dashboard/users/search?${params}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setSearchResults(data.data);
-      } else {
-        toast.error(data.error || "Failed to search users");
-        setSearchResults([]);
-      }
+      const { data } = await cachedGet<{ data: User[] }>(
+        `/api/dashboard/users/search?${params}`
+      );
+      setSearchResults(data.data);
     } catch (error) {
       console.error("Error searching users:", error);
       toast.error("Failed to search users");
@@ -78,6 +74,9 @@ export function useUserSearch() {
           } else {
             toast.success("Existing user found");
           }
+          invalidateCacheByPrefix("/api/dashboard/users");
+          invalidateCacheByPrefix("/api/dashboard/users/stats");
+          invalidateCacheByPrefix("/api/dashboard/stats");
           return data;
         } else {
           toast.error(data.error || "Failed to check/create user");

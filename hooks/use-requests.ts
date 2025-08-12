@@ -1,3 +1,4 @@
+import { cachedGet, invalidateCacheByPrefix } from "@/lib/cache";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -57,7 +58,8 @@ export const useRequests = () => {
       limit: number = 10,
       search?: string,
       status?: string,
-      service?: string
+      service?: string,
+      force?: boolean
     ): Promise<RequestsResponse | null> => {
       try {
         setLoading(true);
@@ -69,15 +71,11 @@ export const useRequests = () => {
           ...(service && service !== "all" && { service }),
         });
 
-        const response = await fetch(`/api/dashboard/requests?${params}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          return data;
-        } else {
-          toast.error("Failed to fetch requests");
-          return null;
-        }
+        const { data } = await cachedGet<RequestsResponse>(
+          `/api/dashboard/requests?${params}`,
+          { revalidate: force ? "force" : undefined }
+        );
+        return data;
       } catch (error) {
         console.error("Error fetching requests:", error);
         toast.error("Failed to fetch requests");
@@ -91,18 +89,14 @@ export const useRequests = () => {
 
   // Fetch single request by ID
   const fetchRequest = useCallback(
-    async (id: string): Promise<Request | null> => {
+    async (id: string, force?: boolean): Promise<Request | null> => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/dashboard/requests/${id}`);
-        const data: RequestResponse = await response.json();
-
-        if (response.ok) {
-          return data.data;
-        } else {
-          toast.error("Failed to fetch request");
-          return null;
-        }
+        const { data } = await cachedGet<RequestResponse>(
+          `/api/dashboard/requests/${id}`,
+          { revalidate: force ? "force" : undefined }
+        );
+        return data.data;
       } catch (error) {
         console.error("Error fetching request:", error);
         toast.error("Failed to fetch request");
@@ -137,6 +131,9 @@ export const useRequests = () => {
 
         if (response.ok) {
           toast.success("Request created successfully!");
+          invalidateCacheByPrefix("/api/dashboard/requests");
+          invalidateCacheByPrefix("/api/dashboard/requests/stats");
+          invalidateCacheByPrefix("/api/dashboard/stats");
           return data.data;
         } else {
           toast.error(data.error || "Failed to create request");
@@ -173,6 +170,9 @@ export const useRequests = () => {
 
         if (response.ok) {
           toast.success("Request updated successfully!");
+          invalidateCacheByPrefix("/api/dashboard/requests");
+          invalidateCacheByPrefix("/api/dashboard/requests/stats");
+          invalidateCacheByPrefix("/api/dashboard/stats");
           return data.data;
         } else {
           toast.error(data.error || "Failed to update request");
@@ -203,6 +203,9 @@ export const useRequests = () => {
 
       if (response.ok) {
         toast.success("Request deleted successfully");
+        invalidateCacheByPrefix("/api/dashboard/requests");
+        invalidateCacheByPrefix("/api/dashboard/requests/stats");
+        invalidateCacheByPrefix("/api/dashboard/stats");
         return true;
       } else {
         const data = await response.json();
@@ -240,19 +243,15 @@ export function useRequestStats() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = useCallback(async () => {
+  const fetchStats = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/dashboard/requests/stats");
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch request stats");
-      }
-
-      const data = await response.json();
+      const { data } = await cachedGet<{ data: RequestStats }>(
+        "/api/dashboard/requests/stats",
+        { revalidate: force ? "force" : undefined }
+      );
       setStats(data.data);
     } catch (error) {
       const errorMessage =
@@ -274,6 +273,6 @@ export function useRequestStats() {
     stats,
     loading,
     error,
-    refetch: fetchStats,
+    refetch: () => fetchStats(true),
   };
 }

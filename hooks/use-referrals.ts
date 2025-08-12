@@ -1,3 +1,4 @@
+import { cachedGet, invalidateCacheByPrefix } from "@/lib/cache";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -61,28 +62,32 @@ export function useReferrals() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const fetchReferrals = useCallback(async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: pagination.page.toString(),
-        limit: pagination.limit.toString(),
-        ...(debouncedSearch && { search: debouncedSearch }),
-        ...(statusFilter && statusFilter !== "all" && { status: statusFilter }),
-      });
+  const fetchReferrals = useCallback(
+    async (force?: boolean) => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          page: pagination.page.toString(),
+          limit: pagination.limit.toString(),
+          ...(debouncedSearch && { search: debouncedSearch }),
+          ...(statusFilter &&
+            statusFilter !== "all" && { status: statusFilter }),
+        });
 
-      const response = await fetch(`/api/dashboard/referrals?${params}`);
-      if (!response.ok) throw new Error("Failed to fetch referrals");
-
-      const data: ReferralsResponse = await response.json();
-      setReferrals(data.data);
-      setPagination(data.pagination);
-    } catch (error) {
-      toast.error("Failed to fetch referrals");
-    } finally {
-      setLoading(false);
-    }
-  }, [pagination.page, debouncedSearch, statusFilter, pagination.limit]);
+        const { data } = await cachedGet<ReferralsResponse>(
+          `/api/dashboard/referrals?${params}`,
+          { revalidate: force ? "force" : undefined }
+        );
+        setReferrals(data.data);
+        setPagination(data.pagination);
+      } catch (error) {
+        toast.error("Failed to fetch referrals");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [pagination.page, debouncedSearch, statusFilter, pagination.limit]
+  );
 
   useEffect(() => {
     fetchReferrals();
@@ -112,6 +117,9 @@ export function useReferrals() {
 
       const data = await response.json();
       toast.success("Referral submitted successfully");
+      invalidateCacheByPrefix("/api/dashboard/referrals");
+      invalidateCacheByPrefix("/api/dashboard/referrals/stats");
+      invalidateCacheByPrefix("/api/dashboard/stats");
       return data;
     } catch (error) {
       const errorMessage =
@@ -133,6 +141,9 @@ export function useReferrals() {
       if (!response.ok) throw new Error("Failed to update referral");
 
       toast.success("Referral updated successfully");
+      invalidateCacheByPrefix("/api/dashboard/referrals");
+      invalidateCacheByPrefix("/api/dashboard/referrals/stats");
+      invalidateCacheByPrefix("/api/dashboard/stats");
       fetchReferrals();
     } catch (error) {
       toast.error("Failed to update referral");
@@ -142,12 +153,12 @@ export function useReferrals() {
   };
 
   const getReferral = useCallback(
-    async (id: string): Promise<Referral | null> => {
+    async (id: string, force?: boolean): Promise<Referral | null> => {
       try {
-        const response = await fetch(`/api/dashboard/referrals/${id}`);
-        if (!response.ok) throw new Error("Failed to fetch referral");
-
-        const data = await response.json();
+        const { data } = await cachedGet<{ referral: Referral }>(
+          `/api/dashboard/referrals/${id}`,
+          { revalidate: force ? "force" : undefined }
+        );
         return data.referral;
       } catch (error) {
         toast.error("Failed to fetch referral");
@@ -192,19 +203,15 @@ export function useReferralStats() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = useCallback(async () => {
+  const fetchStats = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/dashboard/referrals/stats");
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch referral stats");
-      }
-
-      const data = await response.json();
+      const { data } = await cachedGet<{ data: ReferralStats }>(
+        "/api/dashboard/referrals/stats",
+        { revalidate: force ? "force" : undefined }
+      );
       setStats(data.data);
     } catch (error) {
       const errorMessage =
@@ -226,6 +233,6 @@ export function useReferralStats() {
     stats,
     loading,
     error,
-    refetch: fetchStats,
+    refetch: () => fetchStats(true),
   };
 }

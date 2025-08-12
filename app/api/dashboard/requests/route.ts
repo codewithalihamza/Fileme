@@ -75,12 +75,6 @@ export async function GET(request: NextRequest) {
       .map((result) => result.assigneeId)
       .filter((id) => id !== null) as string[];
 
-    console.log(
-      "Debug - Results:",
-      results.map((r) => ({ id: r.id, assigneeId: r.assigneeId }))
-    );
-    console.log("Debug - Assignee IDs:", assigneeIds);
-
     let assignees: any[] = [];
     if (assigneeIds.length > 0) {
       // Use proper IN clause with array - handle single vs multiple IDs
@@ -106,8 +100,6 @@ export async function GET(request: NextRequest) {
           .from(users)
           .where(inArray(users.id, assigneeIds));
       }
-
-      console.log("Debug - Assignees fetched:", assignees);
     }
 
     // Combine results with assignee info
@@ -116,11 +108,6 @@ export async function GET(request: NextRequest) {
         ? assignees.find((assignee) => assignee.id === result.assigneeId) ||
           null
         : null;
-
-      console.log(
-        `Debug - Request ${result.id}: assigneeId=${result.assigneeId}, assignee=`,
-        assignee
-      );
 
       return {
         ...result,

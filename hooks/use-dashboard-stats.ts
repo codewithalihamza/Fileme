@@ -1,3 +1,4 @@
+import { cachedGet } from "@/lib/cache";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -16,19 +17,15 @@ export function useDashboardStats() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = useCallback(async () => {
+  const fetchStats = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/dashboard/stats");
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch dashboard stats");
-      }
-
-      const data = await response.json();
+      const { data } = await cachedGet<{ data: DashboardStats }>(
+        "/api/dashboard/stats",
+        { revalidate: force ? "force" : undefined }
+      );
       setStats(data.data);
     } catch (error) {
       const errorMessage =
@@ -50,6 +47,6 @@ export function useDashboardStats() {
     stats,
     loading,
     error,
-    refetch: fetchStats,
+    refetch: () => fetchStats(true),
   };
 }

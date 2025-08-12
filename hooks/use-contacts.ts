@@ -1,3 +1,4 @@
+import { cachedGet, invalidateCacheByPrefix } from "@/lib/cache";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -59,41 +60,42 @@ export function useContacts() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const fetchContacts = useCallback(async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: pagination.page.toString(),
-        limit: pagination.limit.toString(),
-        ...(debouncedSearch && { search: debouncedSearch }),
-        ...(statusFilter && statusFilter !== "all" && { status: statusFilter }),
-        ...(serviceFilter &&
-          serviceFilter !== "all" && { service: serviceFilter }),
-      });
+  const fetchContacts = useCallback(
+    async (force?: boolean) => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          page: pagination.page.toString(),
+          limit: pagination.limit.toString(),
+          ...(debouncedSearch && { search: debouncedSearch }),
+          ...(statusFilter &&
+            statusFilter !== "all" && { status: statusFilter }),
+          ...(serviceFilter &&
+            serviceFilter !== "all" && { service: serviceFilter }),
+        });
 
-      const response = await fetch(`/api/dashboard/contacts?${params}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch contacts");
+        const { data } = await cachedGet<ContactsResponse>(
+          `/api/dashboard/contacts?${params}`,
+          { revalidate: force ? "force" : undefined }
+        );
+        setContacts(data.data);
+        setPagination(data.pagination);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to fetch contacts";
+        toast.error(errorMessage);
+      } finally {
+        setLoading(false);
       }
-
-      setContacts(data.data);
-      setPagination(data.pagination);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to fetch contacts";
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [
-    pagination.page,
-    debouncedSearch,
-    statusFilter,
-    serviceFilter,
-    pagination.limit,
-  ]);
+    },
+    [
+      pagination.page,
+      debouncedSearch,
+      statusFilter,
+      serviceFilter,
+      pagination.limit,
+    ]
+  );
 
   useEffect(() => {
     fetchContacts();
@@ -121,6 +123,9 @@ export function useContacts() {
 
       const data = await response.json();
       toast.success("Contact submitted successfully");
+      invalidateCacheByPrefix("/api/dashboard/contacts");
+      invalidateCacheByPrefix("/api/dashboard/contacts/stats");
+      invalidateCacheByPrefix("/api/dashboard/stats");
       return data;
     } catch (error) {
       const errorMessage =
@@ -147,6 +152,9 @@ export function useContacts() {
         }
 
         toast.success("Contact updated successfully");
+        invalidateCacheByPrefix("/api/dashboard/contacts");
+        invalidateCacheByPrefix("/api/dashboard/contacts/stats");
+        invalidateCacheByPrefix("/api/dashboard/stats");
         fetchContacts();
       } catch (error) {
         const errorMessage =
@@ -160,12 +168,12 @@ export function useContacts() {
   );
 
   const getContact = useCallback(
-    async (id: string): Promise<Contact | null> => {
+    async (id: string, force?: boolean): Promise<Contact | null> => {
       try {
-        const response = await fetch(`/api/dashboard/contacts/${id}`);
-        if (!response.ok) throw new Error("Failed to fetch contact");
-
-        const data = await response.json();
+        const { data } = await cachedGet<{ contact: Contact }>(
+          `/api/dashboard/contacts/${id}`,
+          { revalidate: force ? "force" : undefined }
+        );
         return data.contact;
       } catch (error) {
         toast.error("Failed to fetch contact");
@@ -199,7 +207,7 @@ export function useContacts() {
     getContact,
     setPage,
     setLimit,
-    refetch: fetchContacts,
+    refetch: () => fetchContacts(true),
   };
 }
 
@@ -213,19 +221,15 @@ export function useContactStats() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = useCallback(async () => {
+  const fetchStats = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/dashboard/contacts/stats");
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch contact stats");
-      }
-
-      const data = await response.json();
+      const { data } = await cachedGet<{ data: ContactStats }>(
+        "/api/dashboard/contacts/stats",
+        { revalidate: force ? "force" : undefined }
+      );
       setStats(data.data);
     } catch (error) {
       const errorMessage =
@@ -247,6 +251,6 @@ export function useContactStats() {
     stats,
     loading,
     error,
-    refetch: fetchStats,
+    refetch: () => fetchStats(true),
   };
 }
