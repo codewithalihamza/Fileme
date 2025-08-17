@@ -386,7 +386,7 @@ export default function UsersPage() {
                       <TableCell>
                         <div className="font-medium">{user.name}</div>
                       </TableCell>
-                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user?.email || "-"}</TableCell>
                       <TableCell>{user.phone}</TableCell>
                       <TableCell>{getRoleBadge(user.role)}</TableCell>
                       <TableCell>

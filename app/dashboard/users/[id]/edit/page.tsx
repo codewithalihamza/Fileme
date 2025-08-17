@@ -6,6 +6,7 @@ import { useUsers } from "@/hooks/use-users";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 interface User {
@@ -26,7 +27,7 @@ export default function EditUserPage({ params }: PageProps) {
   const [user, setUser] = useState<User | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const { loading, fetchUser, updateUser } = useUsers();
-
+  const router = useRouter();
   const getParams = async () => {
     const resolvedParams = await params;
     setUserId(resolvedParams.id);
@@ -54,6 +55,7 @@ export default function EditUserPage({ params }: PageProps) {
     const updatedUser = await updateUser(user.id, formData);
     if (updatedUser) {
       setUser(updatedUser);
+      router.back();
     }
   };
 

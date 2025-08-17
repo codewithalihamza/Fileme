@@ -55,7 +55,7 @@ export function UserForm({
     name: initialData?.name || "",
     email: initialData?.email || "",
     phone: initialData?.phone || "",
-    password: initialData?.password || "",
+    password: isEditing ? initialData?.password || "" : "12345678",
     role: initialData?.role || "customer",
   });
   const [errors, setErrors] = useState<Partial<UserFormData>>({});
