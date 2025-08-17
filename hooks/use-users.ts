@@ -253,3 +253,27 @@ export function useUserStats() {
     refetch: fetchStats,
   };
 }
+
+export async function deleteUser(id: string) {
+  try {
+    const response = await fetch(`/api/dashboard/users`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to delete user");
+    }
+
+    return response.json();
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to delete user";
+    toast.error(errorMessage);
+    throw error;
+  }
+}

@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { PageHeader } from "@/components/ui/page-header";
 import {
   Select,
@@ -28,7 +29,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
-import { useUsers, useUserStats } from "@/hooks/use-users";
+import { deleteUser, useUsers, useUserStats } from "@/hooks/use-users";
 import { getRoleBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatDate } from "@/lib/utils";
@@ -87,8 +88,22 @@ export default function UsersPage() {
   const [roleFilter, setRoleFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalUsers, setTotalUsers] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    userId: string | null;
+    userName: string | null;
+  }>({
+    isOpen: false,
+    userId: null,
+    userName: null,
+  });
+  const [statusModal, setStatusModal] = useState<{
+    isOpen: boolean;
+    userId: string | null;
+    userName: string | null;
+    newStatus: "active" | "disabled" | null;
+  }>({ isOpen: false, userId: null, userName: null, newStatus: null });
 
   const router = useRouter();
 
@@ -98,7 +113,6 @@ export default function UsersPage() {
       if (data) {
         setUsers(data.data);
         setTotalPages(data.pagination.totalPages);
-        setTotalUsers(data.pagination.total);
       }
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -109,25 +123,17 @@ export default function UsersPage() {
     loadUsers();
   }, [loadUsers]);
 
-  const handleDeleteUser = async (userId: string) => {
-    if (!confirm("Are you sure you want to delete this user?")) return;
+  const handleDeleteUser = (userId: string, userName?: string) => {
+    setDeleteModal({ isOpen: true, userId, userName: userName ?? null });
+  };
 
+  const confirmDeleteUser = async () => {
+    if (!deleteModal.userId) return;
     try {
-      const response = await fetch(`/api/dashboard/users`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: userId }),
-      });
-
-      if (response.ok) {
-        toast.success("User deleted successfully");
-        loadUsers();
-      } else {
-        const data = await response.json();
-        toast.error(data.error || "Failed to delete user");
-      }
+      await deleteUser(deleteModal.userId);
+      toast.success("User deleted successfully");
+      setDeleteModal({ isOpen: false, userId: null, userName: null });
+      loadUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
       toast.error("Failed to delete user");
@@ -146,15 +152,32 @@ export default function UsersPage() {
     loadUsers();
   };
 
-  const handleStatusToggle = async (userId: string, currentStatus: string) => {
+  const handleStatusToggle = (
+    userId: string,
+    currentStatus: string,
+    userName?: string
+  ) => {
     const newStatus = currentStatus === "active" ? "disabled" : "active";
-    const action = newStatus === "disabled" ? "disable" : "enable";
+    setStatusModal({
+      isOpen: true,
+      userId,
+      userName: userName ?? null,
+      newStatus,
+    });
+  };
 
-    if (!confirm(`Are you sure you want to ${action} this user?`)) return;
-
+  const confirmStatusToggle = async () => {
+    if (!statusModal.userId || !statusModal.newStatus) return;
+    const action = statusModal.newStatus === "disabled" ? "disable" : "enable";
     try {
-      await updateUser(userId, { status: newStatus });
+      await updateUser(statusModal.userId, { status: statusModal.newStatus });
       toast.success(`User ${action}d successfully`);
+      setStatusModal({
+        isOpen: false,
+        userId: null,
+        userName: null,
+        newStatus: null,
+      });
       loadUsers();
     } catch (error) {
       console.error(`Error ${action}ing user:`, error);
@@ -449,7 +472,11 @@ export default function UsersPage() {
                                   <DropdownMenuItem
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      handleStatusToggle(user.id, user.status);
+                                      handleStatusToggle(
+                                        user.id,
+                                        user.status,
+                                        user.name
+                                      );
                                     }}
                                     className="text-orange-600"
                                   >
@@ -460,7 +487,11 @@ export default function UsersPage() {
                                   <DropdownMenuItem
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      handleStatusToggle(user.id, user.status);
+                                      handleStatusToggle(
+                                        user.id,
+                                        user.status,
+                                        user.name
+                                      );
                                     }}
                                     className="text-green-600"
                                   >
@@ -472,7 +503,7 @@ export default function UsersPage() {
                                 <DropdownMenuItem
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleDeleteUser(user.id);
+                                    handleDeleteUser(user.id, user.name);
                                   }}
                                   className="text-red-600"
                                 >
@@ -516,6 +547,85 @@ export default function UsersPage() {
           )}
         </CardContent>
       </Card>
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={deleteModal.isOpen}
+        onClose={() =>
+          setDeleteModal({ isOpen: false, userId: null, userName: null })
+        }
+        title="Delete user"
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() =>
+                setDeleteModal({ isOpen: false, userId: null, userName: null })
+              }
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDeleteUser}
+              disabled={!deleteModal.userId}
+            >
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-gray-600">
+          Are you sure you want to delete
+          {deleteModal.userName ? ` ${deleteModal.userName}` : " this user"}?
+          This action cannot be undone.
+        </p>
+      </Modal>
+
+      {/* Status Toggle Confirmation Modal */}
+      <Modal
+        isOpen={statusModal.isOpen}
+        onClose={() =>
+          setStatusModal({
+            isOpen: false,
+            userId: null,
+            userName: null,
+            newStatus: null,
+          })
+        }
+        title={
+          statusModal.newStatus === "disabled" ? "Disable user" : "Enable user"
+        }
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() =>
+                setStatusModal({
+                  isOpen: false,
+                  userId: null,
+                  userName: null,
+                  newStatus: null,
+                })
+              }
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmStatusToggle}
+              disabled={!statusModal.userId || !statusModal.newStatus}
+            >
+              {statusModal.newStatus === "disabled" ? "Disable" : "Enable"}
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-gray-600">
+          Are you sure you want to
+          {statusModal.newStatus === "disabled" ? " disable" : " enable"}
+          {statusModal.userName ? ` ${statusModal.userName}` : " this user"}?
+        </p>
+      </Modal>
     </div>
   );
 }
