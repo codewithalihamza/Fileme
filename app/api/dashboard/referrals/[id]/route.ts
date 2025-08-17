@@ -106,3 +106,39 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Referral ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const deleted = await db
+      .delete(referrals)
+      .where(eq(referrals.id, id))
+      .returning();
+
+    if (deleted.length === 0) {
+      return NextResponse.json(
+        { error: "Referral not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: "Referral deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting referral:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/table";
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
-import { useReferrals } from "@/hooks/use-referrals";
+import { deleteReferral, useReferrals } from "@/hooks/use-referrals";
 import { getReferralStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -44,9 +44,11 @@ import {
   RefreshCw,
   Search,
   Send,
+  Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function ReferralsTable() {
   const {
@@ -81,6 +83,8 @@ export function ReferralsTable() {
 
   const [modalValue, setModalValue] = useState<string>("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const openEarningsModal = (
     referralId: string,
     currentAmount: string | null,
@@ -126,6 +130,10 @@ export function ReferralsTable() {
       case "create-request":
         router.push(`${ROUTES_CONSTANT.REQUESTS}/new?referralId=${referralId}`);
         break;
+      case "delete":
+        setDeletingId(referralId);
+        setIsDeleteOpen(true);
+        break;
     }
   };
 
@@ -133,6 +141,19 @@ export function ReferralsTable() {
     setIsRefreshing(true);
     await refetch();
     setIsRefreshing(false);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
+    try {
+      await deleteReferral(deletingId);
+      toast.success("Referral deleted");
+      setIsDeleteOpen(false);
+      setDeletingId(null);
+      await refetch();
+    } catch (error) {
+      toast.error("Failed to delete referral");
+    }
   };
 
   return (
@@ -374,6 +395,16 @@ export function ReferralsTable() {
                               <Send className="mr-2 size-4" />
                               Update Amount Sent
                             </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="text-red-600 focus:text-red-600"
+                              onClick={() =>
+                                handleQuickAction("delete", referral.id)
+                              }
+                            >
+                              <Trash2 className="mr-2 size-4" />
+                              Delete
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -462,6 +493,32 @@ export function ReferralsTable() {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        title="Delete referral"
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              disabled={!deletingId}
+            >
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-gray-600">
+          Are you sure you want to delete this referral? This action cannot be
+          undone.
+        </p>
       </Modal>
     </div>
   );

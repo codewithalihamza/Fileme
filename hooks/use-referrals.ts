@@ -229,3 +229,25 @@ export function useReferralStats() {
     refetch: fetchStats,
   };
 }
+
+export async function deleteReferral(id: string) {
+  try {
+    const response = await fetch(`/api/dashboard/referrals/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to delete referral");
+    }
+
+    return response.json();
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to delete referral";
+    toast.error(errorMessage);
+    throw error;
+  }
+}
