@@ -250,3 +250,25 @@ export function useContactStats() {
     refetch: fetchStats,
   };
 }
+
+export async function deleteContact(id: string) {
+  try {
+    const response = await fetch(`/api/dashboard/contacts/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to delete contact");
+    }
+
+    return response.json();
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to delete contact";
+    toast.error(errorMessage);
+    throw error;
+  }
+}

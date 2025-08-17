@@ -90,3 +90,36 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Contact ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const deleted = await db
+      .delete(contactUs)
+      .where(eq(contactUs.id, id))
+      .returning();
+
+    if (deleted.length === 0) {
+      return NextResponse.json({ error: "Contact not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Contact deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

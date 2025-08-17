@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   Select,
   SelectContent,
@@ -26,7 +27,7 @@ import {
 } from "@/components/ui/table";
 import { TableEmpty } from "@/components/ui/table-empty";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
-import { useContacts } from "@/hooks/use-contacts";
+import { deleteContact, useContacts } from "@/hooks/use-contacts";
 import { getContactsStatusBadge } from "@/lib/color-constants";
 import { ROUTES_CONSTANT } from "@/lib/routes.constant";
 import { formatDate } from "@/lib/utils";
@@ -44,6 +45,7 @@ import {
   MoreHorizontal,
   RefreshCw,
   Search,
+  Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -67,6 +69,8 @@ export function ContactsTable() {
   } = useContacts();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -91,6 +95,10 @@ export function ContactsTable() {
       case "create-request":
         router.push(`${ROUTES_CONSTANT.REQUESTS}/new?contactId=${contactId}`);
         break;
+      case "delete":
+        setDeletingId(contactId);
+        setIsDeleteOpen(true);
+        break;
     }
   };
 
@@ -102,6 +110,19 @@ export function ContactsTable() {
       toast.error("Failed to refresh contacts");
     } finally {
       setIsRefreshing(false);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
+    try {
+      await deleteContact(deletingId);
+      toast.success("Contact deleted");
+      setIsDeleteOpen(false);
+      setDeletingId(null);
+      await refetch();
+    } catch (error) {
+      toast.error("Failed to delete contact");
     }
   };
 
@@ -285,6 +306,16 @@ export function ContactsTable() {
                               <FileText className="mr-2 size-4" />
                               Create Request
                             </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleQuickAction("delete", contact.id);
+                              }}
+                              className="text-red-600 focus:text-red-600"
+                            >
+                              <Trash2 className="mr-2 size-4" />
+                              Delete
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -330,6 +361,34 @@ export function ContactsTable() {
           </div>
         </div>
       )}
+      <Modal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        title="Delete contact"
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteOpen(false)}
+              disabled={false}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              disabled={!deletingId}
+            >
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-gray-600">
+          Are you sure you want to delete this contact? This action cannot be
+          undone.
+        </p>
+      </Modal>
     </div>
   );
 }
