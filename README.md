@@ -171,31 +171,6 @@ fileme/
 - Email integration with Resend
 - Toast notifications for form feedback
 
-## API Routes
-
-### POST `/api/contact`
-
-Handles contact form submissions and sends emails via Resend.
-
-**Request Body:**
-
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "message": "I need help with my tax return..."
-}
-```
-
-**Response:**
-
-```json
-{
-  "message": "Email sent successfully",
-  "data": { ... }
-}
-```
-
 ## Styling
 
 The project uses Tailwind CSS with a custom design system:
@@ -229,31 +204,6 @@ The project uses Tailwind CSS with a custom design system:
 - ARIA labels and roles
 - Keyboard navigation support
 - Screen reader friendly
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy
-
-### Other Platforms
-
-The project is compatible with any platform that supports Next.js:
-
-- Netlify
-- Railway
-- DigitalOcean App Platform
-- AWS Amplify
-
-## Environment Variables
-
-| Variable         | Description                                       | Required |
-| ---------------- | ------------------------------------------------- | -------- |
-| `RESEND_API_KEY` | Resend API key for email functionality            | Yes      |
-| `CONTACT_EMAIL`  | Email address to receive contact form submissions | Yes      |
 
 ## Contributing
 
