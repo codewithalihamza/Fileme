@@ -1,5 +1,4 @@
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
-import { CtaSection } from "@/components/view/home/cta-section";
 import { Experts } from "@/components/view/home/experts";
 import { HeroSection } from "@/components/view/home/hero-section";
 import { ServicesSection } from "@/components/view/home/services-section";
@@ -19,7 +18,7 @@ export default function Home() {
       <ServicesSection />
 
       {/* CTA Section */}
-      <CtaSection />
+      {/* <CtaSection /> */}
       {/* Experts Section */}
       <Experts />
       <WhatsAppButton phoneNumber={contactInfo.Phone} />

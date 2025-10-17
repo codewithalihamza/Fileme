@@ -34,19 +34,19 @@ const experts: Expert[] = [
   },
   {
     id: 2,
-    name: "Syed Shahzaib",
-    role: "BPO Accounting Specialist",
+    name: "Ali Hamza",
+    role: "Software Engineer",
     image:
-      "https://media.licdn.com/dms/image/v2/D4D03AQFwJDSC7lwTwA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1719468687910?e=1756944000&v=beta&t=osxgUxF5pL4RxR9EG3luviZ7vci8ujlpv5c0a0Gp1bs",
-    linkedin: "https://www.linkedin.com/in/syed-shahzaib-aca-384796218/",
-    description: "Focuses specifically on outsourced accounting tasks.",
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgorcYdz0E5TsArfLwh4CPJJXN-fDeoZfVGqYq1cwYeaSjYQAs6Y_6YHKVCtnvnB_Ojngj6a0h9Kz2VZGFzb9TDb8533T7UqXkHK-5Xd9UwE8Ulsckn-FsifAO76n85Dm8YrLc7sMC1HIO9HeNBc1LiVgkWNJ_nZO5nwzgM-V6K7p_RbhxcRrguw_5-lOU/w320-h320/WhatsApp%20Image%202023-08-01%20at%2011.07.22%20AM-modified.png",
+    linkedin: "https://www.linkedin.com/in/syedalihamzaofficial/",
+    description:
+      "5+ years of experience in software development and web development.",
   },
   {
     id: 3,
     name: "Muhammad Noman",
     role: "Senior Internal Controls Analyst",
-    image:
-      "https://media.licdn.com/dms/image/v2/D4D03AQHOTSwXsnFJmg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1709370722420?e=1756944000&v=beta&t=KGp-kbq7ONyzOFPwyO4FtXgHPM5ppD9OUK7FkzUt68s",
+    image: "",
     linkedin: "https://www.linkedin.com/in/muhammad-noman-26617a189",
     description: "Internal controls and compliance expert.",
   },
@@ -64,20 +64,17 @@ const experts: Expert[] = [
     id: 5,
     name: "Danyal Mehdi",
     role: "Marketing Officer",
-    image:
-      "https://media.licdn.com/dms/image/v2/C5103AQFDvzekCVEzgg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1519248773846?e=1756339200&v=beta&t=radz92-7xS5P2khwCpsVcdNmSx0sPuo34UH2d8Gv-XA",
+    image: "",
     linkedin: "https://www.linkedin.com/in/danyal-mehdi-0bb2b515a/",
     description: "5+ years of experience in marketing and sales.",
   },
   {
     id: 6,
-    name: "Ali Hamza",
-    role: "Software Engineer",
-    image:
-      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgorcYdz0E5TsArfLwh4CPJJXN-fDeoZfVGqYq1cwYeaSjYQAs6Y_6YHKVCtnvnB_Ojngj6a0h9Kz2VZGFzb9TDb8533T7UqXkHK-5Xd9UwE8Ulsckn-FsifAO76n85Dm8YrLc7sMC1HIO9HeNBc1LiVgkWNJ_nZO5nwzgM-V6K7p_RbhxcRrguw_5-lOU/w320-h320/WhatsApp%20Image%202023-08-01%20at%2011.07.22%20AM-modified.png",
-    linkedin: "https://www.linkedin.com/in/syedalihamzaofficial/",
-    description:
-      "5+ years of experience in software development and web development.",
+    name: "Syed Shahzaib",
+    role: "BPO Accounting Specialist",
+    image: "",
+    linkedin: "https://www.linkedin.com/in/syed-shahzaib-aca-384796218/",
+    description: "Focuses specifically on outsourced accounting tasks.",
   },
   {
     id: 7,
