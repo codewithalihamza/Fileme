@@ -151,8 +151,9 @@ export default function AboutPage() {
                     <Image
                       src={service.image}
                       alt={service.title}
-                      fill
-                      className="object-cover"
+                      width={800}
+                      height={600}
+                      className="size-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                   </motion.div>
@@ -255,8 +256,9 @@ export default function AboutPage() {
                 <Image
                   src="/hero-section/accountant-calculating-profit-with-financial-analysis-graphs.jpg"
                   alt="Professional team working"
-                  fill
-                  className="object-cover"
+                  width={800}
+                  height={600}
+                  className="size-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               </div>
@@ -281,7 +283,7 @@ export default function AboutPage() {
               Contact us today to discuss your financial needs and discover how
               we can help you achieve your goals.
             </p>
-            <div className="flex items-center space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0">
+            <div className="flex items-center justify-center space-y-4 sm:space-x-4">
               <Button
                 asChild
                 size="lg"

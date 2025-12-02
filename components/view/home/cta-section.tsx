@@ -80,8 +80,9 @@ export const CtaSection = () => {
         <Image
           src="/hero-section/accountant-calculating-profit-with-financial-analysis-graphs.jpg"
           alt="Accountant working"
-          fill
-          className="object-cover opacity-20"
+          width={1920}
+          height={1080}
+          className="size-full object-cover opacity-20"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-indigo-700/90 to-purple-800/90" />

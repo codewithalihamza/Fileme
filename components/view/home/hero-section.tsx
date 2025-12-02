@@ -21,8 +21,9 @@ export const HeroSection = () => {
         <Image
           src="/hero-section/financial-analysis.jpg"
           alt="Professional tax advisor working"
-          fill
-          className="object-cover opacity-20"
+          width={1920}
+          height={1080}
+          className="size-full object-cover opacity-20"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-blue-900/60 to-indigo-900/80"></div>
